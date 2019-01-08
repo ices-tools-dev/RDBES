@@ -1,2 +1,2 @@
 # RDBES
-The repository of the RDBES development
+The public repository of the RDBES development.
