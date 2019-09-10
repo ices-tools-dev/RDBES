@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xs:schema elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:include schemaLocation="BaseTypes.xsd" />
+  <xs:element name="RDBES" type="RDBESTypeH2" />
+  <xs:complexType name="RDBESTypeH2">
+    <xs:sequence>
+      <xs:element  maxOccurs="1" name="H2" type="H2" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="H2">
+    <xs:sequence>
+      <xs:element  maxOccurs="unbounded" name="DE" type="DE" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="SL">
+    <xs:complexContent mixed="false">
+      <xs:extension base="BaseSL" />
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="DE">
+    <xs:complexContent mixed="false">
+      <xs:extension base="BaseDE">
+        <xs:sequence>
+          <xs:element  maxOccurs="unbounded" name="SD" type="SD"  />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+   <xs:complexType name="SD">
+    <xs:complexContent mixed="false">
+      <xs:extension base="BaseSD"  >
+        <xs:sequence maxOccurs="unbounded" minOccurs="1">
+          <xs:element  name="VD" type="VD" />
+          <xs:element  name="FT" type="FT" />
+          
+        </xs:sequence>               
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="VD">
+    <xs:complexContent mixed="false">
+      <xs:extension base="BaseVD" />
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="FT">
+    <xs:complexContent mixed="false">
+      <xs:extension base="BaseFT">
+        <xs:sequence>
+          <xs:element  maxOccurs="unbounded" name="FO" type="FO" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="FO">
+    <xs:complexContent mixed="false">
+      <xs:extension base="BaseFO">
+        <xs:sequence  maxOccurs="unbounded" minOccurs="1">
+          <xs:element  name="SL" type="SL" />
+          <xs:element  name="SS" type="SS" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="SS">
+    <xs:complexContent mixed="false">
+      <xs:extension base="BaseSS">
+        <xs:sequence>
+          <xs:element  maxOccurs="unbounded" name="SA" type="SA" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="SA">
+    <xs:complexContent mixed="false">
+      <xs:extension base="BaseSA">
+        <xs:sequence>
+          <xs:element minOccurs="0"  maxOccurs="unbounded" name="FM" type="FM" />
+          <xs:element minOccurs="0"  maxOccurs="unbounded" name="BV" type="BV" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="FM">
+    <xs:complexContent mixed="false">
+      <xs:extension base="BaseFM">
+        <xs:sequence>
+          <xs:element minOccurs="0"  maxOccurs="unbounded" name="BV" type="BV" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="BV">
+    <xs:complexContent mixed="false">
+      <xs:extension base="BaseBV" />
+    </xs:complexContent>
+  </xs:complexType>
+</xs:schema>
