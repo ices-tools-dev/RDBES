@@ -1,0 +1,470 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xs:schema elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:include schemaLocation="Enumerators/RS_AccuracyCode.xsd" />
+  <xs:include schemaLocation="Enumerators/RS_ObservationType.xsd" />
+  <xs:include schemaLocation="Enumerators/RS_AccuracyCode.xsd" />
+  <xs:include schemaLocation="Enumerators/RS_LandingCategory.xsd" />
+  <xs:include schemaLocation="Enumerators/RS_Stratification.xsd" />
+  <xs:include schemaLocation="Enumerators/EDMO.xsd" />
+  <xs:include schemaLocation="Enumerators/TargetSpecies.xsd" />
+  <xs:include schemaLocation="Enumerators/RS_BiologicalMeasurementType.xsd" />
+  <xs:include schemaLocation="Enumerators/RS_CommercialSizeCategory.xsd" />
+  <xs:include schemaLocation="Enumerators/RS_FACEuropeanLvl6.xsd" />
+  <xs:include schemaLocation="Enumerators/RS_FunctionalUnit.xsd" />
+  <xs:include schemaLocation="Enumerators/RS_LocationType.xsd" />
+  <xs:include schemaLocation="Enumerators/RS_MethodForMeasurement.xsd" />
+  <xs:include schemaLocation="Enumerators/RS_Presentation.xsd" />
+  <xs:include schemaLocation="Enumerators/RS_SelectionMethod.xsd" />
+  <xs:include schemaLocation="Enumerators/RS_test999.xsd" />
+  <xs:include schemaLocation="Enumerators/RS_UnitType.xsd" />
+  <xs:include schemaLocation="Enumerators/RS_VesselType.xsd" />
+  <xs:include schemaLocation="Enumerators/YesNoFields.xsd" />
+  <xs:include schemaLocation="Enumerators/ICES_Area.xsd" />
+  <xs:include schemaLocation="Enumerators/GearType.xsd" />
+  <xs:include schemaLocation="Enumerators/RDBES.xsd" />
+  <xs:include schemaLocation="Enumerators/RS_AggregationLevel.xsd" />
+  <xs:include schemaLocation="Enumerators/RS_CatchCategory.xsd" />
+  <xs:include schemaLocation="Enumerators/RS_Clustering.xsd" />
+  <xs:include schemaLocation="Enumerators/RS_CommercialSizeCategoryScale.xsd" />
+  <xs:include schemaLocation="Enumerators/RS_FACEuropeanLvl5.xsd" />
+  <xs:include schemaLocation="Enumerators/RS_FACNational.xsd" />
+  <xs:include schemaLocation="Enumerators/RS_FishingValidity.xsd" />
+  <xs:include schemaLocation="Enumerators/RS_Harbour.xsd" />
+  <xs:include schemaLocation="Enumerators/RS_LandingCategory.xsd" />
+  <xs:include schemaLocation="Enumerators/RS_LocationType.xsd" />
+  <xs:include schemaLocation="Enumerators/RS_MeasurementEquipment.xsd" />
+  <xs:include schemaLocation="Enumerators/RS_MethodForMeasurement.xsd" />
+  <xs:include schemaLocation="Enumerators/RS_ObservationCode.xsd" />
+  <xs:include schemaLocation="Enumerators/RS_Presentation.xsd" />
+  <xs:include schemaLocation="Enumerators/RS_Sampler.xsd" />
+  <xs:include schemaLocation="Enumerators/RS_SelectionMethod.xsd" />
+  <xs:include schemaLocation="Enumerators/RS_Stratification.xsd" />
+  <xs:include schemaLocation="Enumerators/RS_test999.xsd" />
+  <xs:include schemaLocation="Enumerators/RS_UnitOfValue.xsd" />
+  <xs:include schemaLocation="Enumerators/RS_UnitType.xsd" />
+  <xs:include schemaLocation="Enumerators/RS_VesselLengthCategory.xsd" />
+  <xs:include schemaLocation="Enumerators/RS_VesselType.xsd" />
+  <xs:include schemaLocation="Enumerators/StatRec.xsd" />
+  <xs:include schemaLocation="Enumerators/YesNoFields.xsd" />
+  <xs:include schemaLocation="Enumerators/EDMO.xsd" />
+  <xs:include schemaLocation="Enumerators/ICES_Area.xsd" />
+  <xs:include schemaLocation="Enumerators/ISO_3166.xsd" />
+  <xs:include schemaLocation="Enumerators/GearType.xsd" />
+  <xs:include schemaLocation="Enumerators/TargetSpecies.xsd" />
+  <xs:include schemaLocation="Enumerators/RDBES.xsd" />
+  <xs:include schemaLocation="Enumerators/RS_AccuracyCode.xsd" />
+  <xs:include schemaLocation="Enumerators/RS_AggregationLevel.xsd" />
+  <xs:include schemaLocation="Enumerators/RS_BiologicalMeasurementType.xsd" />
+  <xs:include schemaLocation="Enumerators/RS_CatchCategory.xsd" />
+  <xs:include schemaLocation="Enumerators/RS_CatchRegistration.xsd" />
+  <xs:include schemaLocation="Enumerators/RS_Clustering.xsd" />
+  <xs:include schemaLocation="Enumerators/RS_CommercialSizeCategory.xsd" />
+  <xs:include schemaLocation="Enumerators/RS_CommercialSizeCategoryScale.xsd" />
+  <xs:include schemaLocation="Enumerators/RS_EconomicalZone.xsd" />
+  <xs:include schemaLocation="Enumerators/RS_FACEuropeanLvl5.xsd" />
+  <xs:include schemaLocation="Enumerators/RS_FACEuropeanLvl6.xsd" />
+  <xs:include schemaLocation="Enumerators/RS_FACNational.xsd" />
+  <xs:include schemaLocation="Enumerators/RS_FAOAsfisSpeciesCode.xsd" />
+  <xs:include schemaLocation="Enumerators/RS_FAOSpecies.xsd" />
+  <xs:include schemaLocation="Enumerators/RS_FishingValidity.xsd" />
+  <xs:include schemaLocation="Enumerators/RS_FunctionalUnit.xsd" />
+  <xs:include schemaLocation="Enumerators/RS_Harbour.xsd" />
+  <xs:include schemaLocation="Enumerators/RS_Hierarchy.xsd" />
+  <xs:include schemaLocation="Enumerators/RS_LandingCategory.xsd" />
+  <xs:include schemaLocation="Enumerators/RS_LEfullTripAvailable.xsd" />
+  <xs:include schemaLocation="Enumerators/RS_LocationType.xsd" />
+  <xs:include schemaLocation="Enumerators/RS_LowerHierarchy.xsd" />
+  <xs:include schemaLocation="Enumerators/RS_MeasurementEquipment.xsd" />
+  <xs:include schemaLocation="Enumerators/RS_MeasurementType.xsd" />
+  <xs:include schemaLocation="Enumerators/RS_MethodForMeasurement.xsd" />
+  <xs:include schemaLocation="Enumerators/RS_ObservationActivityType.xsd" />
+  <xs:include schemaLocation="Enumerators/RS_ObservationActivityType.xsd.bak" />
+  <xs:include schemaLocation="Enumerators/RS_ObservationCode.xsd" />
+  <xs:include schemaLocation="Enumerators/RS_ObservationType.xsd" />
+  <xs:include schemaLocation="Enumerators/RS_Presentation.xsd" />
+  <xs:include schemaLocation="Enumerators/RS_ReasonForNotSampling.xsd" />
+  <xs:include schemaLocation="Enumerators/RS_Sampler.xsd" />
+  <xs:include schemaLocation="Enumerators/RS_SelectionDevice.xsd" />
+  <xs:include schemaLocation="Enumerators/RS_SelectionMethod.xsd" />
+  <xs:include schemaLocation="Enumerators/RS_Sex.xsd" />
+  <xs:include schemaLocation="Enumerators/RS_Stratification.xsd" />
+  <xs:include schemaLocation="Enumerators/RS_Subpolygon.xsd" />
+  <xs:include schemaLocation="Enumerators/RS_test999.xsd" />
+  <xs:include schemaLocation="Enumerators/RS_TimeUnit.xsd" />
+  <xs:include schemaLocation="Enumerators/RS_UnitOfValue.xsd" />
+  <xs:include schemaLocation="Enumerators/RS_UnitScaleList.xsd" />
+  <xs:include schemaLocation="Enumerators/RS_UnitType.xsd" />
+  <xs:include schemaLocation="Enumerators/RS_UpperHierarchy.xsd" />
+  <xs:include schemaLocation="Enumerators/RS_VesselLengthCategory.xsd" />
+  <xs:include schemaLocation="Enumerators/RS_VesselSizeUnit.xsd" />
+  <xs:include schemaLocation="Enumerators/RS_VesselType.xsd" />
+  <xs:include schemaLocation="Enumerators/SpecWoRMS.xsd" />
+  <xs:include schemaLocation="Enumerators/StatRec.xsd" />
+  <xs:include schemaLocation="Enumerators/Year.xsd" />
+  <xs:include schemaLocation="Enumerators/YesNoFields.xsd" />
+  <xs:include schemaLocation="Enumerators/RS_CatchFraction.xsd" />
+  <xs:complexType name="BaseBV">
+    <xs:sequence>
+      <xs:element minOccurs="1" maxOccurs="1" name="BVfishId" type="xs:int" />
+      <xs:element minOccurs="1" maxOccurs="1" name="BVstratification" type="xs:int" />
+      <xs:element minOccurs="1" maxOccurs="1" name="BVstratum" type="xs:string" />
+      <xs:element minOccurs="1" maxOccurs="1" name="BVtype" type="tRS_BiologicalMeasurementType" />
+      <xs:element minOccurs="1" maxOccurs="1" name="BVvalue" type="xs:string" />
+      <xs:element minOccurs="1" maxOccurs="1" name="BVunitValue" type="tRS_UnitOfValue" />
+      <xs:element minOccurs="0" maxOccurs="1" name="BVunitScaleList" type="tRS_UnitScaleList" />
+      <xs:element minOccurs="0" maxOccurs="1" name="BVmethod" type="tRS_MethodForMeasurement" />
+      <xs:element minOccurs="1" maxOccurs="1" name="BVmeasurementEquipment" type="tRS_MeasurementEquipment" />
+      <xs:element minOccurs="0" maxOccurs="1" name="BVtotal" type="xs:int" />
+      <xs:element minOccurs="0" maxOccurs="1" name="BVsampled" type="xs:int" />
+      <xs:element minOccurs="0" maxOccurs="1" name="BVsampProb" type="xs:decimal" />
+      <xs:element minOccurs="1" maxOccurs="1" name="BVselectionMethod" type="tRS_SelectionMethod" />
+      <xs:element minOccurs="0" maxOccurs="1" name="BVsampler" type="tRS_Sampler" />
+    </xs:sequence>
+    <xs:attribute name="ln" type="xs:int" use="required" />
+  </xs:complexType>
+  <xs:complexType name="BaseDE">
+    <xs:sequence>
+      <xs:element minOccurs="1" maxOccurs="1" name="DEsamplingScheme" type="xs:string" />
+      <xs:element minOccurs="1" maxOccurs="1" name="DEyear" type="tYear" />
+      <xs:element minOccurs="1" maxOccurs="1" name="DEstratum" type="xs:string" />
+      <xs:element minOccurs="1" maxOccurs="1" name="DEhierarchyCorrect" type="tYesNoFields" />
+      <xs:element minOccurs="1" maxOccurs="1" name="DEhierarchy" type="tRS_Hierarchy" />
+    </xs:sequence>
+    <xs:attribute name="ln" type="xs:int" use="required" />
+  </xs:complexType>
+  <xs:complexType name="BaseFM">
+    <xs:sequence>
+      <xs:element minOccurs="1" maxOccurs="1" name="FMclass" type="xs:int" />
+      <xs:element minOccurs="1" maxOccurs="1" name="FMnumberAtUnit" type="xs:decimal" />
+      <xs:element minOccurs="1" maxOccurs="1" name="FMtype" type="tRS_MeasurementType" />
+      <xs:element minOccurs="0" maxOccurs="1" name="FMmeasurementEquipment" type="tRS_MeasurementEquipment" />
+      <xs:element minOccurs="0" maxOccurs="1" name="FMaccuracy" type="tRS_AccuracyCode" />
+      <xs:element minOccurs="0" maxOccurs="1" name="FMsampler" type="tRS_Sampler" />
+    </xs:sequence>
+    <xs:attribute name="ln" type="xs:int" use="required" />
+  </xs:complexType>
+  <xs:complexType name="BaseFO">
+    <xs:sequence>
+      <xs:element minOccurs="1" maxOccurs="1" name="FOstratification" type="tRS_Stratification" />
+      <xs:element minOccurs="1" maxOccurs="1" name="FOhaulNumber" type="xs:int" />
+      <xs:element minOccurs="1" maxOccurs="1" name="FOstratum" type="xs:string" />
+      <xs:element minOccurs="1" maxOccurs="1" name="FOclustering" type="tRS_Clustering" />
+      <xs:element minOccurs="1" maxOccurs="1" name="FOclusterName" type="xs:string" />
+      <xs:element minOccurs="0" maxOccurs="1" name="FOsampler" type="tRS_Sampler" />
+      <xs:element minOccurs="1" maxOccurs="1" name="FOaggregationLevel" type="tRS_AggregationLevel" />
+      <xs:element minOccurs="1" maxOccurs="1" name="FOvalidity" type="tRS_FishingValidity" />
+      <xs:element minOccurs="1" maxOccurs="1" name="FOcatchReg" type="tRS_CatchRegistration" />
+      <xs:element minOccurs="0" maxOccurs="1" name="FOstartDate" type="tDate" />
+      <xs:element minOccurs="0" maxOccurs="1" name="FOstartTime" type="tTime" />
+      <xs:element minOccurs="1" maxOccurs="1" name="FOendDate" type="tDate" />
+      <xs:element minOccurs="0" maxOccurs="1" name="FOendTime" type="tTime" />
+      <xs:element minOccurs="0" maxOccurs="1" name="FOduration" type="xs:int" />
+      <xs:element minOccurs="0" maxOccurs="1" name="FOstartLat" type="xs:decimal" />
+      <xs:element minOccurs="0" maxOccurs="1" name="FOstartLon" type="xs:decimal" />
+      <xs:element minOccurs="0" maxOccurs="1" name="FOstopLat" type="xs:decimal" />
+      <xs:element minOccurs="0" maxOccurs="1" name="FOstopLon" type="xs:decimal" />
+      <xs:element minOccurs="0" maxOccurs="1" name="FOeconomicalZone" type="tRS_EconomicalZone" />
+      <xs:element minOccurs="1" maxOccurs="1" name="FOarea" type="tICES_Area" />
+      <xs:element minOccurs="0" maxOccurs="1" name="FOrectangle" type="tStatRec" />
+      <xs:element minOccurs="0" maxOccurs="1" name="FOsubpolygon" type="tRS_Subpolygon" />
+      <xs:element minOccurs="0" maxOccurs="1" name="FOfunctinalUnit" type="xs:string" />
+      <xs:element minOccurs="0" maxOccurs="1" name="FOfishingDepth" type="xs:int" />
+      <xs:element minOccurs="0" maxOccurs="1" name="FOwaterDepth" type="xs:int" />
+      <xs:element minOccurs="0" maxOccurs="1" name="FOnationalCategory" type="tRS_FACNational" />
+      <xs:element minOccurs="0" maxOccurs="1" name="FOmetier5" type="tRS_FACEuropeanLvl5" />
+      <xs:element minOccurs="0" maxOccurs="1" name="FOmetier6" type="tRS_FACEuropeanLvl6" />
+      <xs:element minOccurs="1" maxOccurs="1" name="FOgear" type="tGearType" />
+      <xs:element minOccurs="0" maxOccurs="1" name="FOmeshSize" type="xs:int" />
+      <xs:element minOccurs="0" maxOccurs="1" name="FOselectionDevice" type="tRS_SelectionDevice" />
+      <xs:element minOccurs="0" maxOccurs="1" name="FOselectionDeviceMeshSize" type="xs:int" />
+      <xs:element minOccurs="0" maxOccurs="1" name="FOtargetSpecies" type="tTargetSpecies" />
+      <xs:element minOccurs="1" maxOccurs="1" name="FOobservationCode" type="tRS_ObservationCode" />
+      <xs:element minOccurs="0" maxOccurs="1" name="FOtotal" type="xs:int" />
+      <xs:element minOccurs="0" maxOccurs="1" name="FOsampled" type="xs:int" />
+      <xs:element minOccurs="0" maxOccurs="1" name="FOsampProb" type="xs:decimal" />
+      <xs:element minOccurs="1" maxOccurs="1" name="FOselectionMethod" type="xs:string" />
+      <xs:element minOccurs="0" maxOccurs="1" name="FOselectionMethodCluster" type="tRS_SelectionMethod" />
+      <xs:element minOccurs="0" maxOccurs="1" name="FOtotalClusters" type="xs:int" />
+      <xs:element minOccurs="0" maxOccurs="1" name="FOsampledClusters" type="xs:int" />
+      <xs:element minOccurs="0" maxOccurs="1" name="FOclustersProb" type="xs:decimal" />
+      <xs:element minOccurs="0" maxOccurs="1" name="FOreasonNotSampled" type="tRS_ReasonForNotSampling" />
+    </xs:sequence>
+    <xs:attribute name="ln" type="xs:int" use="required" />
+  </xs:complexType>
+  <xs:complexType name="BaseFT">
+    <xs:sequence>
+      <xs:element minOccurs="1" maxOccurs="1" name="FTnationalCode" type="xs:string" />
+      <xs:element minOccurs="1" maxOccurs="1" name="FTstratification" type="tRS_Stratification" />
+      <xs:element minOccurs="1" maxOccurs="1" name="FTstratum" type="xs:string" />
+      <xs:element minOccurs="1" maxOccurs="1" name="FTclustering" type="tRS_Clustering" />
+      <xs:element minOccurs="1" maxOccurs="1" name="FTclusterName" type="xs:string" />
+      <xs:element minOccurs="0" maxOccurs="1" name="FTsampler" type="tRS_Sampler" />
+      <xs:element minOccurs="0" maxOccurs="1" name="FTnumberOfHauls" type="xs:int" />
+      <xs:element minOccurs="0" maxOccurs="1" name="FTdepartureLocation" type="tRS_Harbour" />
+      <xs:element minOccurs="0" maxOccurs="1" name="FTdepatureDate" type="tDate" />
+      <xs:element minOccurs="0" maxOccurs="1" name="FTdepartureTime" type="tTime" />
+      <xs:element minOccurs="1" maxOccurs="1" name="FTarrivalLocation" type="xs:string" />
+      <xs:element minOccurs="1" maxOccurs="1" name="FTarrivalDate" type="xs:string" />
+      <xs:element minOccurs="0" maxOccurs="1" name="FTarrivalTime" type="xs:string" />
+      <xs:element minOccurs="0" maxOccurs="1" name="FTtotal" type="xs:int" />
+      <xs:element minOccurs="0" maxOccurs="1" name="FTsampled" type="xs:int" />
+      <xs:element minOccurs="0" maxOccurs="1" name="FTsampProb" type="xs:decimal" />
+      <xs:element minOccurs="1" maxOccurs="1" name="FTselectionMethod" type="tRS_SelectionMethod" />
+      <xs:element minOccurs="0" maxOccurs="1" name="FTselectionMethodCluster" type="tRS_SelectionMethod" />
+      <xs:element minOccurs="0" maxOccurs="1" name="FTtotalClusters" type="xs:int" />
+      <xs:element minOccurs="0" maxOccurs="1" name="FTsampledClusters" type="xs:int" />
+      <xs:element minOccurs="0" maxOccurs="1" name="FTclustersProb" type="xs:decimal" />
+      <xs:element minOccurs="0" maxOccurs="1" name="FTreasonNotSampled" type="tRS_ReasonForNotSampling" />
+    </xs:sequence>
+    <xs:attribute name="ln" type="xs:int" use="required" />
+  </xs:complexType>
+  <xs:complexType name="BaseLE">
+    <xs:sequence>
+      <xs:element minOccurs="1" maxOccurs="1" name="LEstratification" type="tRS_Stratification" />
+      <xs:element minOccurs="1" maxOccurs="1" name="LEsequenceNumber" type="xs:int" />
+      <xs:element minOccurs="0" maxOccurs="1" name="LEhaulNumber" type="xs:int" />
+      <xs:element minOccurs="1" maxOccurs="1" name="LEstratum" type="xs:string" />
+      <xs:element minOccurs="1" maxOccurs="1" name="LEclustering" type="tRS_Clustering" />
+      <xs:element minOccurs="1" maxOccurs="1" name="LEclusterName" type="xs:string" />
+      <xs:element minOccurs="0" maxOccurs="1" name="LEsampler" type="tRS_Sampler" />
+      <xs:element minOccurs="1" maxOccurs="1" name="LEmixedTrip" type="tYesNoFields" />
+      <xs:element minOccurs="1" maxOccurs="1" name="LEcatchReg" type="tRS_CatchRegistration" />
+      <xs:element minOccurs="0" maxOccurs="1" name="LElocation" type="tRS_Harbour" />
+      <xs:element minOccurs="0" maxOccurs="1" name="LElocationType" type="tRS_LocationType" />
+      <xs:element minOccurs="1" maxOccurs="1" name="LEcountry" type="tISO_3166" />
+      <xs:element minOccurs="0" maxOccurs="1" name="LEdate" type="tDate" />
+      <xs:element minOccurs="0" maxOccurs="1" name="LEtime" type="tTime" />
+      <xs:element minOccurs="0" maxOccurs="1" name="LEeconomicalZone" type="tRS_EconomicalZone" />
+      <xs:element minOccurs="1" maxOccurs="1" name="LEarea" type="tICES_Area" />
+      <xs:element minOccurs="0" maxOccurs="1" name="LErectangle" type="tStatRec" />
+      <xs:element minOccurs="0" maxOccurs="1" name="LEsubpolygon" type="tRS_Subpolygon" />
+      <xs:element minOccurs="0" maxOccurs="1" name="LEfunctinalUnit" type="tRS_FunctionalUnit" />
+      <xs:element minOccurs="0" maxOccurs="1" name="LEnationalCategory" type="tRS_FACNational" />
+      <xs:element minOccurs="0" maxOccurs="1" name="LEmetier5" type="tRS_FACEuropeanLvl5" />
+      <xs:element minOccurs="1" maxOccurs="1" name="LEmetier6" type="tRS_FACEuropeanLvl6" />
+      <xs:element minOccurs="1" maxOccurs="1" name="LEgear" type="tGearType" />
+      <xs:element minOccurs="0" maxOccurs="1" name="LEmeshSize" type="xs:int" />
+      <xs:element minOccurs="0" maxOccurs="1" name="LEselectionDevice" type="tRS_SelectionDevice" />
+      <xs:element minOccurs="0" maxOccurs="1" name="LEselectionDeviceMeshSize" type="xs:int" />
+      <xs:element minOccurs="0" maxOccurs="1" name="LEtargetSpecies" type="tTargetSpecies" />
+      <xs:element minOccurs="0" maxOccurs="1" name="LEtotal" type="xs:int" />
+      <xs:element minOccurs="0" maxOccurs="1" name="LEsampled" type="xs:int" />
+      <xs:element minOccurs="0" maxOccurs="1" name="LEsampProb" type="xs:decimal" />
+      <xs:element minOccurs="1" maxOccurs="1" name="LEselectionMethod" type="tRS_SelectionMethod" />
+      <xs:element minOccurs="0" maxOccurs="1" name="LEselectionMethodCluster" type="xs:string" />
+      <xs:element minOccurs="0" maxOccurs="1" name="LEtotalClusters" type="xs:int" />
+      <xs:element minOccurs="0" maxOccurs="1" name="LEsampledClusters" type="tRS_SelectionMethod" />
+      <xs:element minOccurs="0" maxOccurs="1" name="LEclustersProb" type="xs:decimal" />
+      <xs:element minOccurs="0" maxOccurs="1" name="LEreasonNotSampled" type="tRS_ReasonForNotSampling" />
+      <xs:element minOccurs="0" maxOccurs="1" name="LEfullTripAvailable" type="tRS_LEfullTripAvailable" />
+    </xs:sequence>
+    <xs:attribute name="ln" type="xs:int" use="required" />
+  </xs:complexType>
+  <xs:complexType name="BaseLO">
+    <xs:sequence>
+      <xs:element minOccurs="1" maxOccurs="1" name="LOstratification" type="tRS_Stratification" />
+      <xs:element minOccurs="1" maxOccurs="1" name="LOlocation" type="xs:string" />
+      <xs:element minOccurs="1" maxOccurs="1" name="LOstratum" type="xs:string" />
+      <xs:element minOccurs="1" maxOccurs="1" name="LOclustering" type="tRS_Clustering" />
+      <xs:element minOccurs="1" maxOccurs="1" name="LOclusterName" type="xs:string" />
+      <xs:element minOccurs="0" maxOccurs="1" name="LOsampler" type="tRS_Sampler" />
+      <xs:element minOccurs="0" maxOccurs="1" name="LOtotal" type="xs:int" />
+      <xs:element minOccurs="0" maxOccurs="1" name="LOsampled" type="xs:int" />
+      <xs:element minOccurs="0" maxOccurs="1" name="LOsampProb" type="xs:decimal" />
+      <xs:element minOccurs="1" maxOccurs="1" name="LOselectionMethod" type="tRS_SelectionMethod" />
+      <xs:element minOccurs="0" maxOccurs="1" name="LOselectionMethodCluster" type="tRS_SelectionMethod" />
+      <xs:element minOccurs="0" maxOccurs="1" name="LOtotalClusters" type="xs:int" />
+      <xs:element minOccurs="0" maxOccurs="1" name="LOsampledClusters" type="xs:int" />
+      <xs:element minOccurs="0" maxOccurs="1" name="LOclustersProb" type="xs:decimal" />
+      <xs:element minOccurs="0" maxOccurs="1" name="LOreasonNotSampled" type="tRS_ReasonForNotSampling" />
+    </xs:sequence>
+    <xs:attribute name="ln" type="xs:int" use="required" />
+  </xs:complexType>
+  <xs:complexType name="BaseOS">
+    <xs:sequence>
+      <xs:element minOccurs="1" maxOccurs="1" name="OSnationalLocationName" type="xs:string" />
+      <xs:element minOccurs="1" maxOccurs="1" name="OSstratification" type="tRS_Stratification" />
+      <xs:element minOccurs="1" maxOccurs="1" name="OSlocation" type="tRS_Harbour" />
+      <xs:element minOccurs="1" maxOccurs="1" name="OSsamplingDate" type="tDate" />
+      <xs:element minOccurs="0" maxOccurs="1" name="OSsamplingTime" type="tTime" />
+      <xs:element minOccurs="1" maxOccurs="1" name="OSstratum" type="xs:string" />
+      <xs:element minOccurs="1" maxOccurs="1" name="OSclustering" type="tRS_Clustering" />
+      <xs:element minOccurs="1" maxOccurs="1" name="OSclusterName" type="xs:string" />
+      <xs:element minOccurs="0" maxOccurs="1" name="OSsampler" type="tRS_Sampler" />
+      <xs:element minOccurs="0" maxOccurs="1" name="OStimeUnit" type="tRS_TimeUnit" />
+      <xs:element minOccurs="0" maxOccurs="1" name="OStimeValue" type="xs:decimal" />
+      <xs:element minOccurs="0" maxOccurs="1" name="OStotal" type="xs:int" />
+      <xs:element minOccurs="0" maxOccurs="1" name="OSsampled" type="xs:int" />
+      <xs:element minOccurs="0" maxOccurs="1" name="OSsampProb" type="xs:decimal" />
+      <xs:element minOccurs="1" maxOccurs="1" name="OSselectionMethod" type="tRS_SelectionMethod" />
+      <xs:element minOccurs="0" maxOccurs="1" name="OSlocationType" type="tRS_LocationType" />
+      <xs:element minOccurs="0" maxOccurs="1" name="OSselectionMethodCluster" type="tRS_SelectionMethod" />
+      <xs:element minOccurs="0" maxOccurs="1" name="OStotalClusters" type="xs:int" />
+      <xs:element minOccurs="0" maxOccurs="1" name="OSsampledClusters" type="xs:int" />
+      <xs:element minOccurs="0" maxOccurs="1" name="OSclustersProb" type="xs:decimal" />
+      <xs:element minOccurs="0" maxOccurs="1" name="OSreasonNotSampled" type="tRS_ReasonForNotSampling" />
+    </xs:sequence>
+    <xs:attribute name="ln" type="xs:int" use="required" />
+  </xs:complexType>
+  <xs:complexType name="BaseSA">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="1" name="SAnationalCode" type="xs:string" />
+      <xs:element minOccurs="1" maxOccurs="1" name="SAstratification" type="tRS_Stratification" />
+      <xs:element minOccurs="1" maxOccurs="1" name="SAstratum" type="xs:string" />
+      <xs:element minOccurs="1" maxOccurs="1" name="SAspeciesCode" type="tSpecWoRMS" />
+      <xs:element minOccurs="0" maxOccurs="1" name="SAcommercialSpecies" type="tRS_FAOAsfisSpeciesCode" />
+      <xs:element minOccurs="1" maxOccurs="1" name="SApresentation" type="tRS_Presentation" />
+      <xs:element minOccurs="1" maxOccurs="1" name="SAcatchCategory" type="tRS_CatchCategory" />
+      <xs:element minOccurs="0" maxOccurs="1" name="SAlandingCategory" type="tRS_LandingCategory" />
+      <xs:element minOccurs="0" maxOccurs="1" name="SAcommSizeCatScale" type="tRS_CommercialSizeCategoryScale" />
+      <xs:element minOccurs="0" maxOccurs="1" name="SAcommSizeCat" type="tRS_CommercialSizeCategory" />
+      <xs:element minOccurs="1" maxOccurs="1" name="SAsex" type="tRS_Sex" />
+      <xs:element minOccurs="1" maxOccurs="1" name="SAunitType" type="tRS_UnitType" />
+      <xs:element minOccurs="0" maxOccurs="1" name="SAtotalWeightLive" type="xs:int" />
+      <xs:element minOccurs="0" maxOccurs="1" name="SAsampleWeightLive" type="xs:int" />
+      <xs:element minOccurs="0" maxOccurs="1" name="SAtotal" type="xs:decimal" />
+      <xs:element minOccurs="0" maxOccurs="1" name="SAsampled" type="xs:decimal" />
+      <xs:element minOccurs="0" maxOccurs="1" name="SAsampProb" type="xs:decimal" />
+      <xs:element minOccurs="0" maxOccurs="1" name="SAselectionMethod" type="tRS_SelectionMethod" />
+      <xs:element minOccurs="1" maxOccurs="1" name="SAlowerHierarchy" type="tRS_LowerHierarchy" />
+      <xs:element minOccurs="0" maxOccurs="1" name="SAsampler" type="tRS_Sampler" />
+      <xs:element minOccurs="0" maxOccurs="1" name="SAreasonNotSampledFM" type="tRS_ReasonForNotSampling" />
+      <xs:element minOccurs="0" maxOccurs="1" name="SAreasonNotSampledBV" type="tRS_ReasonForNotSampling" />
+      <xs:element minOccurs="0" maxOccurs="1" name="SAtotalWeightMeasured" type="xs:int" />
+      <xs:element minOccurs="0" maxOccurs="1" name="SAsampleWeightMeasured" type="xs:int" />
+      <xs:element minOccurs="0" maxOccurs="1" name="SAconversionFactorMesLive" type="xs:decimal" />
+    </xs:sequence>
+    <xs:attribute name="ln" type="xs:int" use="required" />
+  </xs:complexType>
+  <xs:complexType name="BaseSD" abstract="true">
+    <xs:sequence>
+      <xs:element minOccurs="1" maxOccurs="1" name="SDcountry" type="tISO_3166" />
+      <xs:element minOccurs="1" maxOccurs="1" name="SDinstitution" type="tEDMO" />
+    </xs:sequence>
+    <xs:attribute name="ln" type="xs:int" use="required" />
+  </xs:complexType>
+  <xs:complexType name="BaseSL">
+    <xs:sequence>
+      <xs:element minOccurs="1" maxOccurs="1" name="SLlistName" type="xs:string" />
+      <xs:element minOccurs="1" maxOccurs="1" name="SLyear" type="xs:int" />
+      <xs:element minOccurs="1" maxOccurs="1" name="SLspeciesCode" type="tSpecWoRMS" />      
+      <xs:element minOccurs="0" maxOccurs="1" name="SLcommercialSpecies" type="tRS_FAOAsfisSpeciesCode" />
+      <xs:element minOccurs="1" maxOccurs="1" name="SLcatchFraction" type="tRS_CatchFraction" />
+    </xs:sequence>
+    <xs:attribute name="ln" type="xs:int" use="required" />
+  </xs:complexType>
+  <xs:complexType name="BaseSS">
+    <xs:sequence>
+      <xs:element minOccurs="1" maxOccurs="1" name="SSstratification" type="tRS_Stratification" />
+      <xs:element minOccurs="1" maxOccurs="1" name="SSobservationActivityType" type="tRS_ObservationActivityType" />
+      <xs:element minOccurs="1" maxOccurs="1" name="SScatchCategory" type="tRS_CatchCategory" />
+      <xs:element minOccurs="1" maxOccurs="1" name="SSobservationType" type="tRS_ObservationType" />      
+      <xs:element minOccurs="1" maxOccurs="1" name="SSstratum" type="xs:string" />
+      <xs:element minOccurs="1" maxOccurs="1" name="SSclustering" type="tRS_Clustering" />
+      <xs:element minOccurs="1" maxOccurs="1" name="SSclusterName" type="xs:string" />
+      <xs:element minOccurs="0" maxOccurs="1" name="SSsampler" type="tRS_Sampler" />
+      <xs:element minOccurs="1" maxOccurs="1" name="SSspeciesListName" type="xs:string" />
+      <xs:element minOccurs="0" maxOccurs="1" name="SStotal" type="xs:int" />
+      <xs:element minOccurs="0" maxOccurs="1" name="SSsampled" type="xs:int" />
+      <xs:element minOccurs="1" maxOccurs="1" name="SSselectionMethod" type="tRS_SelectionMethod" />
+      <xs:element minOccurs="0" maxOccurs="1" name="SSselectionMethodCluster" type="tRS_SelectionMethod" />
+      <xs:element minOccurs="0" maxOccurs="1" name="SStotalClusters" type="xs:int" />
+      <xs:element minOccurs="0" maxOccurs="1" name="SSsampledClusters" type="xs:int" />
+      <xs:element minOccurs="0" maxOccurs="1" name="SSclustersProb" type="xs:decimal" />
+      <xs:element minOccurs="0" maxOccurs="1" name="SSreasonNotSampled" type="tRS_ReasonForNotSampling" />
+      
+    </xs:sequence>
+    <xs:attribute name="ln" type="xs:int" use="required" />
+  </xs:complexType>
+  <xs:complexType name="BaseTE">
+    <xs:sequence>
+      <xs:element minOccurs="1" maxOccurs="1" name="TEstratification" type="tRS_Stratification" />
+      <xs:element minOccurs="1" maxOccurs="1" name="TEtimeUnit" type="tRS_TimeUnit" />
+      <xs:element minOccurs="1" maxOccurs="1" name="TEstratum" type="xs:string" />
+      <xs:element minOccurs="1" maxOccurs="1" name="TEclustering" type="tRS_Clustering" />
+      <xs:element minOccurs="1" maxOccurs="1" name="TEclusterName" type="xs:string" />
+      <xs:element minOccurs="0" maxOccurs="1" name="TEsampler" type="tRS_Sampler" />
+      <xs:element minOccurs="0" maxOccurs="1" name="TEtotal" type="xs:int" />
+      <xs:element minOccurs="0" maxOccurs="1" name="TEsampled" type="xs:int" />
+      <xs:element minOccurs="0" maxOccurs="1" name="TEsampProb" type="xs:decimal" />
+      <xs:element minOccurs="1" maxOccurs="1" name="TEselectionMethod" type="tRS_SelectionMethod" />
+      <xs:element minOccurs="1" maxOccurs="1" name="TEnationalCode" type="xs:string" />
+      <xs:element minOccurs="0" maxOccurs="1" name="TEselectionMethodCluster" type="tRS_SelectionMethod" />
+      <xs:element minOccurs="0" maxOccurs="1" name="TEtotalClusters" type="xs:int" />
+      <xs:element minOccurs="0" maxOccurs="1" name="TEsampledClusters" type="xs:int" />
+      <xs:element minOccurs="0" maxOccurs="1" name="TEclustersProb" type="xs:decimal" />
+      <xs:element minOccurs="0" maxOccurs="1" name="TEreasonNotSampled" type="tRS_ReasonForNotSampling" />
+    </xs:sequence>
+    <xs:attribute name="ln" type="xs:int" use="required" />
+  </xs:complexType>
+  <xs:complexType name="BaseVD">
+    <xs:sequence>
+      <xs:element minOccurs="1" maxOccurs="1" name="VDencryptedCode" type="xs:string" />
+      <xs:element minOccurs="0" maxOccurs="1" name="VDhomePort" type="tRS_Harbour" />
+      <xs:element minOccurs="1" maxOccurs="1" name="VDflagCountry" type="tISO_3166" />
+      <xs:element minOccurs="0" maxOccurs="1" name="VDlength" type="xs:int" />
+      <xs:element minOccurs="1" maxOccurs="1" name="VDlengthCategory" type="tRS_VesselLengthCategory" />
+      <xs:element minOccurs="0" maxOccurs="1" name="VDpower" type="xs:int" />
+      <xs:element minOccurs="0" maxOccurs="1" name="VDsize" type="xs:int" />
+      <xs:element minOccurs="0" maxOccurs="1" name="VDsizeUnit" type="tRS_VesselSizeUnit" />
+      <xs:element minOccurs="1" maxOccurs="1" name="VDtype" type="tRS_VesselType" />
+    </xs:sequence>
+    <xs:attribute name="ln" type="xs:int" use="required" />
+  </xs:complexType>
+  <xs:complexType name="BaseVS">
+    
+    <xs:sequence>
+      <xs:element minOccurs="1" maxOccurs="1" name="VSstratification" type="tRS_Stratification" />
+      <xs:element minOccurs="1" maxOccurs="1" name="VSstratum" type="xs:string" />
+      <xs:element minOccurs="1" maxOccurs="1" name="VSclustering" type="tRS_Clustering" />
+      <xs:element minOccurs="1" maxOccurs="1" name="VSclusterName" type="xs:string" />
+      <xs:element minOccurs="0" maxOccurs="1" name="VSsampler" type="tRS_Sampler" />
+      <xs:element minOccurs="0" maxOccurs="1" name="VStotal" type="xs:int" />
+      <xs:element minOccurs="0" maxOccurs="1" name="VSsampled" type="xs:int" />
+      <xs:element minOccurs="0" maxOccurs="1" name="VSsampProb" type="xs:decimal" />
+      <xs:element minOccurs="1" maxOccurs="1" name="VSselectionMethod" type="tRS_SelectionMethod" />
+      <xs:element minOccurs="0" maxOccurs="1" name="VSselectionMethodCluster" type="tRS_SelectionMethod" />
+      <xs:element minOccurs="0" maxOccurs="1" name="VStotalClusters" type="xs:int" />
+      <xs:element minOccurs="0" maxOccurs="1" name="VSsampledClusters" type="xs:int" />
+      <xs:element minOccurs="0" maxOccurs="1" name="VSclustersProb" type="xs:decimal" />
+      <xs:element minOccurs="0" maxOccurs="1" name="VSreasonNotSampled" type="tRS_ReasonForNotSampling" />
+    </xs:sequence>
+    <xs:attribute name="ln" type="xs:int" use="required" />
+  </xs:complexType>
+  <xs:simpleType name="tDate">
+    <xs:restriction base="xs:string">
+      <xs:length value="10" />
+      <xs:pattern value="\d{4}\-\d{2}\-\d{2}" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="tTime">
+    <xs:restriction base="xs:string">
+      <xs:length value="5" />
+      <xs:pattern value="\d{2}\:\d{2}" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="tNumberOfHauls">
+    <xs:restriction base="xs:int">
+      <xs:minInclusive value="1" />
+      <xs:maxInclusive value="300" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="tVesselLength">
+    <xs:restriction base="xs:int">
+      <xs:minInclusive value="3" />
+      <xs:maxInclusive value="160" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="tVesselSize">
+    <xs:restriction base="xs:int">
+      <xs:minInclusive value="1" />
+      <xs:maxInclusive value="2500" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="tVesselPower">
+    <xs:restriction base="xs:int">
+      <xs:minInclusive value="4" />
+      <xs:maxInclusive value="8500" />
+    </xs:restriction>
+  </xs:simpleType>
+</xs:schema>
