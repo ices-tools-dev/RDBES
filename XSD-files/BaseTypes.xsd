@@ -182,7 +182,7 @@
       <xs:element minOccurs="0" maxOccurs="1" name="FOtotal" type="xs:int" />
       <xs:element minOccurs="0" maxOccurs="1" name="FOsampled" type="xs:int" />
       <xs:element minOccurs="0" maxOccurs="1" name="FOsampProb" type="xs:decimal" />
-      <xs:element minOccurs="1" maxOccurs="1" name="FOselectionMethod" type="xs:string" />
+      <xs:element minOccurs="1" maxOccurs="1" name="FOselectionMethod" type="tRS_SelectionMethod" />
       <xs:element minOccurs="0" maxOccurs="1" name="FOselectionMethodCluster" type="tRS_SelectionMethod" />
       <xs:element minOccurs="0" maxOccurs="1" name="FOtotalClusters" type="xs:int" />
       <xs:element minOccurs="0" maxOccurs="1" name="FOsampledClusters" type="xs:int" />
@@ -251,7 +251,7 @@
       <xs:element minOccurs="0" maxOccurs="1" name="LEsampled" type="xs:int" />
       <xs:element minOccurs="0" maxOccurs="1" name="LEsampProb" type="xs:decimal" />
       <xs:element minOccurs="1" maxOccurs="1" name="LEselectionMethod" type="tRS_SelectionMethod" />
-      <xs:element minOccurs="0" maxOccurs="1" name="LEselectionMethodCluster" type="xs:string" />
+      <xs:element minOccurs="0" maxOccurs="1" name="LEselectionMethodCluster" type="tRS_SelectionMethod" />
       <xs:element minOccurs="0" maxOccurs="1" name="LEtotalClusters" type="xs:int" />
       <xs:element minOccurs="0" maxOccurs="1" name="LEsampledClusters" type="tRS_SelectionMethod" />
       <xs:element minOccurs="0" maxOccurs="1" name="LEclustersProb" type="xs:decimal" />
