@@ -1,75 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <xs:schema elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
-  <xs:include schemaLocation="Enumerators/RS_AccuracyCode.xsd" />
-  <xs:include schemaLocation="Enumerators/RS_ObservationType.xsd" />
-  <xs:include schemaLocation="Enumerators/RS_AccuracyCode.xsd" />
-  <xs:include schemaLocation="Enumerators/RS_LandingCategory.xsd" />
-  <xs:include schemaLocation="Enumerators/RS_Stratification.xsd" />
   <xs:include schemaLocation="Enumerators/EDMO.xsd" />
-  <xs:include schemaLocation="Enumerators/TargetSpecies.xsd" />
-  <xs:include schemaLocation="Enumerators/RS_BiologicalMeasurementType.xsd" />
-  <xs:include schemaLocation="Enumerators/RS_CommercialSizeCategory.xsd" />
-  <xs:include schemaLocation="Enumerators/RS_FACEuropeanLvl6.xsd" />
-  <xs:include schemaLocation="Enumerators/RS_FunctionalUnit.xsd" />
-  <xs:include schemaLocation="Enumerators/RS_LocationType.xsd" />
-  <xs:include schemaLocation="Enumerators/RS_MethodForMeasurement.xsd" />
-  <xs:include schemaLocation="Enumerators/RS_Presentation.xsd" />
-  <xs:include schemaLocation="Enumerators/RS_SelectionMethod.xsd" />
-  <xs:include schemaLocation="Enumerators/RS_test999.xsd" />
-  <xs:include schemaLocation="Enumerators/RS_UnitType.xsd" />
-  <xs:include schemaLocation="Enumerators/RS_VesselType.xsd" />
-  <xs:include schemaLocation="Enumerators/YesNoFields.xsd" />
-  <xs:include schemaLocation="Enumerators/ICES_Area.xsd" />
   <xs:include schemaLocation="Enumerators/GearType.xsd" />
-  <xs:include schemaLocation="Enumerators/RDBES.xsd" />
-  <xs:include schemaLocation="Enumerators/RS_AggregationLevel.xsd" />
-  <xs:include schemaLocation="Enumerators/RS_CatchCategory.xsd" />
-  <xs:include schemaLocation="Enumerators/RS_Clustering.xsd" />
-  <xs:include schemaLocation="Enumerators/RS_CommercialSizeCategoryScale.xsd" />
-  <xs:include schemaLocation="Enumerators/RS_FACEuropeanLvl5.xsd" />
-  <xs:include schemaLocation="Enumerators/RS_FACNational.xsd" />
-  <xs:include schemaLocation="Enumerators/RS_FishingValidity.xsd" />
-  <xs:include schemaLocation="Enumerators/RS_Harbour.xsd" />
-  <xs:include schemaLocation="Enumerators/RS_LandingCategory.xsd" />
-  <xs:include schemaLocation="Enumerators/RS_LocationType.xsd" />
-  <xs:include schemaLocation="Enumerators/RS_MeasurementEquipment.xsd" />
-  <xs:include schemaLocation="Enumerators/RS_MethodForMeasurement.xsd" />
-  <xs:include schemaLocation="Enumerators/RS_ObservationCode.xsd" />
-  <xs:include schemaLocation="Enumerators/RS_Presentation.xsd" />
-  <xs:include schemaLocation="Enumerators/RS_Sampler.xsd" />
-  <xs:include schemaLocation="Enumerators/RS_SelectionMethod.xsd" />
-  <xs:include schemaLocation="Enumerators/RS_Stratification.xsd" />
-  <xs:include schemaLocation="Enumerators/RS_test999.xsd" />
-  <xs:include schemaLocation="Enumerators/RS_UnitOfValue.xsd" />
-  <xs:include schemaLocation="Enumerators/RS_UnitType.xsd" />
-  <xs:include schemaLocation="Enumerators/RS_VesselLengthCategory.xsd" />
-  <xs:include schemaLocation="Enumerators/RS_VesselType.xsd" />
-  <xs:include schemaLocation="Enumerators/StatRec.xsd" />
-  <xs:include schemaLocation="Enumerators/YesNoFields.xsd" />
-  <xs:include schemaLocation="Enumerators/EDMO.xsd" />
   <xs:include schemaLocation="Enumerators/ICES_Area.xsd" />
   <xs:include schemaLocation="Enumerators/ISO_3166.xsd" />
-  <xs:include schemaLocation="Enumerators/GearType.xsd" />
-  <xs:include schemaLocation="Enumerators/TargetSpecies.xsd" />
-  <xs:include schemaLocation="Enumerators/RDBES.xsd" />
+  <xs:include schemaLocation="Enumerators/Metier5.xsd" />
+  <xs:include schemaLocation="Enumerators/Metier6.xsd" />
+  <xs:include schemaLocation="Enumerators/NationalFishingGear.xsd" />
   <xs:include schemaLocation="Enumerators/RS_AccuracyCode.xsd" />
   <xs:include schemaLocation="Enumerators/RS_AggregationLevel.xsd" />
   <xs:include schemaLocation="Enumerators/RS_BiologicalMeasurementType.xsd" />
   <xs:include schemaLocation="Enumerators/RS_CatchCategory.xsd" />
+  <xs:include schemaLocation="Enumerators/RS_CatchFraction.xsd" />
   <xs:include schemaLocation="Enumerators/RS_CatchRegistration.xsd" />
   <xs:include schemaLocation="Enumerators/RS_Clustering.xsd" />
   <xs:include schemaLocation="Enumerators/RS_CommercialSizeCategory.xsd" />
   <xs:include schemaLocation="Enumerators/RS_CommercialSizeCategoryScale.xsd" />
   <xs:include schemaLocation="Enumerators/RS_EconomicalZone.xsd" />
-  <xs:include schemaLocation="Enumerators/RS_FACEuropeanLvl5.xsd" />
-  <xs:include schemaLocation="Enumerators/RS_FACEuropeanLvl6.xsd" />
-  <xs:include schemaLocation="Enumerators/RS_FACNational.xsd" />
-  <xs:include schemaLocation="Enumerators/RS_FAOAsfisSpeciesCode.xsd" />
-  <xs:include schemaLocation="Enumerators/RS_FAOSpecies.xsd" />
   <xs:include schemaLocation="Enumerators/RS_FishingValidity.xsd" />
-  <xs:include schemaLocation="Enumerators/RS_FunctionalUnit.xsd" />
   <xs:include schemaLocation="Enumerators/RS_Harbour.xsd" />
-  <xs:include schemaLocation="Enumerators/RS_Hierarchy.xsd" />
   <xs:include schemaLocation="Enumerators/RS_LandingCategory.xsd" />
   <xs:include schemaLocation="Enumerators/RS_LEfullTripAvailable.xsd" />
   <xs:include schemaLocation="Enumerators/RS_LocationType.xsd" />
@@ -78,19 +27,17 @@
   <xs:include schemaLocation="Enumerators/RS_MeasurementType.xsd" />
   <xs:include schemaLocation="Enumerators/RS_MethodForMeasurement.xsd" />
   <xs:include schemaLocation="Enumerators/RS_ObservationActivityType.xsd" />
-  <xs:include schemaLocation="Enumerators/RS_ObservationActivityType.xsd.bak" />
   <xs:include schemaLocation="Enumerators/RS_ObservationCode.xsd" />
   <xs:include schemaLocation="Enumerators/RS_ObservationType.xsd" />
   <xs:include schemaLocation="Enumerators/RS_Presentation.xsd" />
   <xs:include schemaLocation="Enumerators/RS_ReasonForNotSampling.xsd" />
+  <xs:include schemaLocation="Enumerators/RS_Region.xsd" />
   <xs:include schemaLocation="Enumerators/RS_Sampler.xsd" />
   <xs:include schemaLocation="Enumerators/RS_SelectionDevice.xsd" />
   <xs:include schemaLocation="Enumerators/RS_SelectionMethod.xsd" />
   <xs:include schemaLocation="Enumerators/RS_Sex.xsd" />
   <xs:include schemaLocation="Enumerators/RS_Stratification.xsd" />
   <xs:include schemaLocation="Enumerators/RS_Subpolygon.xsd" />
-  <xs:include schemaLocation="Enumerators/RS_test999.xsd" />
-  <xs:include schemaLocation="Enumerators/RS_TimeUnit.xsd" />
   <xs:include schemaLocation="Enumerators/RS_UnitOfValue.xsd" />
   <xs:include schemaLocation="Enumerators/RS_UnitScaleList.xsd" />
   <xs:include schemaLocation="Enumerators/RS_UnitType.xsd" />
@@ -98,11 +45,13 @@
   <xs:include schemaLocation="Enumerators/RS_VesselLengthCategory.xsd" />
   <xs:include schemaLocation="Enumerators/RS_VesselSizeUnit.xsd" />
   <xs:include schemaLocation="Enumerators/RS_VesselType.xsd" />
+  <xs:include schemaLocation="Enumerators/SpecASFIS.xsd" />
   <xs:include schemaLocation="Enumerators/SpecWoRMS.xsd" />
   <xs:include schemaLocation="Enumerators/StatRec.xsd" />
+  <xs:include schemaLocation="Enumerators/TargetSpecies.xsd" />
+  <xs:include schemaLocation="Enumerators/TimeUnit.xsd" />
   <xs:include schemaLocation="Enumerators/Year.xsd" />
   <xs:include schemaLocation="Enumerators/YesNoFields.xsd" />
-  <xs:include schemaLocation="Enumerators/RS_CatchFraction.xsd" />
   <xs:complexType name="BaseBV">
     <xs:sequence>
       <xs:element minOccurs="1" maxOccurs="1" name="BVfishId" type="xs:int" />
@@ -128,7 +77,7 @@
       <xs:element minOccurs="1" maxOccurs="1" name="DEyear" type="tYear" />
       <xs:element minOccurs="1" maxOccurs="1" name="DEstratum" type="xs:string" />
       <xs:element minOccurs="1" maxOccurs="1" name="DEhierarchyCorrect" type="tYesNoFields" />
-      <xs:element minOccurs="1" maxOccurs="1" name="DEhierarchy" type="tRS_Hierarchy" />
+      <xs:element minOccurs="1" maxOccurs="1" name="DEhierarchy" type="tRS_UpperHierarchy" />
     </xs:sequence>
     <xs:attribute name="ln" type="xs:int" use="required" />
   </xs:complexType>
@@ -170,9 +119,9 @@
       <xs:element minOccurs="0" maxOccurs="1" name="FOfunctinalUnit" type="xs:string" />
       <xs:element minOccurs="0" maxOccurs="1" name="FOfishingDepth" type="xs:int" />
       <xs:element minOccurs="0" maxOccurs="1" name="FOwaterDepth" type="xs:int" />
-      <xs:element minOccurs="0" maxOccurs="1" name="FOnationalCategory" type="tRS_FACNational" />
-      <xs:element minOccurs="0" maxOccurs="1" name="FOmetier5" type="tRS_FACEuropeanLvl5" />
-      <xs:element minOccurs="0" maxOccurs="1" name="FOmetier6" type="tRS_FACEuropeanLvl6" />
+      <xs:element minOccurs="0" maxOccurs="1" name="FOnationalCategory" type="tNationalFishingGear" />
+      <xs:element minOccurs="0" maxOccurs="1" name="FOmetier5" type="tMetier5" />
+      <xs:element minOccurs="0" maxOccurs="1" name="FOmetier6" type="tMetier6" />
       <xs:element minOccurs="1" maxOccurs="1" name="FOgear" type="tGearType" />
       <xs:element minOccurs="0" maxOccurs="1" name="FOmeshSize" type="xs:int" />
       <xs:element minOccurs="0" maxOccurs="1" name="FOselectionDevice" type="tRS_SelectionDevice" />
@@ -238,10 +187,9 @@
       <xs:element minOccurs="1" maxOccurs="1" name="LEarea" type="tICES_Area" />
       <xs:element minOccurs="0" maxOccurs="1" name="LErectangle" type="tStatRec" />
       <xs:element minOccurs="0" maxOccurs="1" name="LEsubpolygon" type="tRS_Subpolygon" />
-      <xs:element minOccurs="0" maxOccurs="1" name="LEfunctinalUnit" type="tRS_FunctionalUnit" />
-      <xs:element minOccurs="0" maxOccurs="1" name="LEnationalCategory" type="tRS_FACNational" />
-      <xs:element minOccurs="0" maxOccurs="1" name="LEmetier5" type="tRS_FACEuropeanLvl5" />
-      <xs:element minOccurs="1" maxOccurs="1" name="LEmetier6" type="tRS_FACEuropeanLvl6" />
+      <xs:element minOccurs="0" maxOccurs="1" name="LEnationalCategory" type="tNationalFishingGear" />
+      <xs:element minOccurs="0" maxOccurs="1" name="LEmetier5" type="tMetier5" />
+      <xs:element minOccurs="1" maxOccurs="1" name="LEmetier6" type="tMetier6" />
       <xs:element minOccurs="1" maxOccurs="1" name="LEgear" type="tGearType" />
       <xs:element minOccurs="0" maxOccurs="1" name="LEmeshSize" type="xs:int" />
       <xs:element minOccurs="0" maxOccurs="1" name="LEselectionDevice" type="tRS_SelectionDevice" />
@@ -253,7 +201,7 @@
       <xs:element minOccurs="1" maxOccurs="1" name="LEselectionMethod" type="tRS_SelectionMethod" />
       <xs:element minOccurs="0" maxOccurs="1" name="LEselectionMethodCluster" type="tRS_SelectionMethod" />
       <xs:element minOccurs="0" maxOccurs="1" name="LEtotalClusters" type="xs:int" />
-      <xs:element minOccurs="0" maxOccurs="1" name="LEsampledClusters" type="tRS_SelectionMethod" />
+      <xs:element minOccurs="0" maxOccurs="1" name="LEsampledClusters" type="xs:int" />
       <xs:element minOccurs="0" maxOccurs="1" name="LEclustersProb" type="xs:decimal" />
       <xs:element minOccurs="0" maxOccurs="1" name="LEreasonNotSampled" type="tRS_ReasonForNotSampling" />
       <xs:element minOccurs="0" maxOccurs="1" name="LEfullTripAvailable" type="tRS_LEfullTripAvailable" />
@@ -291,7 +239,7 @@
       <xs:element minOccurs="1" maxOccurs="1" name="OSclustering" type="tRS_Clustering" />
       <xs:element minOccurs="1" maxOccurs="1" name="OSclusterName" type="xs:string" />
       <xs:element minOccurs="0" maxOccurs="1" name="OSsampler" type="tRS_Sampler" />
-      <xs:element minOccurs="0" maxOccurs="1" name="OStimeUnit" type="tRS_TimeUnit" />
+      <xs:element minOccurs="0" maxOccurs="1" name="OStimeUnit" type="tTimeUnit" />
       <xs:element minOccurs="0" maxOccurs="1" name="OStimeValue" type="xs:decimal" />
       <xs:element minOccurs="0" maxOccurs="1" name="OStotal" type="xs:int" />
       <xs:element minOccurs="0" maxOccurs="1" name="OSsampled" type="xs:int" />
@@ -312,7 +260,7 @@
       <xs:element minOccurs="1" maxOccurs="1" name="SAstratification" type="tRS_Stratification" />
       <xs:element minOccurs="1" maxOccurs="1" name="SAstratum" type="xs:string" />
       <xs:element minOccurs="1" maxOccurs="1" name="SAspeciesCode" type="tSpecWoRMS" />
-      <xs:element minOccurs="0" maxOccurs="1" name="SAcommercialSpecies" type="tRS_FAOAsfisSpeciesCode" />
+      <xs:element minOccurs="0" maxOccurs="1" name="SAcommercialSpecies" type="tSpecASFIS" />
       <xs:element minOccurs="1" maxOccurs="1" name="SApresentation" type="tRS_Presentation" />
       <xs:element minOccurs="1" maxOccurs="1" name="SAcatchCategory" type="tRS_CatchCategory" />
       <xs:element minOccurs="0" maxOccurs="1" name="SAlandingCategory" type="tRS_LandingCategory" />
@@ -347,8 +295,8 @@
     <xs:sequence>
       <xs:element minOccurs="1" maxOccurs="1" name="SLlistName" type="xs:string" />
       <xs:element minOccurs="1" maxOccurs="1" name="SLyear" type="xs:int" />
-      <xs:element minOccurs="1" maxOccurs="1" name="SLspeciesCode" type="tSpecWoRMS" />      
-      <xs:element minOccurs="0" maxOccurs="1" name="SLcommercialSpecies" type="tRS_FAOAsfisSpeciesCode" />
+      <xs:element minOccurs="1" maxOccurs="1" name="SLspeciesCode" type="tSpecWoRMS" />
+      <xs:element minOccurs="0" maxOccurs="1" name="SLcommercialSpecies" type="tSpecASFIS" />
       <xs:element minOccurs="1" maxOccurs="1" name="SLcatchFraction" type="tRS_CatchFraction" />
     </xs:sequence>
     <xs:attribute name="ln" type="xs:int" use="required" />
@@ -358,7 +306,7 @@
       <xs:element minOccurs="1" maxOccurs="1" name="SSstratification" type="tRS_Stratification" />
       <xs:element minOccurs="1" maxOccurs="1" name="SSobservationActivityType" type="tRS_ObservationActivityType" />
       <xs:element minOccurs="1" maxOccurs="1" name="SScatchCategory" type="tRS_CatchCategory" />
-      <xs:element minOccurs="1" maxOccurs="1" name="SSobservationType" type="tRS_ObservationType" />      
+      <xs:element minOccurs="1" maxOccurs="1" name="SSobservationType" type="tRS_ObservationType" />
       <xs:element minOccurs="1" maxOccurs="1" name="SSstratum" type="xs:string" />
       <xs:element minOccurs="1" maxOccurs="1" name="SSclustering" type="tRS_Clustering" />
       <xs:element minOccurs="1" maxOccurs="1" name="SSclusterName" type="xs:string" />
@@ -372,14 +320,13 @@
       <xs:element minOccurs="0" maxOccurs="1" name="SSsampledClusters" type="xs:int" />
       <xs:element minOccurs="0" maxOccurs="1" name="SSclustersProb" type="xs:decimal" />
       <xs:element minOccurs="0" maxOccurs="1" name="SSreasonNotSampled" type="tRS_ReasonForNotSampling" />
-      
     </xs:sequence>
     <xs:attribute name="ln" type="xs:int" use="required" />
   </xs:complexType>
   <xs:complexType name="BaseTE">
     <xs:sequence>
       <xs:element minOccurs="1" maxOccurs="1" name="TEstratification" type="tRS_Stratification" />
-      <xs:element minOccurs="1" maxOccurs="1" name="TEtimeUnit" type="tRS_TimeUnit" />
+      <xs:element minOccurs="1" maxOccurs="1" name="TEtimeUnit" type="tTimeUnit" />
       <xs:element minOccurs="1" maxOccurs="1" name="TEstratum" type="xs:string" />
       <xs:element minOccurs="1" maxOccurs="1" name="TEclustering" type="tRS_Clustering" />
       <xs:element minOccurs="1" maxOccurs="1" name="TEclusterName" type="xs:string" />
@@ -412,7 +359,6 @@
     <xs:attribute name="ln" type="xs:int" use="required" />
   </xs:complexType>
   <xs:complexType name="BaseVS">
-    
     <xs:sequence>
       <xs:element minOccurs="1" maxOccurs="1" name="VSstratification" type="tRS_Stratification" />
       <xs:element minOccurs="1" maxOccurs="1" name="VSstratum" type="xs:string" />
