@@ -33,7 +33,7 @@
     <xs:complexContent mixed="false">
       <xs:extension base="BaseSD">
         <xs:sequence>         
-          <xs:element   name="VS" type="VS" />          
+          <xs:element minOccurs="1" maxOccurs="unbounded"   name="VS" type="VS" />          
         </xs:sequence>
       </xs:extension>
     </xs:complexContent>
