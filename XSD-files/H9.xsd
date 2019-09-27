@@ -48,23 +48,24 @@
   <xs:complexType name="TE">
     <xs:complexContent mixed="false">
       <xs:extension base="BaseTE">
-        <xs:sequence minOccurs="1" maxOccurs="unbounded">
-          <xs:element  name="SL" type="SL" />
-          <xs:element  name="SS" type="SS" />
-        </xs:sequence>
-      </xs:extension>
-    </xs:complexContent>
-  </xs:complexType>
-  <xs:complexType name="SS">
-    <xs:complexContent mixed="false">
-      <xs:extension base="BaseSS">
-        <xs:sequence>          
-          <xs:element  maxOccurs="unbounded" name="SA" type="SA" />          
+        <xs:sequence>
+          
+          <xs:element maxOccurs="unbounded"  name="SS" type="SS" />
         </xs:sequence>
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>
   
+  <xs:complexType name="SS">
+    <xs:complexContent mixed="false">
+      <xs:extension base="BaseSS">
+        <xs:sequence minOccurs="1" maxOccurs="unbounded">
+          <xs:element maxOccurs="unbounded"   name="SL" type="SL" />
+          <xs:element   name="SA" type="SA" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
   
   
   <xs:complexType name="SA">
