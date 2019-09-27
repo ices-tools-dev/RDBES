@@ -42,29 +42,35 @@
   <xs:complexType name="TE">
     <xs:complexContent mixed="false">
       <xs:extension base="BaseTE">
-        <xs:sequence minOccurs="1" maxOccurs="unbounded">
-          <xs:element  name="VD" type="VD" />
-          <xs:element  name="FT" type="FT" />
-          <xs:element  name="LE" type="LE" />
-        </xs:sequence>
-      </xs:extension>
-    </xs:complexContent>
-  </xs:complexType>  
-  <xs:complexType name="LE">
-    <xs:complexContent mixed="false">
-      <xs:extension base="BaseLE">
-        <xs:sequence minOccurs="1" maxOccurs="unbounded">
-          <xs:element  name="SL" type="SL" />          
-          <xs:element  name="SS" type="SS" />
+        <xs:sequence>
+          <xs:element maxOccurs="unbounded"  name="VD" type="VD" />
+         
         </xs:sequence>
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>
   <xs:complexType name="VD">
     <xs:complexContent mixed="false">
-      <xs:extension base="BaseVD" />
+      <xs:extension base="BaseVD">
+        <xs:sequence minOccurs="1" maxOccurs="unbounded">
+          <xs:element minOccurs="0"  name="FT" type="FT" />
+          <xs:element  name="LE" type="LE" />
+
+        </xs:sequence>
+      </xs:extension>
     </xs:complexContent>
   </xs:complexType>
+  <xs:complexType name="LE">
+    <xs:complexContent mixed="false">
+      <xs:extension base="BaseLE">
+        <xs:sequence>
+                
+          <xs:element maxOccurs="unbounded"  name="SS" type="SS" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  
   <xs:complexType name="FT">
     <xs:complexContent mixed="false">
       <xs:extension base="BaseFT" />
@@ -73,8 +79,9 @@
   <xs:complexType name="SS">
     <xs:complexContent mixed="false">
       <xs:extension base="BaseSS">
-        <xs:sequence>          
-          <xs:element  maxOccurs="unbounded" name="SA" type="SA" />
+        <xs:sequence  minOccurs="1"  maxOccurs="unbounded" >
+          <xs:element  name="SL" type="SL" maxOccurs="unbounded" />
+          <xs:element  name="SA" type="SA" />
         </xs:sequence>
       </xs:extension>
     </xs:complexContent>
