@@ -35,19 +35,24 @@
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>
+  
   <xs:complexType name="OS">
     <xs:complexContent mixed="false">
       <xs:extension base="BaseOS">
-        <xs:sequence minOccurs="1" maxOccurs="unbounded" >
-          <xs:element  name="VD" type="VD" />
-          <xs:element  name="FT" type="FT" />
+        <xs:sequence>
+          
+          <xs:element maxOccurs="unbounded"  name="VD" type="VD" />
         </xs:sequence>
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>
-  <xs:complexType name="VD">
+ <xs:complexType name="VD">
     <xs:complexContent mixed="false">
-      <xs:extension base="BaseVD" />
+      <xs:extension base="BaseVD">
+        <xs:sequence>
+          <xs:element maxOccurs="unbounded" name="FT" type="FT" />
+        </xs:sequence>
+      </xs:extension>
     </xs:complexContent>
   </xs:complexType>
   <xs:complexType name="FT">
@@ -62,9 +67,9 @@
   <xs:complexType name="LE">
     <xs:complexContent mixed="false">
       <xs:extension base="BaseLE">
-        <xs:sequence  maxOccurs="unbounded" minOccurs="1">
-          <xs:element  name="SL" type="SL" />
-          <xs:element  name="SS" type="SS" />
+        <xs:sequence>
+          
+          <xs:element maxOccurs="unbounded"  name="SS" type="SS" />
         </xs:sequence>
       </xs:extension>
     </xs:complexContent>
@@ -72,8 +77,9 @@
   <xs:complexType name="SS">
     <xs:complexContent mixed="false">
       <xs:extension base="BaseSS">
-        <xs:sequence>
-          <xs:element  maxOccurs="unbounded" name="SA" type="SA" />
+        <xs:sequence minOccurs="1" maxOccurs="unbounded">
+          <xs:element maxOccurs="unbounded"  name="SL" type="SL" />
+          <xs:element   name="SA" type="SA" />
         </xs:sequence>
       </xs:extension>
     </xs:complexContent>
