@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xs:schema elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:include schemaLocation="BaseTypes.xsd" />
+  <xs:element name="RDBES" type="RDBESTypeHCL" />
+  <xs:complexType name="RDBESTypeHCL">
+    <xs:sequence>
+      <xs:element  maxOccurs="1" name="HCL" type="HCL" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="HCL">
+    <xs:sequence>
+      <xs:element  maxOccurs="unbounded" name="CL" type="BaseCL" />
+    </xs:sequence>
+  </xs:complexType>  
+  
+</xs:schema>

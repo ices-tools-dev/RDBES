@@ -26,30 +26,16 @@
     <xs:complexContent mixed="false">
       <xs:extension base="BaseSD"  >
         <xs:sequence>
-
-          <xs:element maxOccurs="unbounded"  name="VD" type="VD" />
-
+          <xs:element minOccurs="0"  maxOccurs="unbounded"  name="FT" type="FT" />
         </xs:sequence>
       </xs:extension>
     </xs:complexContent>
-  </xs:complexType>
-    <xs:complexType name="VD">
-      <xs:complexContent mixed="false">
-        <xs:extension base="BaseVD">
-          <xs:sequence>
-            <xs:element  maxOccurs="unbounded" name="FT" type="FT"  />
-          </xs:sequence>
-        </xs:extension>
-      </xs:complexContent>
-  </xs:complexType>
-    
-   
-  
+  </xs:complexType> 
   <xs:complexType name="FT">
     <xs:complexContent mixed="false">
       <xs:extension base="BaseFT">
         <xs:sequence>
-          <xs:element  maxOccurs="unbounded" name="FO" type="FO" />
+          <xs:element  minOccurs="0"  maxOccurs="unbounded" name="FO" type="FO" />
         </xs:sequence>
       </xs:extension>
     </xs:complexContent>
@@ -58,7 +44,7 @@
     <xs:complexContent mixed="false">
       <xs:extension base="BaseFO">
         <xs:sequence>          
-          <xs:element   maxOccurs="unbounded"  name="SS" type="SS" />
+          <xs:element  minOccurs="0"   maxOccurs="unbounded"  name="SS" type="SS" />
         </xs:sequence>
       </xs:extension>
     </xs:complexContent>
@@ -66,18 +52,13 @@
   <xs:complexType name="SS">
     <xs:complexContent mixed="false">
       <xs:extension base="BaseSS">
-        <xs:sequence minOccurs="1" maxOccurs="unbounded">
-          <xs:element  name="SL" type="SL" maxOccurs="unbounded" />
-          <xs:element  name="SA" type="SA" />
+        <xs:sequence>
+          <xs:element minOccurs="0"   maxOccurs="unbounded"   name="SA" type="SA" />
         </xs:sequence>
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>
-    <xs:complexType name="SL">
-      <xs:complexContent mixed="false">
-        <xs:extension base="BaseSL" />
-      </xs:complexContent>
-    </xs:complexType>
+    
   <xs:complexType name="SA">
     <xs:complexContent mixed="false">
       <xs:extension base="BaseSA">
