@@ -11,7 +11,13 @@
     <xs:sequence>
       <xs:element  maxOccurs="unbounded" name="DE" type="DE" />
     </xs:sequence>
-  </xs:complexType>  
+  </xs:complexType>
+  <xs:complexType name="SL">
+    <xs:complexContent mixed="false">
+      <xs:extension base="BaseSL">
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
   <xs:complexType name="DE">
     <xs:complexContent mixed="false">
       <xs:extension base="BaseDE">
@@ -25,7 +31,7 @@
     <xs:complexContent mixed="false">
       <xs:extension base="BaseSD">
         <xs:sequence>
-          <xs:element minOccurs="0"   maxOccurs="unbounded" name="LO" type="LO" />
+          <xs:element  maxOccurs="unbounded" name="LO" type="LO" />
         </xs:sequence>
       </xs:extension>
     </xs:complexContent>
@@ -34,7 +40,7 @@
     <xs:complexContent mixed="false">
       <xs:extension base="BaseLO">
         <xs:sequence>
-          <xs:element minOccurs="0"   maxOccurs="unbounded" name="TE" type="TE" />
+          <xs:element  maxOccurs="unbounded" name="TE" type="TE" />
         </xs:sequence>
       </xs:extension>
     </xs:complexContent>
@@ -43,7 +49,8 @@
     <xs:complexContent mixed="false">
       <xs:extension base="BaseTE">
         <xs:sequence>
-          <xs:element minOccurs="0"  maxOccurs="unbounded"  name="SS" type="SS" />
+          
+          <xs:element maxOccurs="unbounded"  name="SS" type="SS" />
         </xs:sequence>
       </xs:extension>
     </xs:complexContent>
@@ -52,8 +59,9 @@
   <xs:complexType name="SS">
     <xs:complexContent mixed="false">
       <xs:extension base="BaseSS">
-        <xs:sequence>
-          <xs:element minOccurs="0"  name="SA" type="SA" />
+        <xs:sequence minOccurs="1" maxOccurs="unbounded">
+          <xs:element maxOccurs="unbounded"   name="SL" type="SL" />
+          <xs:element   name="SA" type="SA" />
         </xs:sequence>
       </xs:extension>
     </xs:complexContent>
@@ -63,21 +71,30 @@
   <xs:complexType name="SA">
     <xs:complexContent mixed="false">
       <xs:extension base="BaseSA">
-        <xs:sequence minOccurs="0"  maxOccurs="unbounded">
-          <xs:element minOccurs="0" maxOccurs="unbounded" name="LE" type="LE" />
+        <xs:sequence minOccurs="1" maxOccurs="unbounded">
+          <xs:element name="VD" type="VD" />
+          <xs:element name="LE" type="LE" />
           <xs:element minOccurs="0"  maxOccurs="unbounded" name="FM" type="FM" />
           <xs:element minOccurs="0"  maxOccurs="unbounded" name="BV" type="BV" />
         </xs:sequence>
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>
+
   <xs:complexType name="LE">
     <xs:complexContent mixed="false">
-      <xs:extension base="BaseLE">
+      <xs:extension base="BaseLE">        
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>
-  
+
+
+  <xs:complexType name="VD">
+    <xs:complexContent mixed="false">
+      <xs:extension base="BaseVD" />
+    </xs:complexContent>
+  </xs:complexType>
+
   <xs:complexType name="FM">
     <xs:complexContent mixed="false">
       <xs:extension base="BaseFM">
