@@ -12,8 +12,7 @@
       <xs:element  maxOccurs="unbounded" name="DE" type="DE" />
     </xs:sequence>
   </xs:complexType>
-
-  <xs:complexType name="DE">
+ <xs:complexType name="DE">
     <xs:complexContent mixed="false">
       <xs:extension base="BaseDE">
         <xs:sequence>
@@ -25,24 +24,14 @@
   <xs:complexType name="SD">
     <xs:complexContent mixed="false">
       <xs:extension base="BaseSD">
-        <xs:sequence minOccurs="1" maxOccurs="unbounded">
-          <xs:element minOccurs="0" name="VD" type="VD" />
+        <xs:sequence>
           <xs:element minOccurs="0" name="FT" type="FT" />
-          <xs:element name="FO" type="FO" />
+          <xs:element minOccurs="0" maxOccurs="unbounded"  name="FO" type="FO" />
         </xs:sequence>
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>
-
-
-  <xs:complexType name="VD">
-    <xs:complexContent mixed="false">
-      <xs:extension base="BaseVD" />
-    </xs:complexContent>
-  </xs:complexType>
-
   <!--2019 09 06 After Webex yesterday we agreed that the important link to the VD is what was actually sampled not the VD that was pland to be sampled. If the vessel change specifications like engine power-->
-
   <xs:complexType name="FT">
     <xs:complexContent mixed="false">
       <xs:extension base="BaseFT" />
@@ -52,7 +41,7 @@
     <xs:complexContent mixed="false">
       <xs:extension base="BaseFO">
         <xs:sequence>
-          <xs:element   maxOccurs="unbounded"  name="SS" type="SS" />
+          <xs:element  minOccurs="0"   maxOccurs="unbounded"  name="SS" type="SS" />
         </xs:sequence>
       </xs:extension>
     </xs:complexContent>
@@ -60,16 +49,10 @@
   <xs:complexType name="SS">
     <xs:complexContent mixed="false">
       <xs:extension base="BaseSS">
-        <xs:sequence minOccurs="1" maxOccurs="unbounded">
-          <xs:element  maxOccurs="unbounded" name="SL" type="SL"  />
-          <xs:element  name="SA" type="SA" />
+        <xs:sequence>
+          <xs:element  minOccurs="0" maxOccurs="unbounded"  name="SA" type="SA" />
         </xs:sequence>
       </xs:extension>
-    </xs:complexContent>
-  </xs:complexType>
-  <xs:complexType name="SL">
-    <xs:complexContent mixed="false">
-      <xs:extension base="BaseSL" />
     </xs:complexContent>
   </xs:complexType>
   <xs:complexType name="SA">
