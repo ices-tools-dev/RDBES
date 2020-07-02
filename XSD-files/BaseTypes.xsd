@@ -461,7 +461,7 @@
       <xs:element minOccurs="0" maxOccurs="1" name="SAreasonNotSampledBV" type="tRS_ReasonForNotSampling" />
       <xs:element minOccurs="0" maxOccurs="1" name="SAtotalWeightMeasured" type="xs:int" />
       <xs:element minOccurs="0" maxOccurs="1" name="SAsampleWeightMeasured" type="xs:int" />
-      <xs:element minOccurs="0" maxOccurs="1" name="SAconversionFactorMesLive" type="tDecimalPrec0" />
+      <xs:element minOccurs="0" maxOccurs="1" name="SAconversionFactorMesLive" type="tDecimalPrec5" />
     </xs:sequence>
     <xs:attribute name="ln" type="xs:int" use="required" />
   </xs:complexType>
