@@ -99,7 +99,7 @@
       <xs:element minOccurs="1" maxOccurs="1" name="CLstatisticalRectangle" type="tStatRec" />
       <xs:element minOccurs="1" maxOccurs="1" name="CLgsaSubarea" type="tAreas_GFCM_GSA" />
       <xs:element minOccurs="0" maxOccurs="1" name="CLjurisdictionArea" type="tRS_JurisdictionArea" />
-      <xs:element minOccurs="1" maxOccurs="1" name="CLexclusiveEconomicZoneIndicator" type="tRS_EEZI" />
+      <xs:element minOccurs="0" maxOccurs="1" name="CLexclusiveEconomicZoneIndicator" type="tRS_EEZI" />
       <xs:element minOccurs="1" maxOccurs="1" name="CLspeciesCode" type="tSpecWoRMS" />
       <xs:element minOccurs="0" maxOccurs="1" name="CLspeciesFaoCode" type="tSpecASFIS" />
       <xs:element minOccurs="1" maxOccurs="1" name="CLlandingCategory" type="tRS_LandingCategory" />
@@ -156,8 +156,8 @@
       <xs:element minOccurs="0" maxOccurs="1" name="CEscientificNumberOfHaulsOrSets" type="tInt2Hundrend50Thousand" />
       <xs:element minOccurs="0" maxOccurs="1" name="CEofficialVesselFishingHour" type="tDecimalPointZeroOneTo1200000" />
       <xs:element minOccurs="0" maxOccurs="1" name="CEscientificVesselFishingHour" type="tDecimalPointZeroOneTo1200000" />
-      <xs:element minOccurs="0" maxOccurs="1" name="CEofficialSoakingMeterHour" type="tDecimalPointZeroOneTo1200000" />
-      <xs:element minOccurs="0" maxOccurs="1" name="CEscientificSoakingMeterHour" type="tDecimalPointZeroOneTo1200000" />
+      <xs:element minOccurs="0" maxOccurs="1" name="CEofficialSoakingMeterHour" type="tDecimalPointZeroOneTo12e8" />
+      <xs:element minOccurs="0" maxOccurs="1" name="CEscientificSoakingMeterHour" type="tDecimalPointZeroOneTo12e8" />
       <xs:element minOccurs="1" maxOccurs="1" name="CEofficialkWDaysAtSea" type="tInt2Million500Thousand" />
       <xs:element minOccurs="1" maxOccurs="1" name="CEscientifickWDaysAtSea" type="tInt2Million500Thousand" />
       <xs:element minOccurs="1" maxOccurs="1" name="CEofficialkWFishingDays" type="tInt2Million500Thousand" />
@@ -185,8 +185,8 @@
       <xs:element minOccurs="0" maxOccurs="1" name="BVmeasurementEquipment" type="tRS_MeasurementEquipment" />
       <xs:element minOccurs="0" maxOccurs="1" name="BVnumberTotal" type="xs:int" />
       <xs:element minOccurs="0" maxOccurs="1" name="BVnumberSampled" type="xs:int" />
-      <xs:element minOccurs="0" maxOccurs="1" name="BVselectionProb" type="tDecimalPrec2" />
-      <xs:element minOccurs="0" maxOccurs="1" name="BVinclusionProb" type="tDecimalPrec2" />      
+      <xs:element minOccurs="0" maxOccurs="1" name="BVselectionProb" type="tDecimalPrec10" />
+      <xs:element minOccurs="0" maxOccurs="1" name="BVinclusionProb" type="tDecimalPrec10" />      
       <xs:element minOccurs="1" maxOccurs="1" name="BVselectionMethod" type="tRS_SelectionMethod" />
       <xs:element minOccurs="1" maxOccurs="1" name="BVunitName" type="xs:string" />      
       <xs:element minOccurs="0" maxOccurs="1" name="BVsampler" type="tRS_Sampler" />
@@ -264,15 +264,15 @@
       <xs:element minOccurs="1" maxOccurs="1" name="FOobservationCode" type="tRS_ObservationCode" />
       <xs:element minOccurs="0" maxOccurs="1" name="FOnumberTotal" type="xs:int" />
       <xs:element minOccurs="0" maxOccurs="1" name="FOnumberSampled" type="xs:int" />
-      <xs:element minOccurs="0" maxOccurs="1" name="FOselectionProb" type="tDecimalPrec2" />
-      <xs:element minOccurs="0" maxOccurs="1" name="FOinclusionProb" type="tDecimalPrec2" />      
+      <xs:element minOccurs="0" maxOccurs="1" name="FOselectionProb" type="tDecimalPrec10" />
+      <xs:element minOccurs="0" maxOccurs="1" name="FOinclusionProb" type="tDecimalPrec10" />      
       <xs:element minOccurs="1" maxOccurs="1" name="FOselectionMethod" type="tRS_SelectionMethod" />
       <xs:element minOccurs="1" maxOccurs="1" name="FOunitName" type="xs:string" />      
       <xs:element minOccurs="0" maxOccurs="1" name="FOselectionMethodCluster" type="tRS_SelectionMethod" />
       <xs:element minOccurs="0" maxOccurs="1" name="FOnumberTotalClusters" type="xs:int" />
       <xs:element minOccurs="0" maxOccurs="1" name="FOnumberSampledClusters" type="xs:int" />
-      <xs:element minOccurs="0" maxOccurs="1" name="FOselectionProbCluster" type="tDecimalPrec2" />
-      <xs:element minOccurs="0" maxOccurs="1" name="FOinclusionProbCluster" type="tDecimalPrec2" />
+      <xs:element minOccurs="0" maxOccurs="1" name="FOselectionProbCluster" type="tDecimalPrec10" />
+      <xs:element minOccurs="0" maxOccurs="1" name="FOinclusionProbCluster" type="tDecimalPrec10" />
       <xs:element minOccurs="1" maxOccurs="1" name="FOsampled" type="tYesNoFields" />      
       <xs:element minOccurs="0" maxOccurs="1" name="FOreasonNotSampled" type="tRS_ReasonForNotSampling" />
     </xs:sequence>
@@ -297,15 +297,15 @@
       <xs:element minOccurs="0" maxOccurs="1" name="FTarrivalTime" type="tTime" />
       <xs:element minOccurs="0" maxOccurs="1" name="FTnumberTotal" type="xs:int" />
       <xs:element minOccurs="0" maxOccurs="1" name="FTnumberSampled" type="xs:int" />
-      <xs:element minOccurs="0" maxOccurs="1" name="FTselectionProb" type="xs:decimal" />
-      <xs:element minOccurs="0" maxOccurs="1" name="FTinclusionProb" type="xs:decimal" />
+      <xs:element minOccurs="0" maxOccurs="1" name="FTselectionProb" type="tDecimalPrec10" />
+      <xs:element minOccurs="0" maxOccurs="1" name="FTinclusionProb" type="tDecimalPrec10" />
       <xs:element minOccurs="1" maxOccurs="1" name="FTselectionMethod" type="tRS_SelectionMethod" />      
       <xs:element minOccurs="1" maxOccurs="1" name="FTunitName" type="xs:string" />
       <xs:element minOccurs="0" maxOccurs="1" name="FTselectionMethodCluster" type="tRS_SelectionMethod" />
       <xs:element minOccurs="0" maxOccurs="1" name="FTnumberTotalClusters" type="xs:int" />
       <xs:element minOccurs="0" maxOccurs="1" name="FTnumberSampledClusters" type="xs:int" />
-      <xs:element minOccurs="0" maxOccurs="1" name="FTselectionProbCluster" type="xs:decimal" />
-      <xs:element minOccurs="0" maxOccurs="1" name="FTinclusionProbCluster" type="xs:decimal" />
+      <xs:element minOccurs="0" maxOccurs="1" name="FTselectionProbCluster" type="tDecimalPrec10" />
+      <xs:element minOccurs="0" maxOccurs="1" name="FTinclusionProbCluster" type="tDecimalPrec10" />
       <xs:element minOccurs="1" maxOccurs="1" name="FTsampled" type="tYesNoFields" />
       <xs:element minOccurs="0" maxOccurs="1" name="FTreasonNotSampled" type="tRS_ReasonForNotSampling" />
     </xs:sequence>
@@ -345,15 +345,15 @@
       <xs:element minOccurs="0" maxOccurs="1" name="LEgearDimensions" type="xs:int" />      
       <xs:element minOccurs="0" maxOccurs="1" name="LEnumberTotal" type="xs:int" />
       <xs:element minOccurs="0" maxOccurs="1" name="LEnumberSampled" type="xs:int" />     
-      <xs:element minOccurs="0" maxOccurs="1" name="LEselectionProb" type="xs:decimal" />
-      <xs:element minOccurs="0" maxOccurs="1" name="LEinclusionProb" type="xs:decimal" />
+      <xs:element minOccurs="0" maxOccurs="1" name="LEselectionProb" type="tDecimalPrec10" />
+      <xs:element minOccurs="0" maxOccurs="1" name="LEinclusionProb" type="tDecimalPrec10" />
       <xs:element minOccurs="1" maxOccurs="1" name="LEselectionMethod" type="tRS_SelectionMethod" />
       <xs:element minOccurs="1" maxOccurs="1" name="LEunitName" type="xs:string" />
       <xs:element minOccurs="0" maxOccurs="1" name="LEselectionMethodCluster" type="tRS_SelectionMethod" />
       <xs:element minOccurs="0" maxOccurs="1" name="LEnumberTotalClusters" type="xs:int" />
       <xs:element minOccurs="0" maxOccurs="1" name="LEnumberSampledClusters" type="xs:int" />
-      <xs:element minOccurs="0" maxOccurs="1" name="LEselectionProbCluster" type="xs:decimal" />
-      <xs:element minOccurs="0" maxOccurs="1" name="LEinclusionProbCluster" type="xs:decimal" />
+      <xs:element minOccurs="0" maxOccurs="1" name="LEselectionProbCluster" type="tDecimalPrec10" />
+      <xs:element minOccurs="0" maxOccurs="1" name="LEinclusionProbCluster" type="tDecimalPrec10" />
       <xs:element minOccurs="1" maxOccurs="1" name="LEsampled" type="tYesNoFields" />
       <xs:element minOccurs="0" maxOccurs="1" name="LEreasonNotSampled" type="tRS_ReasonForNotSampling" />
       <xs:element minOccurs="0" maxOccurs="1" name="LEfullTripAvailable" type="tRS_LEfullTripAvailable" />
@@ -373,15 +373,16 @@
       <xs:element minOccurs="0" maxOccurs="1" name="LOsampler" type="tRS_Sampler" />
       <xs:element minOccurs="0" maxOccurs="1" name="LOnumberTotal" type="xs:int" />
       <xs:element minOccurs="0" maxOccurs="1" name="LOnumberSampled" type="xs:int" />
-      <xs:element minOccurs="0" maxOccurs="1" name="LOselectionProb" type="xs:decimal" />
-      <xs:element minOccurs="0" maxOccurs="1" name="LOinclusionProb" type="xs:decimal" />
-      <xs:element minOccurs="0" maxOccurs="1" name="LOunitName" type="xs:string" />      
+      <xs:element minOccurs="0" maxOccurs="1" name="LOselectionProb" type="tDecimalPrec10" />
+      <xs:element minOccurs="0" maxOccurs="1" name="LOinclusionProb" type="tDecimalPrec10" /> 
       <xs:element minOccurs="1" maxOccurs="1" name="LOselectionMethod" type="tRS_SelectionMethod" />
+      <xs:element minOccurs="0" maxOccurs="1" name="LOunitName" type="xs:string" />
       <xs:element minOccurs="0" maxOccurs="1" name="LOselectionMethodCluster" type="tRS_SelectionMethod" />
       <xs:element minOccurs="0" maxOccurs="1" name="LOnumberTotalClusters" type="xs:int" />
       <xs:element minOccurs="0" maxOccurs="1" name="LOnumberSampledClusters" type="xs:int" />
-      <xs:element minOccurs="0" maxOccurs="1" name="LOselectionProbCluster" type="xs:decimal" />
-      <xs:element minOccurs="0" maxOccurs="1" name="LOinclusionProbCluster" type="xs:decimal" />
+      <xs:element minOccurs="0" maxOccurs="1" name="LOselectionProbCluster" type="tDecimalPrec10" />
+      <xs:element minOccurs="0" maxOccurs="1" name="LOinclusionProbCluster" type="tDecimalPrec10" />
+      <xs:element minOccurs="1" maxOccurs="1" name="LOSampled" type="xs:string" />
       <xs:element minOccurs="0" maxOccurs="1" name="LOreasonNotSampled" type="tRS_ReasonForNotSampling" />
     </xs:sequence>
     <xs:attribute name="ln" type="xs:int" use="required" />
@@ -403,16 +404,16 @@
       <xs:element minOccurs="0" maxOccurs="1" name="OStimeValue" type="xs:decimal" />
       <xs:element minOccurs="0" maxOccurs="1" name="OSnumberTotal" type="xs:int" />
       <xs:element minOccurs="0" maxOccurs="1" name="OSnumberSampled" type="xs:int" />
-      <xs:element minOccurs="0" maxOccurs="1" name="OSselectionProb" type="xs:decimal" />
-      <xs:element minOccurs="0" maxOccurs="1" name="OSinclusionProb" type="xs:decimal" />
+      <xs:element minOccurs="0" maxOccurs="1" name="OSselectionProb" type="tDecimalPrec10" />
+      <xs:element minOccurs="0" maxOccurs="1" name="OSinclusionProb" type="tDecimalPrec10" />
       <xs:element minOccurs="1" maxOccurs="1" name="OSselectionMethod" type="tRS_SelectionMethod" />      
       <xs:element minOccurs="0" maxOccurs="1" name="OSunitName" type="xs:string" />
       <xs:element minOccurs="0" maxOccurs="1" name="OSlocationType" type="tRS_LocationType" />
       <xs:element minOccurs="0" maxOccurs="1" name="OSselectionMethodCluster" type="tRS_SelectionMethod" />
       <xs:element minOccurs="0" maxOccurs="1" name="OSnumberTotalClusters" type="xs:int" />
       <xs:element minOccurs="0" maxOccurs="1" name="OSnumberSampledClusters" type="xs:int" />
-      <xs:element minOccurs="0" maxOccurs="1" name="OSselectionProbCluster" type="xs:decimal" />
-      <xs:element minOccurs="0" maxOccurs="1" name="OSinclusionProbCluster" type="xs:decimal" />
+      <xs:element minOccurs="0" maxOccurs="1" name="OSselectionProbCluster" type="tDecimalPrec10" />
+      <xs:element minOccurs="0" maxOccurs="1" name="OSinclusionProbCluster" type="tDecimalPrec10" />
       <xs:element minOccurs="1" maxOccurs="1" name="OSsampled" type="tYesNoFields" />
       <xs:element minOccurs="0" maxOccurs="1" name="OSreasonNotSampled" type="tRS_ReasonForNotSampling" />
     </xs:sequence>
@@ -488,8 +489,8 @@
       <xs:element minOccurs="0" maxOccurs="1" name="SSselectionMethodCluster" type="tRS_SelectionMethod" />
       <xs:element minOccurs="0" maxOccurs="1" name="SSnumberTotalClusters" type="xs:int" />
       <xs:element minOccurs="0" maxOccurs="1" name="SSnumberSampledClusters" type="xs:int" />
-      <xs:element minOccurs="0" maxOccurs="1" name="SSselectionProbCluster" type="xs:decimal" />
-      <xs:element minOccurs="0" maxOccurs="1" name="SSinclusionProbCluster" type="xs:decimal" />      
+      <xs:element minOccurs="0" maxOccurs="1" name="SSselectionProbCluster" type="tDecimalPrec10" />
+      <xs:element minOccurs="0" maxOccurs="1" name="SSinclusionProbCluster" type="tDecimalPrec10" />      
       <xs:element minOccurs="1" maxOccurs="1" name="SSsampled" type="tYesNoFields" />
       <xs:element minOccurs="0" maxOccurs="1" name="SSreasonNotSampled" type="tRS_ReasonForNotSampling" />
     </xs:sequence>
@@ -506,15 +507,15 @@
       <xs:element minOccurs="0" maxOccurs="1" name="TEsampler" type="tRS_Sampler" />
       <xs:element minOccurs="0" maxOccurs="1" name="TEnumberTotal" type="xs:int" />
       <xs:element minOccurs="0" maxOccurs="1" name="TEnumberSampled" type="xs:int" />
-      <xs:element minOccurs="0" maxOccurs="1" name="TEselectionProb" type="xs:decimal" />
-      <xs:element minOccurs="0" maxOccurs="1" name="TEinclusionProb" type="xs:decimal" />
+      <xs:element minOccurs="0" maxOccurs="1" name="TEselectionProb" type="tDecimalPrec10" />
+      <xs:element minOccurs="0" maxOccurs="1" name="TEinclusionProb" type="tDecimalPrec10" />
       <xs:element minOccurs="1" maxOccurs="1" name="TEselectionMethod" type="tRS_SelectionMethod" />
       <xs:element minOccurs="1" maxOccurs="1" name="TEunitName" type="xs:string" />      
       <xs:element minOccurs="0" maxOccurs="1" name="TEselectionMethodCluster" type="tRS_SelectionMethod" />
       <xs:element minOccurs="0" maxOccurs="1" name="TEnumberTotalClusters" type="xs:int" />
       <xs:element minOccurs="0" maxOccurs="1" name="TEnumberSampledClusters" type="xs:int" />
-      <xs:element minOccurs="0" maxOccurs="1" name="TEselectionProbCluster" type="xs:decimal" />      
-      <xs:element minOccurs="0" maxOccurs="1" name="TEinclusionProbCluster" type="xs:decimal" />
+      <xs:element minOccurs="0" maxOccurs="1" name="TEselectionProbCluster" type="tDecimalPrec10" />      
+      <xs:element minOccurs="0" maxOccurs="1" name="TEinclusionProbCluster" type="tDecimalPrec10" />
       <xs:element minOccurs="1" maxOccurs="1" name="TEsampled" type="tYesNoFields" />
       <xs:element minOccurs="0" maxOccurs="1" name="TEreasonNotSampled" type="tRS_ReasonForNotSampling" />
     </xs:sequence>
@@ -547,15 +548,15 @@
       <xs:element minOccurs="0" maxOccurs="1" name="VSsampler" type="tRS_Sampler" />
       <xs:element minOccurs="0" maxOccurs="1" name="VSnumberTotal" type="xs:int" />
       <xs:element minOccurs="0" maxOccurs="1" name="VSnumberSampled" type="xs:int" />
-      <xs:element minOccurs="0" maxOccurs="1" name="VSselectionProb" type="xs:decimal" />
-      <xs:element minOccurs="0" maxOccurs="1" name="VSinclusionProb" type="xs:decimal" />      
+      <xs:element minOccurs="0" maxOccurs="1" name="VSselectionProb" type="tDecimalPrec10" />
+      <xs:element minOccurs="0" maxOccurs="1" name="VSinclusionProb" type="tDecimalPrec10" />      
       <xs:element minOccurs="1" maxOccurs="1" name="VSselectionMethod" type="tRS_SelectionMethod" />
       <xs:element minOccurs="1" maxOccurs="1" name="VSunitName" type="xs:string" />      
       <xs:element minOccurs="0" maxOccurs="1" name="VSselectionMethodCluster" type="tRS_SelectionMethod" />
       <xs:element minOccurs="0" maxOccurs="1" name="VSnumberTotalClusters" type="xs:int" />
       <xs:element minOccurs="0" maxOccurs="1" name="VSnumberSampledClusters" type="xs:int" />
-      <xs:element minOccurs="0" maxOccurs="1" name="VSselectionProbCluster" type="xs:decimal" />
-      <xs:element minOccurs="0" maxOccurs="1" name="VSinclusionProbCluster" type="xs:decimal" />
+      <xs:element minOccurs="0" maxOccurs="1" name="VSselectionProbCluster" type="tDecimalPrec10" />
+      <xs:element minOccurs="0" maxOccurs="1" name="VSinclusionProbCluster" type="tDecimalPrec10" />
       <xs:element minOccurs="1" maxOccurs="1" name="VSsampled" type="tYesNoFields" />
       <xs:element minOccurs="0" maxOccurs="1" name="VSreasonNotSampled" type="tRS_ReasonForNotSampling" />
     </xs:sequence>
@@ -734,6 +735,13 @@
     <xs:restriction base="xs:decimal">
       <xs:fractionDigits value="2" />
       <xs:maxInclusive value="1200000" />
+      <xs:minInclusive value="0.01" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="tDecimalPointZeroOneTo12e8">
+    <xs:restriction base="xs:decimal">
+      <xs:fractionDigits value="2" />
+      <xs:maxInclusive value="120000000" />
       <xs:minInclusive value="0.01" />
     </xs:restriction>
   </xs:simpleType>
