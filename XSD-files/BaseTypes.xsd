@@ -382,7 +382,7 @@
       <xs:element minOccurs="0" maxOccurs="1" name="LOnumberSampledClusters" type="xs:int" />
       <xs:element minOccurs="0" maxOccurs="1" name="LOselectionProbCluster" type="tDecimalPrec10" />
       <xs:element minOccurs="0" maxOccurs="1" name="LOinclusionProbCluster" type="tDecimalPrec10" />
-      <xs:element minOccurs="1" maxOccurs="1" name="LOSampled" type="xs:string" />
+      <xs:element minOccurs="1" maxOccurs="1" name="LOsampled" type="tYesNoFields" />
       <xs:element minOccurs="0" maxOccurs="1" name="LOreasonNotSampled" type="tRS_ReasonForNotSampling" />
     </xs:sequence>
     <xs:attribute name="ln" type="xs:int" use="required" />
