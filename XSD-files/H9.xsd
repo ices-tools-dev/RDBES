@@ -53,7 +53,7 @@
     <xs:complexContent mixed="false">
       <xs:extension base="BaseSS">
         <xs:sequence>
-          <xs:element minOccurs="0"  name="LE" type="LE" />
+          <xs:element minOccurs="0" maxOccurs="unbounded"  name="LE" type="LE" />
         </xs:sequence>
       </xs:extension>
     </xs:complexContent>
@@ -62,7 +62,7 @@
     <xs:complexContent mixed="false">
       <xs:extension base="BaseLE">
         <xs:sequence>
-          <xs:element minOccurs="0"  name="SA" type="SA" />
+          <xs:element minOccurs="0" maxOccurs="unbounded"  name="SA" type="SA" />
         </xs:sequence>
       </xs:extension>
     </xs:complexContent>
