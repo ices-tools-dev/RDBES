@@ -35,8 +35,8 @@
     <xs:complexContent mixed="false">
       <xs:extension base="BaseOS">
         <xs:sequence minOccurs="0"  maxOccurs="unbounded">          
-          <xs:element name="FT" type="FT" minOccurs="0"    />
-          <xs:element minOccurs="0" maxOccurs="unbounded"  name="LE" type="LE" />
+          <xs:element name="FT" type="FT" minOccurs="0"  />
+         <xs:element minOccurs="0" maxOccurs="unbounded"  name="LE" type="LE" />
         </xs:sequence>
       </xs:extension>
     </xs:complexContent>
