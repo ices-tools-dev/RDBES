@@ -12,10 +12,7 @@ knit: (function(inputFile, encoding) {
   rmarkdown::render(inputFile, encoding = encoding, output_file = paste0(substr(inputFile,1,nchar(inputFile)-4),".html"), 
   output_dir = "W:/IMARES/IJmuiden/WOT/WOT Raising_Precision/RDBES/CLCENationalOverviews")})
 output:
-  html_document:
-    toc: true
-    number_sections: true
-    toc_float: true
+  html_document
 ---
 
 ```{r setup, include=FALSE}
@@ -43,11 +40,14 @@ catHeader <- function(text = "", level = 3) {
 }
 ```
 
-<!-- ```{r source} -->
-
-<!-- ``` -->
+```{r source}
+#Read the rectangle list from the repository 
+url <- "https://github.com/ices-tools-dev/RDBES/raw/master/QC-scripts/RectangleList/ICESRectAreas.csv"
+ICESrect <- read.csv(url, header = TRUE)
+```
 
 ```{r data}
+# Read CL + CE tables (the upload files without headers)
 CL <- read.csv("C:/Users/molla004/OneDrive - Wageningen University & Research/WKRDBES/out/MAC_OUT/NLD_MAC_HCL.csv", header = FALSE)
 CE <- read.csv("C:/Users/molla004/OneDrive - Wageningen University & Research/WKRDBES/out/MAC_OUT/NLD_MAC_HCE.csv", header = FALSE)
 
@@ -62,6 +62,8 @@ CEnames <- c("CErecType", "CEdTypSciEff", "CEdSouSciEff", "CEsampScheme", "CEves
 
 colnames(CE) <- CEnames
 
+# Factor to Char 
+CL$CLspecCode <- as.character(CL$CLspecCode)
 ```
 
 
@@ -69,14 +71,14 @@ colnames(CE) <- CEnames
 
 ## CL official weight vs scientific weight 
 
-```{r CLoffweightSciweight}
+```{r CLoffweightSciweight, fig.dim= c(12, 8)}
 CLweightS <- CL %>%
-  group_by(CLspecFAO) %>%
+  group_by(CLspecCode) %>%
   summarise(CLoffWeight = sum(CLoffWeight),
             CLsciWeight = sum(CLsciWeight)) %>%
-  gather(CLweightSource, CLweight, -c(CLspecFAO))
+  gather(CLweightSource, CLweight, -c(CLspecCode))
 
-ggplot(CLweightS, aes(CLspecFAO, CLweight, fill = CLweightSource)) +
+ggplot(CLweightS, aes(CLspecCode, CLweight, fill = CLweightSource)) +
   geom_bar(position="dodge", stat="identity") +
   theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) 
 
@@ -86,12 +88,12 @@ ggplot(CLweightS, aes(CLspecFAO, CLweight, fill = CLweightSource)) +
 
 ## CL scientific weight source 
 
-```{r CLoffweightSciweightSource}
+```{r CLoffweightSciweightSource, fig.dim= c(12, 8)}
 CLweightSource <- CL %>%
-  group_by(CLspecFAO, CLdSouSciWeig) %>%
+  group_by(CLspecCode, CLdSouSciWeig) %>%
   summarise(CLsciWeight = sum(CLsciWeight)) 
 
-ggplot(CLweightSource, aes(CLspecFAO, CLsciWeight, fill = CLdSouSciWeig)) +
+ggplot(CLweightSource, aes(CLspecCode, CLsciWeight, fill = CLdSouSciWeig)) +
   geom_bar(position="dodge", stat="identity") +
   theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) 
 
@@ -104,17 +106,17 @@ ggplot(CLweightSource, aes(CLspecFAO, CLsciWeight, fill = CLdSouSciWeig)) +
 ```{r  CLoffWeight1}
 
 # Check if the code below works with multiple species 
-# gr <- gregexpr("M", CL$CLspecFAO)
-# regmatches(CL$CLspecFAO,gr) <- lapply(lengths(gr), sample, x= LETTERS)
+# gr <- gregexpr("M", CL$CLspecCode)
+# regmatches(CL$CLspecCode,gr) <- lapply(lengths(gr), sample, x= LETTERS)
 
 CLWeightG <- CL %>%
-  group_by(CLspecFAO, CLarea) %>%
+  group_by(CLspecCode, CLarea) %>%
   summarise(CLoffWeight = sum(CLoffWeight))
 
 myplots <- list()
-for(i in unique(CLWeightG$CLspecFAO)){
+for(i in unique(CLWeightG$CLspecCode)){
   myplots[[i]] <- 
-    ggplot(subset(CLWeightG, CLspecFAO == i), aes(CLarea, CLoffWeight))+
+    ggplot(subset(CLWeightG, CLspecCode == i), aes(CLarea, CLoffWeight))+
     geom_bar(stat = "identity") +
     theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) 
 }
@@ -136,13 +138,13 @@ for(i in unique(names(myplots))){
 ```{r  CLoffWeightVel}
 
 CLVel <- CL %>%
-  group_by(CLarea, CLspecFAO, CLvesLenCat) %>%
+  group_by(CLarea, CLspecCode, CLvesLenCat) %>%
   summarise(CLoffWeight = sum(CLoffWeight))
 
 myplotsVel <- list()
-for(i in unique(CLVel$CLspecFAO)){
+for(i in unique(CLVel$CLspecCode)){
   myplotsVel[[i]] <- 
-    ggplot(subset(CLVel, CLspecFAO == i), aes(CLarea, CLoffWeight, fill = CLvesLenCat)) +
+    ggplot(subset(CLVel, CLspecCode == i), aes(CLarea, CLoffWeight, fill = CLvesLenCat)) +
   geom_bar(stat = "identity") +
     theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) 
 }
@@ -159,13 +161,13 @@ for(i in unique(names(myplotsVel))){
 
 ## CL Landings value source 
 
-```{r CLValS}
+```{r CLValS, fig.dim= c(12, 8)}
 
 CLValS <- CL %>%
-  group_by(CLarea, CLspecFAO, CLdSouLanVal) %>%
+  group_by(CLarea, CLspecCode, CLdSouLanVal) %>%
   summarise(CLoffWeight = sum(CLoffWeight))
 
-ggplot(subset(CLValS), aes(CLspecFAO, CLoffWeight, fill = CLdSouLanVal)) +
+ggplot(subset(CLValS), aes(CLspecCode, CLoffWeight, fill = CLdSouLanVal)) +
   geom_bar(position="dodge", stat="identity") +
   theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) 
 
@@ -177,9 +179,9 @@ ggplot(subset(CLValS), aes(CLspecFAO, CLoffWeight, fill = CLdSouLanVal)) +
 ```{r  CLoffWeightVal}
 
 myplotsVal <- list()
-for(i in unique(CL$CLspecFAO)){
+for(i in unique(CL$CLspecCode)){
   myplotsVal[[i]] <- 
-    ggplot(subset(CL, CLspecFAO == i), aes(x= CLoffWeight, y=CLtotOffLanVal)) + geom_point()
+    ggplot(subset(CL, CLspecCode == i), aes(x= CLoffWeight, y=CLtotOffLanVal)) + geom_point()
 }
 ```
 
@@ -197,13 +199,13 @@ for(i in unique(names(myplotsVal))){
 ```{r  CLoffWeightLoc}
 
 CLLoc <- CL %>%
-  group_by(CLarea, CLspecFAO, CLloc) %>%
+  group_by(CLarea, CLspecCode, CLloc) %>%
   summarise(CLoffWeight = sum(CLoffWeight))
 
 myplotsLoc <- list()
-for(i in unique(CLLoc$CLspecFAO)){
+for(i in unique(CLLoc$CLspecCode)){
   myplotsLoc[[i]] <- 
-    ggplot(subset(CLLoc, CLspecFAO == i), aes(CLarea, CLoffWeight, fill = CLloc)) +
+    ggplot(subset(CLLoc, CLspecCode == i), aes(CLarea, CLoffWeight, fill = CLloc)) +
     geom_bar(stat = "identity") +
     theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) 
 }
@@ -227,14 +229,14 @@ world <- ne_countries(scale = "medium", returnclass = "sf")
 world <- st_set_crs(world, 4326)
 
 CLMap <- CL %>%
-  distinct(CLstatRect, CLspecFAO) %>%
+  distinct(CLstatRect, CLspecCode) %>%
   mutate(lon = ices.rect(CLstatRect)$lon,
          lat = ices.rect(CLstatRect)$lat)
  
 
 myplotsMap <- list()
 
-for(i in unique(CLMap$CLspecFAO)){
+for(i in unique(CLMap$CLspecCode)){
   min.lon<-min(CLMap$lon, na.rm = T)
   max.lon<-max(CLMap$lon, na.rm = T)
   min.lat<-min(CLMap$lat, na.rm = T)
@@ -243,7 +245,7 @@ for(i in unique(CLMap$CLspecFAO)){
     ggplot() +
     theme_bw() +
     geom_sf(data=world)+
-    geom_point(data = subset(CLMap, CLspecFAO == i), aes(lon, lat), size=2, colour="red") +
+    geom_point(data = subset(CLMap, CLspecCode == i), aes(lon, lat), size=2, colour="red") +
     coord_sf(xlim = c(min.lon, max.lon), ylim = c(min.lat, max.lat)) +
     xlab("Longitude") +
     ylab("Latitude")
@@ -256,6 +258,33 @@ for(i in unique(names(myplotsMap))){
     catHeader(names(myplotsMap[i]), 3)
     lapply(myplotsMap[i], print)
 }
+```
+
+
+## CL Potential Errors {.tabset}
+
+### CL ICES rectangles and FAO Areas
+
+
+```{r CLrectangles}
+CLRect <- left_join(CL, ICESrect, by = c("CLstatRect" = "ICESNAME"))%>%
+  select(CLarea, CLstatRect, Area) %>%
+  distinct()
+
+CLRectErr <- CLRect %>%
+  group_by(CLstatRect) %>%
+  summarise(CLarea = unique(CLarea),
+            Area = paste0(unique(Area), collapse = ", ")) %>%
+  rowwise() %>%
+  mutate(NoMatch = grepl(CLarea, Area)) %>%
+  filter(NoMatch %in% FALSE) %>%
+  rename(ICESArea = Area) %>%
+  ungroup() %>%
+  select(CLstatRect, CLarea, ICESArea)
+
+kable(CLRectErr) %>%
+  kable_styling()
+
 ```
 
 # CE table 
@@ -357,6 +386,31 @@ print(ggplot() +
 ```
 
 
+## CE Potential Errors {.tabset}
+
+### CE ICES rectangles and FAO Areas
+
+
+```{r CErectangles}
+CERect <- left_join(CE, ICESrect, by = c("CEstatRect" = "ICESNAME"))%>%
+  select(CEArea, CEstatRect, Area) %>%
+  distinct()
+
+CERectErr <- CERect %>%
+  group_by(CEstatRect) %>%
+  summarise(CEArea = unique(CEArea),
+            Area = paste0(unique(Area), collapse = ", ")) %>%
+  rowwise() %>%
+  mutate(NoMatch = grepl(CEArea, Area)) %>%
+  filter(NoMatch %in% FALSE) %>%
+  rename(ICESArea = Area) %>%
+  ungroup() %>%
+  select(CEstatRect, CEArea, ICESArea)
+
+kable(CERectErr) %>%
+  kable_styling()
+
+```
 
 
 

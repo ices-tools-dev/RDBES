@@ -54,6 +54,6 @@ ICESrectfin$Area <- paste("27.",ICESrectfin$Area_27,sep="")
 
 # Write final df 
 
-write.csv(ICESrectfin,"C:/Users/molla004/OneDrive - Wageningen University & Research/Git/hub/RDBES/QC-scripts/RectangleList/ICESRectAreas.csv")
+write.csv(ICESrectfin,"C:/Users/molla004/OneDrive - Wageningen University & Research/Git/hub/RDBES/QC-scripts/RectangleList/ICESRectAreas.csv", row.names = FALSE)
 
 
