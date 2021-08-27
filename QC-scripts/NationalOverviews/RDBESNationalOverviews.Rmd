@@ -1,0 +1,362 @@
+
+```{r title, include = FALSE}
+front_title <- "RDBES CL CE National overview"
+```
+
+<!-- The output directory below defines the path the html file will be saved at -->
+
+---
+title: `r front_title`
+date: "`r format(Sys.time(), '%d %B, %Y')`"
+knit: (function(inputFile, encoding) {
+  rmarkdown::render(inputFile, encoding = encoding, output_file = paste0(substr(inputFile,1,nchar(inputFile)-4),".html"), 
+  output_dir = "W:/IMARES/IJmuiden/WOT/WOT Raising_Precision/RDBES/CLCENationalOverviews")})
+output:
+  html_document:
+    toc: true
+    number_sections: true
+    toc_float: true
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, message = FALSE, warning = FALSE)
+options(scipen=999)
+```
+
+```{r libraries}
+library(tidyverse)
+library(knitr)
+library(kableExtra)
+library(ggplot2)
+library(mapplots)
+library(rnaturalearth)
+library(rnaturalearthdata)
+library(sf)
+library(stringr)
+```
+
+```{r functions}
+catHeader <- function(text = "", level = 3) {
+    cat(paste0("\n\n", 
+               paste(rep("#", level), collapse = ""), 
+               " ", text, "\n"))
+}
+```
+
+<!-- ```{r source} -->
+
+<!-- ``` -->
+
+```{r data}
+CL <- read.csv("C:/Users/molla004/OneDrive - Wageningen University & Research/WKRDBES/out/MAC_OUT/NLD_MAC_HCL.csv", header = FALSE)
+CE <- read.csv("C:/Users/molla004/OneDrive - Wageningen University & Research/WKRDBES/out/MAC_OUT/NLD_MAC_HCE.csv", header = FALSE)
+
+#--Give the df's the R column names from the RDBES data model CL CE file
+# These can also be sourced directly from the repository (the column names of the data model CL CE csv files) to be up-to-date in case something changes 
+
+CLnames <- c("CLrecType", "CLdTypSciWeig", "CLdSouSciWeig", "CLsampScheme", "CLdSouLanVal", "CLlanCou", "CLvesFlagCou", "CLyear", "CLquar", "CLmonth", "CLarea", "CLstatRect", "CLgsaSubarea", "CLjurisdArea", "CLeconZoneIndi", "CLspecCode", "CLspecFAO", "CLlandCat", "CLcatchCat", "CLsizeCatScale", "CLsizeCat", "CLnatFishAct", "CLmetier6", "CLIBmitiDev", "CLloc", "CLvesLenCat", "CLfishTech", "CLdeepSeaReg", "CLoffWeight", "CLsciWeight", "CLexpDiff", "CLtotOffLanVal", "CLnumUniqVes", "CLsciWeightRSE", "CLvalRSE", "CLsciWeightQualBias")
+
+colnames(CL) <- CLnames
+
+CEnames <- c("CErecType", "CEdTypSciEff", "CEdSouSciEff", "CEsampScheme", "CEvesFlagCou", "CEyear", "CEquar", "CEMonth", "CEArea", "CEstatRect", "CEgsaSubarea", "CEjurisdArea", "CEeconZoneIndi", "CEnatFishAct", "CEmetier6", "CEIBmitiDev", "CEloc", "CEvesLenCat", "CEfishTech", "CEdeepSeaReg", "CEnumFracTrips", "CEnumDomTrip", "CEoffDaySea", "CESciDaySea", "CEoffFishDay", "CEsciFishDay", "CEoffNumHaulSet", "CEsciNumHaulSet", "CEoffVesFishHour", "CEsciVesFishHour", "CEoffSoakMeterHour", "CEsciSoakMeterHour", "CEoffkWDaySea", "CEscikWDaySea", "CEoffkWFishDay", "CEscikWFishDay", "CEoffkWFishHour", "CEscikWFishHour", "CEgTDaySea", "CEgTFishDay", "CEgTFishHour", "CEnumUniqVes", "CEsciFishDayRSE", "CEscientificFishingDaysQualBias")
+
+colnames(CE) <- CEnames
+
+```
+
+
+# CL table 
+
+## CL official weight vs scientific weight 
+
+```{r CLoffweightSciweight}
+CLweightS <- CL %>%
+  group_by(CLspecFAO) %>%
+  summarise(CLoffWeight = sum(CLoffWeight),
+            CLsciWeight = sum(CLsciWeight)) %>%
+  gather(CLweightSource, CLweight, -c(CLspecFAO))
+
+ggplot(CLweightS, aes(CLspecFAO, CLweight, fill = CLweightSource)) +
+  geom_bar(position="dodge", stat="identity") +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) 
+
+# A condition needs to be added here in case there is more than one type of weight to plot it as well
+```
+
+
+## CL scientific weight source 
+
+```{r CLoffweightSciweightSource}
+CLweightSource <- CL %>%
+  group_by(CLspecFAO, CLdSouSciWeig) %>%
+  summarise(CLsciWeight = sum(CLsciWeight)) 
+
+ggplot(CLweightSource, aes(CLspecFAO, CLsciWeight, fill = CLdSouSciWeig)) +
+  geom_bar(position="dodge", stat="identity") +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) 
+
+```
+
+
+
+## CL official weight by area {.tabset}
+
+```{r  CLoffWeight1}
+
+# Check if the code below works with multiple species 
+# gr <- gregexpr("M", CL$CLspecFAO)
+# regmatches(CL$CLspecFAO,gr) <- lapply(lengths(gr), sample, x= LETTERS)
+
+CLWeightG <- CL %>%
+  group_by(CLspecFAO, CLarea) %>%
+  summarise(CLoffWeight = sum(CLoffWeight))
+
+myplots <- list()
+for(i in unique(CLWeightG$CLspecFAO)){
+  myplots[[i]] <- 
+    ggplot(subset(CLWeightG, CLspecFAO == i), aes(CLarea, CLoffWeight))+
+    geom_bar(stat = "identity") +
+    theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) 
+}
+```
+
+```{r CLoffWeightplot1, results = "asis", echo = FALSE}
+
+for(i in unique(names(myplots))){
+    # The tabset level here has to be lower than the
+    # parent level (ie, parent is 2, so here you have to use 3)
+    catHeader(names(myplots[i]), 3)
+    lapply(myplots[i], print)
+}
+```
+
+
+## CL official weight by vessel length category {.tabset}
+
+```{r  CLoffWeightVel}
+
+CLVel <- CL %>%
+  group_by(CLarea, CLspecFAO, CLvesLenCat) %>%
+  summarise(CLoffWeight = sum(CLoffWeight))
+
+myplotsVel <- list()
+for(i in unique(CLVel$CLspecFAO)){
+  myplotsVel[[i]] <- 
+    ggplot(subset(CLVel, CLspecFAO == i), aes(CLarea, CLoffWeight, fill = CLvesLenCat)) +
+  geom_bar(stat = "identity") +
+    theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) 
+}
+```
+
+```{r CLoffWeightVelplot, results = "asis"}
+
+for(i in unique(names(myplotsVel))){
+    catHeader(names(myplotsVel[i]), 3)
+    lapply(myplotsVel[i], print)
+}
+```
+
+
+## CL Landings value source 
+
+```{r CLValS}
+
+CLValS <- CL %>%
+  group_by(CLarea, CLspecFAO, CLdSouLanVal) %>%
+  summarise(CLoffWeight = sum(CLoffWeight))
+
+ggplot(subset(CLValS), aes(CLspecFAO, CLoffWeight, fill = CLdSouLanVal)) +
+  geom_bar(position="dodge", stat="identity") +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) 
+
+```
+
+
+## CL official weight vs total official landings value {.tabset}
+
+```{r  CLoffWeightVal}
+
+myplotsVal <- list()
+for(i in unique(CL$CLspecFAO)){
+  myplotsVal[[i]] <- 
+    ggplot(subset(CL, CLspecFAO == i), aes(x= CLoffWeight, y=CLtotOffLanVal)) + geom_point()
+}
+```
+
+```{r CLoffWeightValplot, results = "asis"}
+
+for(i in unique(names(myplotsVal))){
+    catHeader(names(myplotsVal[i]), 3)
+    lapply(myplotsVal[i], print)
+}
+```
+
+
+## CL Landing location {.tabset}
+
+```{r  CLoffWeightLoc}
+
+CLLoc <- CL %>%
+  group_by(CLarea, CLspecFAO, CLloc) %>%
+  summarise(CLoffWeight = sum(CLoffWeight))
+
+myplotsLoc <- list()
+for(i in unique(CLLoc$CLspecFAO)){
+  myplotsLoc[[i]] <- 
+    ggplot(subset(CLLoc, CLspecFAO == i), aes(CLarea, CLoffWeight, fill = CLloc)) +
+    geom_bar(stat = "identity") +
+    theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) 
+}
+```
+
+```{r CLoffWeightLocplot, results = "asis"}
+
+for(i in unique(names(myplotsLoc))){
+    catHeader(names(myplotsLoc[i]), 3)
+    lapply(myplotsLoc[i], print)
+}
+```
+
+
+## CL Maps {.tabset}
+
+
+```{r  CLMap}
+
+world <- ne_countries(scale = "medium", returnclass = "sf")
+world <- st_set_crs(world, 4326)
+
+CLMap <- CL %>%
+  distinct(CLstatRect, CLspecFAO) %>%
+  mutate(lon = ices.rect(CLstatRect)$lon,
+         lat = ices.rect(CLstatRect)$lat)
+ 
+
+myplotsMap <- list()
+
+for(i in unique(CLMap$CLspecFAO)){
+  min.lon<-min(CLMap$lon, na.rm = T)
+  max.lon<-max(CLMap$lon, na.rm = T)
+  min.lat<-min(CLMap$lat, na.rm = T)
+  max.lat<-max(CLMap$lat, na.rm = T)
+  myplotsMap[[i]] <- 
+    ggplot() +
+    theme_bw() +
+    geom_sf(data=world)+
+    geom_point(data = subset(CLMap, CLspecFAO == i), aes(lon, lat), size=2, colour="red") +
+    coord_sf(xlim = c(min.lon, max.lon), ylim = c(min.lat, max.lat)) +
+    xlab("Longitude") +
+    ylab("Latitude")
+}
+```
+
+```{r CLMapplot, results = "asis", fig.dim = c(12, 12)}
+
+for(i in unique(names(myplotsMap))){
+    catHeader(names(myplotsMap[i]), 3)
+    lapply(myplotsMap[i], print)
+}
+```
+
+# CE table 
+
+## CE official effort vs scientific effort {.tabset}
+
+### Official days at sea vs scientific days at sea
+
+```{r CLeffortDATS}
+CEeffortDATS <- CE %>%
+  group_by(CEArea) %>%
+  summarise(CEoffDaySea = sum(CEoffDaySea),
+            CESciDaySea = sum(CESciDaySea))  %>%
+  gather(CEDaySeaSource, CEDaySea, -c(CEArea))
+
+ggplot(CEeffortDATS, aes(CEArea, CEDaySea, fill = CEDaySeaSource)) +
+  geom_bar(position="dodge", stat="identity") +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) 
+
+```
+
+
+### Official fishing days vs scientific fishing days 
+
+```{r CLeffortFDS}
+CEeffortFDS <- CE %>%
+  group_by(CEArea) %>%
+  summarise(CEoffFishDay = sum(CEoffFishDay),
+            CEsciFishDay = sum(CEsciFishDay))  %>%
+  gather(CEFishDaySource, CEFishDay, -c(CEArea))
+
+ggplot(CEeffortFDS, aes(CEArea, CEFishDay, fill = CEFishDaySource)) +
+  geom_bar(position="dodge", stat="identity") +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) 
+
+```
+
+
+## CE scientific effort source 
+
+```{r CESciEffortSource}
+CESciEffortSource <- CE %>%
+  group_by(CEArea, CEdSouSciEff) %>%
+  summarise(CESciDaySea = sum(CESciDaySea),
+            CEsciFishDay = sum(CEsciFishDay)) %>%
+  gather(CEEffSource, CEEffort, -c(CEArea, CEdSouSciEff)) 
+
+ggplot(CESciEffortSource, aes(CEArea, CEEffort, fill = CEdSouSciEff)) +
+  geom_bar(position="dodge", stat="identity") +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) +
+  facet_grid(CEEffSource~., scales = "free")
+```
+
+
+## CE official days at sea vs official fishing days {.tabset}
+
+
+```{r  CEoffEff}
+
+myplotsEff <- list()
+for(i in unique(CE$CEArea)){
+  myplotsEff[[i]] <- 
+    ggplot(subset(CE, CEArea == i), aes(x= CEoffDaySea, y= CEoffFishDay)) + geom_point()
+}
+```
+
+```{r CEoffEffplot, results = "asis"}
+
+for(i in unique(names(myplotsEff))){
+    catHeader(names(myplotsEff[i]), 3)
+    lapply(myplotsEff[i], print)
+}
+```
+
+## CE Map
+
+```{r CEMap, fig.dim= c(12, 12)}
+
+world <- ne_countries(scale = "medium", returnclass = "sf")
+world <- st_set_crs(world, 4326)
+
+CEMap <- CE %>%
+  distinct(CEstatRect) %>%
+  mutate(lon = ices.rect(CEstatRect)$lon,
+         lat = ices.rect(CEstatRect)$lat)
+
+min.lon<-min(CLMap$lon, na.rm = T)
+max.lon<-max(CLMap$lon, na.rm = T)
+min.lat<-min(CLMap$lat, na.rm = T)
+max.lat<-max(CLMap$lat, na.rm = T)
+
+print(ggplot() +
+  theme_bw() +
+  geom_sf(data=world)+
+  geom_point(data = CEMap, aes(lon, lat), size=2, colour="red") +
+               coord_sf(xlim = c(min.lon, max.lon), ylim = c(min.lat, max.lat)) +
+               xlab("Longitude") +
+               ylab("Latitude"))
+```
+
+
+
+
+
