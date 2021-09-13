@@ -10,9 +10,10 @@ title: `r front_title`
 date: "`r format(Sys.time(), '%d %B, %Y')`"
 knit: (function(inputFile, encoding) {
   rmarkdown::render(inputFile, encoding = encoding, output_file = paste0(substr(inputFile,1,nchar(inputFile)-4),".html"), 
-  output_dir = "W:/IMARES/IJmuiden/WOT/WOT Raising_Precision/RDBES/CLCENationalOverviews")})
+  output_dir = "H:/RDBES")})
 output:
   html_document
+fontsize: 12pt
 ---
 
 ```{r setup, include=FALSE}
@@ -48,13 +49,20 @@ ICESrect <- read.csv(url, header = TRUE)
 
 ```{r data}
 # Read CL + CE tables (the upload files without headers)
-CL <- read.csv("C:/Users/molla004/OneDrive - Wageningen University & Research/WKRDBES/out/MAC_OUT/NLD_MAC_HCL.csv", header = FALSE)
-CE <- read.csv("C:/Users/molla004/OneDrive - Wageningen University & Research/WKRDBES/out/MAC_OUT/NLD_MAC_HCE.csv", header = FALSE)
+CL2018 <- read.csv("Q:/dfad/users/joeg/home/LOG/210831_RDBES_2021_test_datacall/CL_2018_HCL.csv", header = FALSE)
+CL2019 <- read.csv("Q:/dfad/users/joeg/home/LOG/210831_RDBES_2021_test_datacall/CL_2019_HCL.csv", header = FALSE)
+CL2020 <- read.csv("Q:/dfad/users/joeg/home/LOG/210831_RDBES_2021_test_datacall/CL_2020_HCL.csv", header = FALSE)
+CE2018 <- read.csv("Q:/dfad/users/joeg/home/LOG/210831_RDBES_2021_test_datacall/CE_2018_HCE.csv", header = FALSE)
+CE2019 <- read.csv("Q:/dfad/users/joeg/home/LOG/210831_RDBES_2021_test_datacall/CE_2019_HCE.csv", header = FALSE)
+CE2020 <- read.csv("Q:/dfad/users/joeg/home/LOG/210831_RDBES_2021_test_datacall/CE_2020_HCE.csv", header = FALSE)
+
+CL <- rbind(CL2018,CL2019,CL2020)
+CE <- rbind(CE2018,CE2019,CE2020)
 
 #--Give the df's the R column names from the RDBES data model CL CE file
 # These can also be sourced directly from the repository (the column names of the data model CL CE csv files) to be up-to-date in case something changes 
-
-CLnames <- c("CLrecType", "CLdTypSciWeig", "CLdSouSciWeig", "CLsampScheme", "CLdSouLanVal", "CLlanCou", "CLvesFlagCou", "CLyear", "CLquar", "CLmonth", "CLarea", "CLstatRect", "CLgsaSubarea", "CLjurisdArea", "CLeconZoneIndi", "CLspecCode", "CLspecFAO", "CLlandCat", "CLcatchCat", "CLsizeCatScale", "CLsizeCat", "CLnatFishAct", "CLmetier6", "CLIBmitiDev", "CLloc", "CLvesLenCat", "CLfishTech", "CLdeepSeaReg", "CLoffWeight", "CLsciWeight", "CLexpDiff", "CLtotOffLanVal", "CLnumUniqVes", "CLsciWeightRSE", "CLvalRSE", "CLsciWeightQualBias")
+ 
+CLnames <- c("CLrecType", "CLdTypSciWeig", "CLdSouSciWeig", "CLsampScheme", "CLdSouLanVal", "CLlanCou", "CLvesFlagCou", "CLyear", "CLquar", "CLmonth", "CLarea", "CLstatRect", "CLgsaSubarea", "CLjurisdArea", "CLeconZoneIndi", "CLspecCode", "CLspecFAO", "CLlandCat", "CLcatchCat", "CLregDisCat","CLsizeCatScale", "CLsizeCat", "CLnatFishAct", "CLmetier6", "CLIBmitiDev", "CLloc", "CLvesLenCat", "CLfishTech", "CLdeepSeaReg", "CLoffWeight", "CLsciWeight", "CLexpDiff", "CLtotOffLanVal", "CLnumUniqVes", "CLsciWeightRSE", "CLvalRSE", "CLsciWeightQualBias")
 
 colnames(CL) <- CLnames
 
@@ -62,23 +70,63 @@ CEnames <- c("CErecType", "CEdTypSciEff", "CEdSouSciEff", "CEsampScheme", "CEves
 
 colnames(CE) <- CEnames
 
-# Factor to Char 
-CL$CLspecCode <- as.character(CL$CLspecCode)
+# Use species FAO codes where available
+CL$species <- CL$CLspecFAO
+CL$species[CL$species==''] <- as.character(CL$CLspecCode)
+#CL$CLspecCode <- as.character(CL$CLspecCode)
+
+#Find top 20 species
+top20_species <- CL %>%
+  group_by(species) %>%
+  summarise(lwTot=sum(CLtotOffLanVal)) %>%
+  arrange(desc(lwTot)) %>%
+  top_n(20)
+top20_species$Top20species <- "X"
+CL1 <- left_join(CL,top20_species,by="species")
+CL1$topSpecies <- ifelse(is.na(CL1$Top20species),"OTH",CL1$species)
+
+#Find top 20 metiers
+top20_metiers <- CL1 %>%
+  group_by(CLmetier6) %>%
+  summarise(lwTot=sum(CLtotOffLanVal)) %>%
+  arrange(desc(lwTot)) %>%
+  top_n(20)
+top20_metiers$Top20metiers <- "X"
+CL1 <- left_join(CL1,top20_metiers,by="CLmetier6")
+CL1$topMetiers <- ifelse(is.na(CL1$Top20metiers),"OTH",CL1$CLmetier6)
+
 ```
 
 
-# CL table 
+## CL table (top 20 species (rest grouped in OTH group)) {.tabset}
 
-## CL official weight vs scientific weight 
+### CL weight by year and month
 
-```{r CLoffweightSciweight, fig.dim= c(12, 8)}
-CLweightS <- CL %>%
-  group_by(CLspecCode) %>%
+```{r CLweightYear, fig.dim= c(12, 8)}
+CLweightYear <- CL1 %>%
+  group_by(CLyear, CLmonth ) %>%
+  summarise(CLsciWeight = sum(CLsciWeight)) 
+
+CLweightYear$CLyear1 <- as.character(CLweightYear$CLyear)
+CLweightYear$CLmonth1 <- as.character(CLweightYear$CLmonth)
+
+ggplot(CLweightYear, aes(CLmonth1, CLsciWeight, fill=CLyear1)) +
+  geom_bar(position="dodge", stat="identity") +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) 
+
+```
+
+
+### CL official weight vs scientific weight 
+
+```{r CLoffweightSciweightSP, fig.dim= c(12, 8)}
+CLweightS <- CL1 %>%
+  group_by(topSpecies) %>%
   summarise(CLoffWeight = sum(CLoffWeight),
             CLsciWeight = sum(CLsciWeight)) %>%
-  gather(CLweightSource, CLweight, -c(CLspecCode))
+  gather(CLweightSource, CLweight, -c(topSpecies))
 
-ggplot(CLweightS, aes(CLspecCode, CLweight, fill = CLweightSource)) +
+ggplot(CLweightS, aes(topSpecies, CLweight, fill = CLweightSource)) +
   geom_bar(position="dodge", stat="identity") +
   theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) 
 
@@ -86,43 +134,83 @@ ggplot(CLweightS, aes(CLspecCode, CLweight, fill = CLweightSource)) +
 ```
 
 
-## CL scientific weight source 
+### CL scientific weight source
 
-```{r CLoffweightSciweightSource, fig.dim= c(12, 8)}
-CLweightSource <- CL %>%
-  group_by(CLspecCode, CLdSouSciWeig) %>%
+```{r CLoffweightSciweightSourceSP, fig.dim= c(12, 8)}
+CLweightSource <- CL1 %>%
+  group_by(topSpecies, CLdSouSciWeig) %>%
   summarise(CLsciWeight = sum(CLsciWeight)) 
 
-ggplot(CLweightSource, aes(CLspecCode, CLsciWeight, fill = CLdSouSciWeig)) +
-  geom_bar(position="dodge", stat="identity") +
+ggplot(CLweightSource, aes(topSpecies, CLsciWeight, fill = CLdSouSciWeig)) +
+  geom_bar(position="stack", stat="identity") +
   theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) 
 
 ```
 
+### CL Landings value source 
 
+```{r CLValSSP, fig.dim= c(12, 8)}
+
+CLValS <- CL1 %>%
+  group_by(topSpecies, CLarea,CLdSouLanVal) %>%
+  summarise(CLoffWeight = sum(CLoffWeight))
+
+ggplot(subset(CLValS), aes(topSpecies, CLoffWeight, fill = CLdSouLanVal)) +
+  geom_bar(position="stack", stat="identity") +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) 
+
+```
+
+### CL Landing category 
+
+```{r CLlandCatSP, fig.dim= c(12, 8)}
+
+CLValS <- CL1 %>%
+  group_by(topSpecies, CLarea,CLlandCat) %>%
+  summarise(CLoffWeight = sum(CLoffWeight))
+
+ggplot(subset(CLValS), aes(topSpecies, CLoffWeight, fill = CLlandCat)) +
+  geom_bar(position="stack", stat="identity") +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) 
+
+```
+
+### CL Catch category 
+
+```{r CLcatchCatSP, fig.dim= c(12, 8)}
+
+CLValS <- CL1 %>%
+  group_by(topSpecies, CLarea,CLcatchCat) %>%
+  summarise(CLoffWeight = sum(CLoffWeight))
+
+ggplot(subset(CLValS), aes(topSpecies, CLoffWeight, fill = CLcatchCat)) +
+  geom_bar(position="stack", stat="identity") +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) 
+
+```
 
 ## CL official weight by area {.tabset}
 
-```{r  CLoffWeight1}
+```{r  CLoffWeight1SP}
 
 # Check if the code below works with multiple species 
 # gr <- gregexpr("M", CL$CLspecCode)
 # regmatches(CL$CLspecCode,gr) <- lapply(lengths(gr), sample, x= LETTERS)
 
-CLWeightG <- CL %>%
-  group_by(CLspecCode, CLarea) %>%
+CLWeightG <- CL1 %>%
+  group_by(topSpecies, CLarea) %>%
   summarise(CLoffWeight = sum(CLoffWeight))
 
 myplots <- list()
-for(i in unique(CLWeightG$CLspecCode)){
+for(i in unique(CLWeightG$topSpecies)){
   myplots[[i]] <- 
-    ggplot(subset(CLWeightG, CLspecCode == i), aes(CLarea, CLoffWeight))+
+    ggplot(subset(CLWeightG, topSpecies == i), aes(CLarea, CLoffWeight))+
     geom_bar(stat = "identity") +
     theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) 
 }
 ```
 
-```{r CLoffWeightplot1, results = "asis", echo = FALSE}
+```{r CLoffWeightplot1SP, results = "asis", echo = FALSE}
 
 for(i in unique(names(myplots))){
     # The tabset level here has to be lower than the
@@ -135,22 +223,22 @@ for(i in unique(names(myplots))){
 
 ## CL official weight by vessel length category {.tabset}
 
-```{r  CLoffWeightVel}
+```{r  CLoffWeightVelSP}
 
-CLVel <- CL %>%
-  group_by(CLarea, CLspecCode, CLvesLenCat) %>%
+CLVel <- CL1 %>%
+  group_by(topSpecies, CLarea,CLvesLenCat) %>%
   summarise(CLoffWeight = sum(CLoffWeight))
 
 myplotsVel <- list()
-for(i in unique(CLVel$CLspecCode)){
+for(i in unique(CLVel$topSpecies)){
   myplotsVel[[i]] <- 
-    ggplot(subset(CLVel, CLspecCode == i), aes(CLarea, CLoffWeight, fill = CLvesLenCat)) +
+    ggplot(subset(CLVel, topSpecies == i), aes(CLarea, CLoffWeight, fill = CLvesLenCat)) +
   geom_bar(stat = "identity") +
     theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) 
 }
 ```
 
-```{r CLoffWeightVelplot, results = "asis"}
+```{r CLoffWeightVelplotSP, results = "asis"}
 
 for(i in unique(names(myplotsVel))){
     catHeader(names(myplotsVel[i]), 3)
@@ -159,53 +247,41 @@ for(i in unique(names(myplotsVel))){
 ```
 
 
-## CL Landings value source 
-
-```{r CLValS, fig.dim= c(12, 8)}
-
-CLValS <- CL %>%
-  group_by(CLarea, CLspecCode, CLdSouLanVal) %>%
-  summarise(CLoffWeight = sum(CLoffWeight))
-
-ggplot(subset(CLValS), aes(CLspecCode, CLoffWeight, fill = CLdSouLanVal)) +
-  geom_bar(position="dodge", stat="identity") +
-  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) 
-
-```
-
-
 ## CL official weight vs total official landings value {.tabset}
 
-```{r  CLoffWeightVal}
+```{r  CLoffWeightValSP}
 
 myplotsVal <- list()
-for(i in unique(CL$CLspecCode)){
+for(i in sort(unique(CL1$topSpecies))){
   myplotsVal[[i]] <- 
-    ggplot(subset(CL, CLspecCode == i), aes(x= CLoffWeight, y=CLtotOffLanVal)) + geom_point()
+    ggplot(subset(CL1, topSpecies == i), aes(x= CLoffWeight, y=CLtotOffLanVal)) + geom_point()
 }
 ```
 
-```{r CLoffWeightValplot, results = "asis"}
+```{r CLoffWeightValplotSP, results = "asis"}
 
 for(i in unique(names(myplotsVal))){
     catHeader(names(myplotsVal[i]), 3)
     lapply(myplotsVal[i], print)
 }
+
+
 ```
+
 
 
 ## CL Landing location {.tabset}
 
 ```{r  CLoffWeightLoc}
 
-CLLoc <- CL %>%
-  group_by(CLarea, CLspecCode, CLloc) %>%
+CLLoc <- CL1 %>%
+  group_by(topSpecies, CLarea, CLloc) %>%
   summarise(CLoffWeight = sum(CLoffWeight))
 
 myplotsLoc <- list()
-for(i in unique(CLLoc$CLspecCode)){
+for(i in unique(CLLoc$topSpecies)){
   myplotsLoc[[i]] <- 
-    ggplot(subset(CLLoc, CLspecCode == i), aes(CLarea, CLoffWeight, fill = CLloc)) +
+    ggplot(subset(CLLoc, topSpecies == i), aes(CLarea, CLoffWeight, fill = CLloc)) +
     geom_bar(stat = "identity") +
     theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) 
 }
@@ -220,23 +296,23 @@ for(i in unique(names(myplotsLoc))){
 ```
 
 
-## CL Maps {.tabset}
+## CL top 20 species maps {.tabset}
 
 
-```{r  CLMap}
+```{r  CLMapSP}
 
 world <- ne_countries(scale = "medium", returnclass = "sf")
 world <- st_set_crs(world, 4326)
 
-CLMap <- CL %>%
-  distinct(CLstatRect, CLspecCode) %>%
+CLMap <- CL1 %>%
+  distinct(CLstatRect, topSpecies) %>%
   mutate(lon = ices.rect(CLstatRect)$lon,
          lat = ices.rect(CLstatRect)$lat)
  
 
 myplotsMap <- list()
 
-for(i in unique(CLMap$CLspecCode)){
+for(i in sort(unique(CLMap$topSpecies))){
   min.lon<-min(CLMap$lon, na.rm = T)
   max.lon<-max(CLMap$lon, na.rm = T)
   min.lat<-min(CLMap$lat, na.rm = T)
@@ -245,7 +321,7 @@ for(i in unique(CLMap$CLspecCode)){
     ggplot() +
     theme_bw() +
     geom_sf(data=world)+
-    geom_point(data = subset(CLMap, CLspecCode == i), aes(lon, lat), size=2, colour="red") +
+    geom_point(data = subset(CLMap, topSpecies == i), aes(lon, lat), size=2, colour="red") +
     coord_sf(xlim = c(min.lon, max.lon), ylim = c(min.lat, max.lat)) +
     xlab("Longitude") +
     ylab("Latitude")
@@ -259,6 +335,153 @@ for(i in unique(names(myplotsMap))){
     lapply(myplotsMap[i], print)
 }
 ```
+
+
+## CL top 20 metiers (rest grouped in OTH group)) {.tabset}
+
+### CL official weight vs scientific weight 
+
+```{r CLoffweightSciweightME, fig.dim= c(12, 8)}
+CLweightS <- CL1 %>%
+  group_by(topMetiers) %>%
+  summarise(CLoffWeight = sum(CLoffWeight),
+            CLsciWeight = sum(CLsciWeight)) %>%
+  gather(CLweightSource, CLweight, -c(topMetiers))
+
+ggplot(CLweightS, aes(topMetiers, CLweight, fill = CLweightSource)) +
+  geom_bar(position="dodge", stat="identity") +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) 
+
+# A condition needs to be added here in case there is more than one type of weight to plot it as well
+```
+
+
+### CL scientific weight source
+
+```{r CLoffweightSciweightSourceME, fig.dim= c(12, 8)}
+CLweightSource <- CL1 %>%
+  group_by(topMetiers, CLdSouSciWeig) %>%
+  summarise(CLsciWeight = sum(CLsciWeight)) 
+
+ggplot(CLweightSource, aes(topMetiers, CLsciWeight, fill = CLdSouSciWeig)) +
+  geom_bar(position="stack", stat="identity") +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) 
+
+```
+
+### CL Landings value source 
+
+```{r CLValSME, fig.dim= c(12, 8)}
+
+CLValS <- CL1 %>%
+  group_by(topMetiers, CLarea,CLdSouLanVal) %>%
+  summarise(CLoffWeight = sum(CLoffWeight))
+
+ggplot(subset(CLValS), aes(topMetiers, CLoffWeight, fill = CLdSouLanVal)) +
+  geom_bar(position="stack", stat="identity") +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) 
+
+```
+
+
+## CL official weight by area {.tabset}
+
+```{r  CLoffWeight1ME}
+
+# Check if the code below works with multiple species 
+# gr <- gregexpr("M", CL$CLspecCode)
+# regmatches(CL$CLspecCode,gr) <- lapply(lengths(gr), sample, x= LETTERS)
+
+CLWeightG <- CL1 %>%
+  group_by(topMetiers, CLarea) %>%
+  summarise(CLoffWeight = sum(CLoffWeight))
+
+myplots <- list()
+for(i in unique(CLWeightG$topMetiers)){
+  myplots[[i]] <- 
+    ggplot(subset(CLWeightG, topMetiers == i), aes(CLarea, CLoffWeight))+
+    geom_bar(stat = "identity") +
+    theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) 
+}
+```
+
+```{r CLoffWeightplot1ME, results = "asis", echo = FALSE}
+
+for(i in unique(names(myplots))){
+    # The tabset level here has to be lower than the
+    # parent level (ie, parent is 2, so here you have to use 3)
+    catHeader(names(myplots[i]), 3)
+    lapply(myplots[i], print)
+}
+```
+
+
+## CL official weight by vessel length category {.tabset}
+
+```{r  CLoffWeightVelME}
+
+CLVel <- CL1 %>%
+  group_by(topMetiers, CLarea,CLvesLenCat) %>%
+  summarise(CLoffWeight = sum(CLoffWeight))
+
+myplotsVel <- list()
+for(i in unique(CLVel$topMetiers)){
+  myplotsVel[[i]] <- 
+    ggplot(subset(CLVel, topMetiers == i), aes(CLarea, CLoffWeight, fill = CLvesLenCat)) +
+  geom_bar(stat = "identity") +
+    theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) 
+}
+```
+
+```{r CLoffWeightVelplotME, results = "asis"}
+
+for(i in unique(names(myplotsVel))){
+    catHeader(names(myplotsVel[i]), 3)
+    lapply(myplotsVel[i], print)
+}
+```
+
+
+## CL top 20 metiers maps {.tabset}
+
+
+```{r  CLMapME}
+
+world <- ne_countries(scale = "medium", returnclass = "sf")
+world <- st_set_crs(world, 4326)
+
+CLMap <- CL1 %>%
+  distinct(CLstatRect, topMetiers) %>%
+  mutate(lon = ices.rect(CLstatRect)$lon,
+         lat = ices.rect(CLstatRect)$lat)
+ 
+
+myplotsMap <- list()
+
+for(i in sort(unique(CLMap$topMetiers))){
+  min.lon<-min(CLMap$lon, na.rm = T)
+  max.lon<-max(CLMap$lon, na.rm = T)
+  min.lat<-min(CLMap$lat, na.rm = T)
+  max.lat<-max(CLMap$lat, na.rm = T)
+  myplotsMap[[i]] <- 
+    ggplot() +
+    theme_bw() +
+    geom_sf(data=world)+
+    geom_point(data = subset(CLMap, topMetiers == i), aes(lon, lat), size=2, colour="red") +
+    coord_sf(xlim = c(min.lon, max.lon), ylim = c(min.lat, max.lat)) +
+    xlab("Longitude") +
+    ylab("Latitude")
+}
+```
+
+```{r CLMapplotME, results = "asis", fig.dim = c(12, 12)}
+
+for(i in unique(names(myplotsMap))){
+    catHeader(names(myplotsMap[i]), 3)
+    lapply(myplotsMap[i], print)
+}
+```
+
 
 
 ## CL Potential Errors {.tabset}
@@ -287,9 +510,25 @@ kable(CLRectErr) %>%
 
 ```
 
-# CE table 
+## CE table 
 
 ## CE official effort vs scientific effort {.tabset}
+
+### CL weight by year and month
+
+```{r CEeffortYear, fig.dim= c(12, 8)}
+CEDASYear <- CE %>%
+  group_by(CEyear, CEMonth ) %>%
+  summarise(CESciDaySea = sum(CESciDaySea)) 
+
+CEDASYear$CEyear1 <- as.character(CEDASYear$CEyear)
+CEDASYear$CEmonth1 <- as.character(CEDASYear$CEMonth)
+
+ggplot(CEDASYear, aes(CEmonth1, CESciDaySea, fill=CEyear1)) +
+  geom_bar(position="dodge", stat="identity") +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) 
+
+```
 
 ### Official days at sea vs scientific days at sea
 
@@ -323,7 +562,7 @@ ggplot(CEeffortFDS, aes(CEArea, CEFishDay, fill = CEFishDaySource)) +
 ```
 
 
-## CE scientific effort source 
+### CE scientific effort source 
 
 ```{r CESciEffortSource}
 CESciEffortSource <- CE %>%
@@ -333,7 +572,7 @@ CESciEffortSource <- CE %>%
   gather(CEEffSource, CEEffort, -c(CEArea, CEdSouSciEff)) 
 
 ggplot(CESciEffortSource, aes(CEArea, CEEffort, fill = CEdSouSciEff)) +
-  geom_bar(position="dodge", stat="identity") +
+  geom_bar(position="stack", stat="identity") +
   theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) +
   facet_grid(CEEffSource~., scales = "free")
 ```
