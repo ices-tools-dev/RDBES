@@ -45,22 +45,23 @@ catHeader <- function(text = "", level = 3) {
 #Read the rectangle list from the repository 
 url <- "https://github.com/ices-tools-dev/RDBES/raw/master/QC-scripts/RectangleList/ICESRectAreas.csv"
 ICESrect <- read.csv(url, header = TRUE)
+urls <- "https://github.com/ices-tools-dev/RDBES/raw/master/QC-scripts/SpeciesScientificName/ICESVocabAphiaIDScienName.csv"
+ScienName <- read.csv(urls, header = TRUE)
+
+# Remove deprecated and invalid records 
+ScienName <- filter(ScienName, !Deprecated %in% c("", "True", "2020-09-16")) %>%
+  select(Code, Description) %>%
+  mutate(Code = as.numeric(Code))
+
 ```
 
 ```{r data}
-# Read CL + CE tables (the upload files without headers)
-CL2018 <- read.csv("Q:/dfad/users/joeg/home/LOG/210831_RDBES_2021_test_datacall/CL_2018_HCL.csv", header = FALSE)
-CL2019 <- read.csv("Q:/dfad/users/joeg/home/LOG/210831_RDBES_2021_test_datacall/CL_2019_HCL.csv", header = FALSE)
-CL2020 <- read.csv("Q:/dfad/users/joeg/home/LOG/210831_RDBES_2021_test_datacall/CL_2020_HCL.csv", header = FALSE)
-CE2018 <- read.csv("Q:/dfad/users/joeg/home/LOG/210831_RDBES_2021_test_datacall/CE_2018_HCE.csv", header = FALSE)
-CE2019 <- read.csv("Q:/dfad/users/joeg/home/LOG/210831_RDBES_2021_test_datacall/CE_2019_HCE.csv", header = FALSE)
-CE2020 <- read.csv("Q:/dfad/users/joeg/home/LOG/210831_RDBES_2021_test_datacall/CE_2020_HCE.csv", header = FALSE)
+# Read test data 
+CL <- read.csv("./ZW_1965_HCL.csv")
+CE <- read.csv("./ZW_1965_HCE.csv")
 
-CL <- rbind(CL2018,CL2019,CL2020)
-CE <- rbind(CE2018,CE2019,CE2020)
 
 #--Give the df's the R column names from the RDBES data model CL CE file
-# These can also be sourced directly from the repository (the column names of the data model CL CE csv files) to be up-to-date in case something changes 
  
 CLnames <- c("CLrecType", "CLdTypSciWeig", "CLdSouSciWeig", "CLsampScheme", "CLdSouLanVal", "CLlanCou", "CLvesFlagCou", "CLyear", "CLquar", "CLmonth", "CLarea", "CLstatRect", "CLgsaSubarea", "CLjurisdArea", "CLeconZoneIndi", "CLspecCode", "CLspecFAO", "CLlandCat", "CLcatchCat", "CLregDisCat","CLsizeCatScale", "CLsizeCat", "CLnatFishAct", "CLmetier6", "CLIBmitiDev", "CLloc", "CLvesLenCat", "CLfishTech", "CLdeepSeaReg", "CLoffWeight", "CLsciWeight", "CLexpDiff", "CLtotOffLanVal", "CLnumUniqVes", "CLsciWeightRSE", "CLvalRSE", "CLsciWeightQualBias")
 
@@ -69,21 +70,57 @@ colnames(CL) <- CLnames
 CEnames <- c("CErecType", "CEdTypSciEff", "CEdSouSciEff", "CEsampScheme", "CEvesFlagCou", "CEyear", "CEquar", "CEMonth", "CEArea", "CEstatRect", "CEgsaSubarea", "CEjurisdArea", "CEeconZoneIndi", "CEnatFishAct", "CEmetier6", "CEIBmitiDev", "CEloc", "CEvesLenCat", "CEfishTech", "CEdeepSeaReg", "CEnumFracTrips", "CEnumDomTrip", "CEoffDaySea", "CESciDaySea", "CEoffFishDay", "CEsciFishDay", "CEoffNumHaulSet", "CEsciNumHaulSet", "CEoffVesFishHour", "CEsciVesFishHour", "CEoffSoakMeterHour", "CEsciSoakMeterHour", "CEoffkWDaySea", "CEscikWDaySea", "CEoffkWFishDay", "CEscikWFishDay", "CEoffkWFishHour", "CEscikWFishHour", "CEgTDaySea", "CEgTFishDay", "CEgTFishHour", "CEnumUniqVes", "CEsciFishDayRSE", "CEscientificFishingDaysQualBias")
 
 colnames(CE) <- CEnames
+```
 
-# Use species FAO codes where available
-CL$species <- CL$CLspecFAO
-CL$species[CL$species==''] <- as.character(CL$CLspecCode)
-#CL$CLspecCode <- as.character(CL$CLspecCode)
+```{r changeIDtoSC}
+# Choice of Aphiad ID or Scientific name (from ICES Vocab)
+# Default is TRUE - If FALSE the AphiaID is used
 
-#Find top 20 species
-top20_species <- CL %>%
-  group_by(species) %>%
+ScName <- TRUE
+
+if(ScName %in% TRUE){
+  CL <- left_join(CL, ScienName, by = c("CLspecCode" = "Code")) %>%
+    rename(CLSpecies = Description) #generic field name for the code to work regardless of aphiaID or scientific name
+}else{
+  CL <- rename(CL, CLSpecies = CLspecCode)
+}
+```
+
+```{r CLCEcon}
+# Just to test - REMOVE
+CL$CLmonth <- sample(1:12, nrow(CL), replace = TRUE)
+CE$CEMonth <- sample(1:12, nrow(CE), replace = TRUE)
+
+
+CL$CLSpecies[CL$CLSpecies==''] <- as.character(CL$CLSpecies)
+CL$CLyear <- as.character(CL$CLyear)
+CE$CEyear <- as.character(CE$CEyear)
+
+# Month factors 
+CL$CLmonth <- factor(CL$CLmonth, levels = as.character(c(1:12)))
+CE$CEMonth <- factor(CE$CEMonth, levels = as.character(c(1:12)))
+
+# Vessel length factors 
+CL$CLvesLenCat <- factor(CL$CLvesLenCat, levels = c("<8", "8-<10", "10-<12", "12-<15", "15-<18", "18-<24", "24-<40", "40<", "Unknown"))
+CE$CEvesLenCat <- factor(CE$CEvesLenCat, levels = c("<8", "8-<10", "10-<12", "12-<15", "15-<18", "18-<24", "24-<40", "40<", "Unknown"))
+
+# Get gear for passive/active
+CE <- mutate(CE, CEGear = str_extract(CEmetier6, "[^_]+"))
+CE <- mutate(CE, CEGearActivity = ifelse(CEGear %in% c("FIX", "FAR", "FPN", "FPO", "FWR", "FYK", "GEN", "GNF", "GN", "GNC", "GND", "GNS", "GTN", "GTR", "GES", "LH", "LHM", "LHP", "LL", "LLD", "LLF", "LLS", "LTL", "LVD", "LVS", "LX", "LN", "LNB", "LNP", "LNS"), "Passive", ifelse(CEGear %in% "NK", "NK", "Active")))
+```
+
+
+
+```{r topMet}
+#Find top 20 CLSpecies
+top20_CLSpecies <- CL %>%
+  group_by(CLSpecies) %>%
   summarise(lwTot=sum(CLtotOffLanVal)) %>%
   arrange(desc(lwTot)) %>%
   top_n(20)
-top20_species$Top20species <- "X"
-CL1 <- left_join(CL,top20_species,by="species")
-CL1$topSpecies <- ifelse(is.na(CL1$Top20species),"OTH",CL1$species)
+top20_CLSpecies$Top20CLSpecies <- "X"
+CL1 <- left_join(CL,top20_CLSpecies,by="CLSpecies")
+CL1$topCLSpecies <- ifelse(is.na(CL1$Top20CLSpecies),"OTH",CL1$CLSpecies)
 
 #Find top 20 metiers
 top20_metiers <- CL1 %>%
@@ -104,15 +141,14 @@ CL1$topMetiers <- ifelse(is.na(CL1$Top20metiers),"OTH",CL1$CLmetier6)
 
 ```{r CLweightYear, fig.dim= c(12, 8)}
 CLweightYear <- CL1 %>%
-  group_by(CLyear, CLmonth ) %>%
+  group_by(CLyear, CLmonth) %>%
   summarise(CLsciWeight = sum(CLsciWeight)) 
 
-CLweightYear$CLyear1 <- as.character(CLweightYear$CLyear)
-CLweightYear$CLmonth1 <- as.character(CLweightYear$CLmonth)
-
-ggplot(CLweightYear, aes(CLmonth1, CLsciWeight, fill=CLyear1)) +
+ggplot(CLweightYear, aes(CLmonth, CLsciWeight, fill=CLyear)) +
   geom_bar(position="dodge", stat="identity") +
-  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) 
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1), legend.key.size = unit(2, 'cm'))  +
+  xlab("CLMonth") +
+  labs(fill = "CLyear")
 
 ```
 
@@ -121,16 +157,17 @@ ggplot(CLweightYear, aes(CLmonth1, CLsciWeight, fill=CLyear1)) +
 
 ```{r CLoffweightSciweightSP, fig.dim= c(12, 8)}
 CLweightS <- CL1 %>%
-  group_by(topSpecies) %>%
+  group_by(topCLSpecies) %>%
   summarise(CLoffWeight = sum(CLoffWeight),
             CLsciWeight = sum(CLsciWeight)) %>%
-  gather(CLweightSource, CLweight, -c(topSpecies))
+  gather(CLweightSource, CLweight, -c(topCLSpecies))
 
-ggplot(CLweightS, aes(topSpecies, CLweight, fill = CLweightSource)) +
+
+ggplot(CLweightS, aes(reorder(topCLSpecies, -CLweight), CLweight, fill = CLweightSource)) +
   geom_bar(position="dodge", stat="identity") +
-  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) 
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1), legend.key.size = unit(2, 'cm'))+
+  xlab("topCLSpecies")
 
-# A condition needs to be added here in case there is more than one type of weight to plot it as well
 ```
 
 
@@ -138,79 +175,94 @@ ggplot(CLweightS, aes(topSpecies, CLweight, fill = CLweightSource)) +
 
 ```{r CLoffweightSciweightSourceSP, fig.dim= c(12, 8)}
 CLweightSource <- CL1 %>%
-  group_by(topSpecies, CLdSouSciWeig) %>%
+  group_by(topCLSpecies, CLdSouSciWeig) %>%
   summarise(CLsciWeight = sum(CLsciWeight)) 
 
-ggplot(CLweightSource, aes(topSpecies, CLsciWeight, fill = CLdSouSciWeig)) +
+ggplot(CLweightSource, aes(reorder(topCLSpecies, -CLsciWeight), CLsciWeight, fill = CLdSouSciWeig)) +
   geom_bar(position="stack", stat="identity") +
-  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) 
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1), legend.key.size = unit(2, 'cm')) +
+  xlab("topCLSpecies")
 
 ```
+
+### CL Landings by area (stacked)
+
+```{r CLLanSArea, , fig.dim= c(12, 8)}
+CLLanSArea <- CL1 %>%
+  group_by(topCLSpecies, CLarea) %>%
+  summarise(CLoffWeight = sum(CLoffWeight))
+
+CLLanSArea <- CLLanSArea %>%
+  group_by(topCLSpecies) %>%
+  mutate(TotW = sum(CLoffWeight))
+
+ggplot(CLLanSArea, aes(reorder(topCLSpecies, -TotW), CLoffWeight, fill = CLarea)) +
+  geom_bar(position="stack", stat="identity") +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) +
+  xlab("topCLSpecies")
+```
+
 
 ### CL Landings value source 
 
 ```{r CLValSSP, fig.dim= c(12, 8)}
-
 CLValS <- CL1 %>%
-  group_by(topSpecies, CLarea,CLdSouLanVal) %>%
-  summarise(CLoffWeight = sum(CLoffWeight))
+  group_by(topCLSpecies, CLdSouLanVal) %>%
+  summarise(CLoffWeight = sum(CLoffWeight)) 
 
-ggplot(subset(CLValS), aes(topSpecies, CLoffWeight, fill = CLdSouLanVal)) +
+ggplot(CLValS, aes(reorder(topCLSpecies, -CLoffWeight), CLoffWeight, fill = CLdSouLanVal)) +
   geom_bar(position="stack", stat="identity") +
-  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) 
-
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1), legend.key.size = unit(2, 'cm')) +
+  xlab("topCLSpecies")
 ```
 
 ### CL Landing category 
 
 ```{r CLlandCatSP, fig.dim= c(12, 8)}
-
-CLValS <- CL1 %>%
-  group_by(topSpecies, CLarea,CLlandCat) %>%
+CLValS2 <- CL1 %>%
+  group_by(topCLSpecies, CLlandCat) %>%
   summarise(CLoffWeight = sum(CLoffWeight))
 
-ggplot(subset(CLValS), aes(topSpecies, CLoffWeight, fill = CLlandCat)) +
+ggplot(CLValS2, aes(reorder(topCLSpecies, -CLoffWeight), CLoffWeight, fill = CLlandCat)) +
   geom_bar(position="stack", stat="identity") +
-  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) 
-
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1), legend.key.size = unit(2, 'cm')) +
+  xlab("topCLSpecies")
 ```
 
 ### CL Catch category 
 
 ```{r CLcatchCatSP, fig.dim= c(12, 8)}
 
-CLValS <- CL1 %>%
-  group_by(topSpecies, CLarea,CLcatchCat) %>%
+CLValS3 <- CL1 %>%
+  group_by(topCLSpecies,CLcatchCat) %>%
   summarise(CLoffWeight = sum(CLoffWeight))
 
-ggplot(subset(CLValS), aes(topSpecies, CLoffWeight, fill = CLcatchCat)) +
+ggplot(CLValS3, aes(reorder(topCLSpecies, -CLoffWeight), CLoffWeight, fill = CLcatchCat)) +
   geom_bar(position="stack", stat="identity") +
-  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) 
-
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1), legend.key.size = unit(2, 'cm')) +
+  xlab("topCLSpecies")
 ```
 
 ## CL official weight by area {.tabset}
 
 ```{r  CLoffWeight1SP}
 
-# Check if the code below works with multiple species 
-# gr <- gregexpr("M", CL$CLspecCode)
-# regmatches(CL$CLspecCode,gr) <- lapply(lengths(gr), sample, x= LETTERS)
-
 CLWeightG <- CL1 %>%
-  group_by(topSpecies, CLarea) %>%
+  group_by(topCLSpecies, CLarea, CLyear) %>%
   summarise(CLoffWeight = sum(CLoffWeight))
 
 myplots <- list()
-for(i in unique(CLWeightG$topSpecies)){
+for(i in unique(CLWeightG$topCLSpecies)){
   myplots[[i]] <- 
-    ggplot(subset(CLWeightG, topSpecies == i), aes(CLarea, CLoffWeight))+
-    geom_bar(stat = "identity") +
-    theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) 
+    ggplot(subset(CLWeightG, topCLSpecies == i), aes(reorder(CLarea, -CLoffWeight), CLoffWeight, fill = as.character(CLyear)))+
+    geom_bar(position="stack",stat = "identity") +
+    theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1), legend.key.size = unit(2, 'cm'))  +
+    xlab("CLarea") +
+    labs(fill = "CLyear")
 }
 ```
 
-```{r CLoffWeightplot1SP, results = "asis", echo = FALSE}
+```{r CLoffWeightplot1SP, results = "asis", fig.dim= c(12, 8)}
 
 for(i in unique(names(myplots))){
     # The tabset level here has to be lower than the
@@ -226,24 +278,31 @@ for(i in unique(names(myplots))){
 ```{r  CLoffWeightVelSP}
 
 CLVel <- CL1 %>%
-  group_by(topSpecies, CLarea,CLvesLenCat) %>%
-  summarise(CLoffWeight = sum(CLoffWeight))
+  group_by(topCLSpecies, CLarea,CLvesLenCat) %>%
+  summarise(CLoffWeight = sum(CLoffWeight)) 
+
+
+CLVel <- CLVel %>%
+  group_by(CLarea, topCLSpecies) %>%
+  mutate(TotW = sum(CLoffWeight))
 
 myplotsVel <- list()
-for(i in unique(CLVel$topSpecies)){
+for(i in unique(CLVel$topCLSpecies)){
   myplotsVel[[i]] <- 
-    ggplot(subset(CLVel, topSpecies == i), aes(CLarea, CLoffWeight, fill = CLvesLenCat)) +
+    ggplot(subset(CLVel, topCLSpecies == i), aes(reorder(CLarea, -TotW), CLoffWeight, fill = CLvesLenCat)) +
   geom_bar(stat = "identity") +
-    theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) 
+    theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) +
+    xlab("CLarea")
 }
 ```
 
-```{r CLoffWeightVelplotSP, results = "asis"}
+```{r CLoffWeightVelplotSP, results = "asis", fig.dim= c(12, 8)}
 
 for(i in unique(names(myplotsVel))){
     catHeader(names(myplotsVel[i]), 3)
     lapply(myplotsVel[i], print)
 }
+
 ```
 
 
@@ -252,9 +311,9 @@ for(i in unique(names(myplotsVel))){
 ```{r  CLoffWeightValSP}
 
 myplotsVal <- list()
-for(i in sort(unique(CL1$topSpecies))){
+for(i in sort(unique(CL1$topCLSpecies))){
   myplotsVal[[i]] <- 
-    ggplot(subset(CL1, topSpecies == i), aes(x= CLoffWeight, y=CLtotOffLanVal)) + geom_point()
+    ggplot(subset(CL1, topCLSpecies == i), aes(x= CLoffWeight, y=CLtotOffLanVal)) + geom_point()
 }
 ```
 
@@ -264,8 +323,6 @@ for(i in unique(names(myplotsVal))){
     catHeader(names(myplotsVal[i]), 3)
     lapply(myplotsVal[i], print)
 }
-
-
 ```
 
 
@@ -275,19 +332,24 @@ for(i in unique(names(myplotsVal))){
 ```{r  CLoffWeightLoc}
 
 CLLoc <- CL1 %>%
-  group_by(topSpecies, CLarea, CLloc) %>%
+  group_by(topCLSpecies, CLarea, CLloc) %>%
   summarise(CLoffWeight = sum(CLoffWeight))
 
+CLLoc <- CLLoc %>%
+  group_by(CLarea, topCLSpecies) %>%
+  mutate(TotW = sum(CLoffWeight))
+
 myplotsLoc <- list()
-for(i in unique(CLLoc$topSpecies)){
+for(i in unique(CLLoc$topCLSpecies)){
   myplotsLoc[[i]] <- 
-    ggplot(subset(CLLoc, topSpecies == i), aes(CLarea, CLoffWeight, fill = CLloc)) +
+    ggplot(subset(CLLoc, topCLSpecies == i), aes(reorder(CLarea, -TotW), CLoffWeight, fill = CLloc)) +
     geom_bar(stat = "identity") +
-    theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) 
+    theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) +
+    xlab("CLarea")
 }
 ```
 
-```{r CLoffWeightLocplot, results = "asis"}
+```{r CLoffWeightLocplot, results = "asis", fig.dim= c(12, 8)}
 
 for(i in unique(names(myplotsLoc))){
     catHeader(names(myplotsLoc[i]), 3)
@@ -305,14 +367,13 @@ world <- ne_countries(scale = "medium", returnclass = "sf")
 world <- st_set_crs(world, 4326)
 
 CLMap <- CL1 %>%
-  distinct(CLstatRect, topSpecies) %>%
+  distinct(CLstatRect, topCLSpecies) %>%
   mutate(lon = ices.rect(CLstatRect)$lon,
          lat = ices.rect(CLstatRect)$lat)
  
 
 myplotsMap <- list()
-
-for(i in sort(unique(CLMap$topSpecies))){
+for(i in sort(unique(CLMap$topCLSpecies))){
   min.lon<-min(CLMap$lon, na.rm = T)
   max.lon<-max(CLMap$lon, na.rm = T)
   min.lat<-min(CLMap$lat, na.rm = T)
@@ -321,7 +382,7 @@ for(i in sort(unique(CLMap$topSpecies))){
     ggplot() +
     theme_bw() +
     geom_sf(data=world)+
-    geom_point(data = subset(CLMap, topSpecies == i), aes(lon, lat), size=2, colour="red") +
+    geom_point(data = subset(CLMap, topCLSpecies == i), aes(lon, lat), size=2, colour="red") +
     coord_sf(xlim = c(min.lon, max.lon), ylim = c(min.lat, max.lat)) +
     xlab("Longitude") +
     ylab("Latitude")
@@ -348,11 +409,11 @@ CLweightS <- CL1 %>%
             CLsciWeight = sum(CLsciWeight)) %>%
   gather(CLweightSource, CLweight, -c(topMetiers))
 
-ggplot(CLweightS, aes(topMetiers, CLweight, fill = CLweightSource)) +
+ggplot(CLweightS, aes(reorder(topMetiers, -CLweight), CLweight, fill = CLweightSource)) +
   geom_bar(position="dodge", stat="identity") +
-  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) 
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1), legend.key.size = unit(2, 'cm')) +
+  xlab("topMetiers")
 
-# A condition needs to be added here in case there is more than one type of weight to plot it as well
 ```
 
 
@@ -363,9 +424,10 @@ CLweightSource <- CL1 %>%
   group_by(topMetiers, CLdSouSciWeig) %>%
   summarise(CLsciWeight = sum(CLsciWeight)) 
 
-ggplot(CLweightSource, aes(topMetiers, CLsciWeight, fill = CLdSouSciWeig)) +
+ggplot(CLweightSource, aes(reorder(topMetiers, -CLsciWeight), CLsciWeight, fill = CLdSouSciWeig)) +
   geom_bar(position="stack", stat="identity") +
-  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) 
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1), legend.key.size = unit(2, 'cm')) +
+  xlab("topMetiers")
 
 ```
 
@@ -377,9 +439,10 @@ CLValS <- CL1 %>%
   group_by(topMetiers, CLarea,CLdSouLanVal) %>%
   summarise(CLoffWeight = sum(CLoffWeight))
 
-ggplot(subset(CLValS), aes(topMetiers, CLoffWeight, fill = CLdSouLanVal)) +
+ggplot(subset(CLValS), aes(reorder(topMetiers, -CLoffWeight), CLoffWeight, fill = CLdSouLanVal)) +
   geom_bar(position="stack", stat="identity") +
-  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) 
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1), legend.key.size = unit(2, 'cm')) +
+  xlab("topMetiers")
 
 ```
 
@@ -388,24 +451,21 @@ ggplot(subset(CLValS), aes(topMetiers, CLoffWeight, fill = CLdSouLanVal)) +
 
 ```{r  CLoffWeight1ME}
 
-# Check if the code below works with multiple species 
-# gr <- gregexpr("M", CL$CLspecCode)
-# regmatches(CL$CLspecCode,gr) <- lapply(lengths(gr), sample, x= LETTERS)
-
 CLWeightG <- CL1 %>%
-  group_by(topMetiers, CLarea) %>%
+  group_by(topMetiers, CLarea, CLyear) %>%
   summarise(CLoffWeight = sum(CLoffWeight))
 
 myplots <- list()
 for(i in unique(CLWeightG$topMetiers)){
   myplots[[i]] <- 
-    ggplot(subset(CLWeightG, topMetiers == i), aes(CLarea, CLoffWeight))+
+    ggplot(subset(CLWeightG, topMetiers == i), aes(reorder(CLarea, -CLoffWeight), CLoffWeight, fill = CLyear))+
     geom_bar(stat = "identity") +
-    theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) 
+    theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) +
+    xlab("CLarea")
 }
 ```
 
-```{r CLoffWeightplot1ME, results = "asis", echo = FALSE}
+```{r CLoffWeightplot1ME, results = "asis", fig.dim= c(12, 8)}
 
 for(i in unique(names(myplots))){
     # The tabset level here has to be lower than the
@@ -427,13 +487,14 @@ CLVel <- CL1 %>%
 myplotsVel <- list()
 for(i in unique(CLVel$topMetiers)){
   myplotsVel[[i]] <- 
-    ggplot(subset(CLVel, topMetiers == i), aes(CLarea, CLoffWeight, fill = CLvesLenCat)) +
+    ggplot(subset(CLVel, topMetiers == i), aes(reorder(CLarea, -CLoffWeight), CLoffWeight, fill = CLvesLenCat)) +
   geom_bar(stat = "identity") +
-    theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) 
+    theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1), legend.key.size = unit(2, 'cm')) +
+    xlab("CLarea")
 }
 ```
 
-```{r CLoffWeightVelplotME, results = "asis"}
+```{r CLoffWeightVelplotME, results = "asis", fig.dim= c(12, 8)}
 
 for(i in unique(names(myplotsVel))){
     catHeader(names(myplotsVel[i]), 3)
@@ -443,7 +504,6 @@ for(i in unique(names(myplotsVel))){
 
 
 ## CL top 20 metiers maps {.tabset}
-
 
 ```{r  CLMapME}
 
@@ -457,7 +517,6 @@ CLMap <- CL1 %>%
  
 
 myplotsMap <- list()
-
 for(i in sort(unique(CLMap$topMetiers))){
   min.lon<-min(CLMap$lon, na.rm = T)
   max.lon<-max(CLMap$lon, na.rm = T)
@@ -488,7 +547,6 @@ for(i in unique(names(myplotsMap))){
 
 ### CL ICES rectangles and FAO Areas
 
-
 ```{r CLrectangles}
 CLRect <- left_join(CL, ICESrect, by = c("CLstatRect" = "ICESNAME"))%>%
   select(CLarea, CLstatRect, Area) %>%
@@ -503,7 +561,10 @@ CLRectErr <- CLRect %>%
   filter(NoMatch %in% FALSE) %>%
   rename(ICESArea = Area) %>%
   ungroup() %>%
-  select(CLstatRect, CLarea, ICESArea)
+  select(CLstatRect, CLarea, ICESArea) %>%
+  rename(SubmittedRectangleCLtable = CLstatRect,
+         SubmittedAreaCLtable = CLarea,
+         ActualICESArea = ICESArea)
 
 kable(CLRectErr) %>%
   kable_styling()
@@ -516,65 +577,107 @@ kable(CLRectErr) %>%
 
 ### CL weight by year and month
 
+
 ```{r CEeffortYear, fig.dim= c(12, 8)}
 CEDASYear <- CE %>%
-  group_by(CEyear, CEMonth ) %>%
+  group_by(CEyear, CEMonth) %>%
   summarise(CESciDaySea = sum(CESciDaySea)) 
 
-CEDASYear$CEyear1 <- as.character(CEDASYear$CEyear)
-CEDASYear$CEmonth1 <- as.character(CEDASYear$CEMonth)
-
-ggplot(CEDASYear, aes(CEmonth1, CESciDaySea, fill=CEyear1)) +
+ggplot(CEDASYear, aes(CEMonth, CESciDaySea, fill=CEyear)) +
   geom_bar(position="dodge", stat="identity") +
-  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) 
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1), legend.key.size = unit(2, 'cm')) 
 
 ```
 
 ### Official days at sea vs scientific days at sea
 
-```{r CLeffortDATS}
+```{r CLeffortDATS, fig.dim= c(12, 8)}
 CEeffortDATS <- CE %>%
   group_by(CEArea) %>%
   summarise(CEoffDaySea = sum(CEoffDaySea),
             CESciDaySea = sum(CESciDaySea))  %>%
   gather(CEDaySeaSource, CEDaySea, -c(CEArea))
 
-ggplot(CEeffortDATS, aes(CEArea, CEDaySea, fill = CEDaySeaSource)) +
+ggplot(CEeffortDATS, aes(reorder(CEArea, -CEDaySea), CEDaySea, fill = CEDaySeaSource)) +
   geom_bar(position="dodge", stat="identity") +
-  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) 
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1), legend.key.size = unit(2, 'cm')) +
+  xlab("CEDaySea")
 
 ```
 
 
+### Official days at sea and scientific days at sea (passive/active gears) 
+
+```{r CLeffortDATSpa, fig.dim= c(12, 8)}
+CEeffortDATSpa <- CE %>%
+  group_by(CEArea, CEGearActivity) %>%
+  summarise(CEoffDaySea = sum(CEoffDaySea),
+            CESciDaySea = sum(CESciDaySea))  %>%
+  gather(CEDaySeaSource, CEDaySea, -c(CEArea, CEGearActivity))
+
+CEeffortDATSpa <- CEeffortDATSpa %>%
+  group_by(CEArea) %>%
+  mutate(TotE = sum(CEDaySea))
+
+ggplot(CEeffortDATSpa, aes(reorder(CEArea, -TotE), CEDaySea, fill = CEGearActivity)) +
+  geom_bar(position="stack", stat="identity") +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1), legend.key.size = unit(2, 'cm')) +
+  facet_grid(CEDaySeaSource~., scales = "free") +
+  xlab("CEFishDay")
+```
+
 ### Official fishing days vs scientific fishing days 
 
-```{r CLeffortFDS}
+```{r CLeffortFDS, fig.dim= c(12, 8)}
 CEeffortFDS <- CE %>%
   group_by(CEArea) %>%
   summarise(CEoffFishDay = sum(CEoffFishDay),
             CEsciFishDay = sum(CEsciFishDay))  %>%
   gather(CEFishDaySource, CEFishDay, -c(CEArea))
 
-ggplot(CEeffortFDS, aes(CEArea, CEFishDay, fill = CEFishDaySource)) +
+ggplot(CEeffortFDS, aes(reorder(CEArea, -CEFishDay), CEFishDay, fill = CEFishDaySource)) +
   geom_bar(position="dodge", stat="identity") +
-  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) 
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1), legend.key.size = unit(2, 'cm')) +
+  xlab("CEFishDay")
 
+```
+
+
+### Official fishing days and scientific fishing days (passive/active gears) 
+
+```{r CLeffortFDSpa, fig.dim= c(12, 8)}
+CEeffortFDSpa <- CE %>%
+  group_by(CEArea, CEGearActivity) %>%
+  summarise(CEoffFishDay = sum(CEoffFishDay),
+            CEsciFishDay = sum(CEsciFishDay))  %>%
+  gather(CEFishDaySource, CEFishDay, -c(CEArea, CEGearActivity))
+
+CEeffortFDSpa <- CEeffortFDSpa %>%
+  group_by(CEArea) %>%
+  mutate(TotE = sum(CEFishDay))
+
+ggplot(CEeffortFDSpa, aes(reorder(CEArea, -TotE), CEFishDay, fill = CEGearActivity)) +
+  geom_bar(position="stack", stat="identity") +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1), legend.key.size = unit(2, 'cm')) +
+  facet_grid(CEFishDaySource~., scales = "free") +
+  xlab("CEFishDay")
 ```
 
 
 ### CE scientific effort source 
 
-```{r CESciEffortSource}
+```{r CESciEffortSource, fig.dim= c(12, 8)}
 CESciEffortSource <- CE %>%
   group_by(CEArea, CEdSouSciEff) %>%
   summarise(CESciDaySea = sum(CESciDaySea),
             CEsciFishDay = sum(CEsciFishDay)) %>%
   gather(CEEffSource, CEEffort, -c(CEArea, CEdSouSciEff)) 
 
-ggplot(CESciEffortSource, aes(CEArea, CEEffort, fill = CEdSouSciEff)) +
+ggplot(CESciEffortSource, aes(reorder(CEArea, -CEEffort), CEEffort, fill = CEdSouSciEff)) +
   geom_bar(position="stack", stat="identity") +
-  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) +
-  facet_grid(CEEffSource~., scales = "free")
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1), legend.key.size = unit(2, 'cm')) +
+  facet_grid(CEEffSource~., scales = "free") +
+  xlab("CEEffort")
 ```
 
 
@@ -591,7 +694,6 @@ for(i in unique(CE$CEArea)){
 ```
 
 ```{r CEoffEffplot, results = "asis"}
-
 for(i in unique(names(myplotsEff))){
     catHeader(names(myplotsEff[i]), 3)
     lapply(myplotsEff[i], print)
