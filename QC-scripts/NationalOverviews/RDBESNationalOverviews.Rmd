@@ -30,6 +30,7 @@ library(mapplots)
 library(rnaturalearth)
 library(rnaturalearthdata)
 library(sf)
+library(DT)
 library(stringr)
 ```
 
@@ -87,11 +88,6 @@ if(ScName %in% TRUE){
 ```
 
 ```{r CLCEcon}
-# Just to test - REMOVE
-CL$CLmonth <- sample(1:12, nrow(CL), replace = TRUE)
-CE$CEMonth <- sample(1:12, nrow(CE), replace = TRUE)
-
-
 CL$CLSpecies[CL$CLSpecies==''] <- as.character(CL$CLSpecies)
 CL$CLyear <- as.character(CL$CLyear)
 CE$CEyear <- as.character(CE$CEyear)
@@ -566,9 +562,7 @@ CLRectErr <- CLRect %>%
          SubmittedAreaCLtable = CLarea,
          ActualICESArea = ICESArea)
 
-kable(CLRectErr) %>%
-  kable_styling()
-
+datatable(CLRectErr) 
 ```
 
 ## CE table 
@@ -748,9 +742,7 @@ CERectErr <- CERect %>%
   ungroup() %>%
   select(CEstatRect, CEArea, ICESArea)
 
-kable(CERectErr) %>%
-  kable_styling()
-
+datatable(CERectErr) 
 ```
 
 
