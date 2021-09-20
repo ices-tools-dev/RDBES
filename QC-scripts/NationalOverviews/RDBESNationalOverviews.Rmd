@@ -61,7 +61,6 @@ ScienName <- filter(ScienName, !Deprecated %in% c("", "True", "2020-09-16")) %>%
 CL <- read.csv("./ZW_1965_HCL.csv")
 CE <- read.csv("./ZW_1965_HCE.csv")
 
-
 #--Give the df's the R column names from the RDBES data model CL CE file
  
 CLnames <- c("CLrecType", "CLdTypSciWeig", "CLdSouSciWeig", "CLsampScheme", "CLdSouLanVal", "CLlanCou", "CLvesFlagCou", "CLyear", "CLquar", "CLmonth", "CLarea", "CLstatRect", "CLgsaSubarea", "CLjurisdArea", "CLeconZoneIndi", "CLspecCode", "CLspecFAO", "CLlandCat", "CLcatchCat", "CLregDisCat","CLsizeCatScale", "CLsizeCat", "CLnatFishAct", "CLmetier6", "CLIBmitiDev", "CLloc", "CLvesLenCat", "CLfishTech", "CLdeepSeaReg", "CLoffWeight", "CLsciWeight", "CLexpDiff", "CLtotOffLanVal", "CLnumUniqVes", "CLsciWeightRSE", "CLvalRSE", "CLsciWeightQualBias")
@@ -102,7 +101,7 @@ CE$CEvesLenCat <- factor(CE$CEvesLenCat, levels = c("<8", "8-<10", "10-<12", "12
 
 # Get gear for passive/active
 CE <- mutate(CE, CEGear = str_extract(CEmetier6, "[^_]+"))
-CE <- mutate(CE, CEGearActivity = ifelse(CEGear %in% c("FIX", "FAR", "FPN", "FPO", "FWR", "FYK", "GEN", "GNF", "GN", "GNC", "GND", "GNS", "GTN", "GTR", "GES", "LH", "LHM", "LHP", "LL", "LLD", "LLF", "LLS", "LTL", "LVD", "LVS", "LX", "LN", "LNB", "LNP", "LNS"), "Passive", ifelse(CEGear %in% "NK", "NK", "Active")))
+CE <- mutate(CE, CEGearActivity = ifelse(CEGear %in% c("FIX", "FAR", "FPN", "FPO", "FWR", "FYK", "GEN", "GNF", "GN", "GNC", "GND", "GNS", "GTN", "GTR", "GES", "LH", "LHM", "LHP", "LL", "LLD", "LLF", "LLS", "LTL", "LVD", "LVS", "LX", "LN", "LNB", "LNP", "LNS","MIS"), "Passive", ifelse(CEGear %in% "NK", "NK", "Active")))
 ```
 
 
@@ -543,6 +542,10 @@ for(i in unique(names(myplotsMap))){
 
 ### CL ICES rectangles and FAO Areas
 
+Area and ICES rectangle in the CL data (AreaCLtable,RectangleCLtable) set is compared with area/rectangle relationship ICES reference list. 
+The expected area related to the ICES rectangle is found in the column ICESAreaWithRectangle.
+Note that -9 is allowed as unknown ICES rectangle.
+
 ```{r CLrectangles}
 CLRect <- left_join(CL, ICESrect, by = c("CLstatRect" = "ICESNAME"))%>%
   select(CLarea, CLstatRect, Area) %>%
@@ -558,9 +561,9 @@ CLRectErr <- CLRect %>%
   rename(ICESArea = Area) %>%
   ungroup() %>%
   select(CLstatRect, CLarea, ICESArea) %>%
-  rename(SubmittedRectangleCLtable = CLstatRect,
-         SubmittedAreaCLtable = CLarea,
-         ActualICESArea = ICESArea)
+  rename(RectangleCLtable = CLstatRect,
+         AreaCLtable = CLarea,
+         ICESAreaWithRectangle = ICESArea)
 
 datatable(CLRectErr) 
 ```
@@ -683,7 +686,7 @@ ggplot(CESciEffortSource, aes(reorder(CEArea, -CEEffort), CEEffort, fill = CEdSo
 myplotsEff <- list()
 for(i in unique(CE$CEArea)){
   myplotsEff[[i]] <- 
-    ggplot(subset(CE, CEArea == i), aes(x= CEoffDaySea, y= CEoffFishDay)) + geom_point()
+    ggplot(subset(CE, CEArea == i), aes(x= CEoffDaySea, y= CEoffFishDay, colour=CEGearActivity)) + geom_point()
 }
 ```
 
@@ -725,6 +728,9 @@ print(ggplot() +
 
 ### CE ICES rectangles and FAO Areas
 
+Area and ICES rectangle in the CE data (AreaCEtable, RectangleCEtable) set is compared with area/rectangle relationship ICES reference list. 
+The expected area related to the ICES rectangle is found in the column ICESAreaWithRectangle.
+Note that -9 is allowed as unknown ICES rectangle.
 
 ```{r CErectangles}
 CERect <- left_join(CE, ICESrect, by = c("CEstatRect" = "ICESNAME"))%>%
@@ -740,10 +746,11 @@ CERectErr <- CERect %>%
   filter(NoMatch %in% FALSE) %>%
   rename(ICESArea = Area) %>%
   ungroup() %>%
-  select(CEstatRect, CEArea, ICESArea)
+  select(CEstatRect, CEArea, ICESArea) %>%
+  rename(RectangleCEtable = CEstatRect,
+         AreaCEtable = CEArea,
+         ICESAreaWithRectangle = ICESArea)
 
 datatable(CERectErr) 
 ```
-
-
 
