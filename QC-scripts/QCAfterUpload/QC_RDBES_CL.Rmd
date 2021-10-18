@@ -1,0 +1,611 @@
+```{r title, include = F}
+
+front_title <- "RDBES CL Multinational overviews"
+
+```
+
+
+---
+title: `r front_title`
+author: "ICES RDBES Core group"
+date: "`r format(Sys.time(), '%d %B, %Y')`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, message = FALSE, warning = FALSE)
+options(scipen=999)
+```
+
+```{r functions, include=FALSE}
+catHeader <- function(text = "", level = 3) {
+    cat(paste0("\n\n", 
+               paste(rep("#", level), collapse = ""), 
+               " ", text, "\n"))
+}
+```
+
+```{r ReadData, echo=FALSE, message=FALSE, warning=FALSE}
+#After submission of data call 2021, add check for catchcategory RegDis and logbook registered discard category
+
+library(dplyr)
+library(knitr)
+library(tidyr)
+library(ggplot2)
+library(data.table)
+library(mapplots)
+library(rnaturalearth)
+library(rnaturalearthdata)
+library(sf)
+library(stringr)
+library(DT)
+library(tidyverse)
+library(kableExtra)
+
+setwd("H:/RDBES/QC_CE_CL")
+
+CL <- read.csv("H:\\RDBES\\RDBES CL all data from year 2019\\RDBES CL all data from year 2019.csv",header=T,sep = ",",stringsAsFactors = FALSE)
+
+CL <- CL[CL$CLvesselFlagCountry !='AD' & CL$CLvesselFlagCountry !='',]
+
+CL_DF <- as.data.frame(CL)
+
+CL_DF$n_records <- 1
+
+CL_DF$n_vessels_3[CL_DF$CLnumberOfUniqueVessels<3] <- '<3 vessels'
+CL_DF$n_vessels_3[CL_DF$CLnumberOfUniqueVessels>=3] <- '>=3 vessels'
+CL_DF$OfficialScientificWeightDiff <- CL_DF$CLofficialWeight - CL_DF$CLscientificWeight
+
+CL_DF_COD <- CL_DF[CL_DF$CLspeciesFaoCode =="COD",]
+
+
+CL %>% 
+group_by(CLstatisticalRectangle, CLvesselFlagCountry) %>% 
+summarise(n()) %>% 
+ungroup() %>% 
+mutate(lon = ices.rect(CLstatisticalRectangle)$lon,
+lat = ices.rect(CLstatisticalRectangle)$lat)-> CLmap
+
+world <- ne_countries(scale = "medium", returnclass = "sf")
+
+world <- st_set_crs(world, 4326)
+
+CL_DT <- data.table(CL)
+
+CLsummary <- CL_DT[,.(n=.N), by=.(CLvesselFlagCountry,CLstatisticalRectangle)]
+# Get ICES rects centroids
+CLsummary[,":="(lon = ices.rect(CLstatisticalRectangle)$lon,
+                lat = ices.rect(CLstatisticalRectangle)$lat)]
+
+# Prepare CL maps
+CLcountries <- unique(CLsummary$CLvesselFlagCountry)
+for(c in CLcountries){
+  dataCountry <- CLsummary[CLvesselFlagCountry == c]
+  min.lon<-min(dataCountry$lon, na.rm = T)
+  max.lon<-max(dataCountry$lon, na.rm = T)
+  min.lat<-min(dataCountry$lat, na.rm = T)
+  max.lat<-max(dataCountry$lat, na.rm = T)
+  d <-
+    ggplot() +
+    theme_bw() +
+    geom_sf(data=world)+
+    geom_point(data = dataCountry, aes(lon, lat), size=2, colour="red") +
+    coord_sf(xlim = c(min.lon, max.lon), ylim = c(min.lat, max.lat))+
+    labs(title = paste0("ICES rectangle centroids in CL data submitted to the RDBES by ",c))
+  #assign(d, c)
+  ggsave(filename=paste0("H:\\RDBES\\QC_CE_CL\\CL_maps\\CL_",c,"_coords.jpg"), plot=d, height = 12, width = 12)
+}
+
+
+#Read the rectangle list from the repository 
+url <- "https://github.com/ices-tools-dev/RDBES/raw/master/QC-scripts/RectangleList/ICESRectAreas.csv"
+ICESrect <- read.csv(url, header = TRUE)
+
+```
+
+
+```{r CLCEcon, include=FALSE}
+CL$CLSpecies[CL$CLSpecies==''] <- as.character(CL$CLSpecies)
+CL$CLyear <- as.character(CL$CLyear)
+
+# Month factors 
+CL$CLmonth <- factor(CL$CLmonth, levels = as.character(c(1:12)))
+
+# Vessel length factors 
+CL$CLvesselLengthCategory <- factor(CL$CLvesselLengthCategory, levels = c("<8", "8-<10", "10-<12", "12-<15", "15-<18", "18-<24", "24-<40", "40<", "Unknown"))
+
+```
+
+
+
+```{r topMet, include=FALSE}
+#Find top 20 CLSpecies
+top20_CLSpecies <- CL %>%
+  group_by(CLspeciesCode) %>%
+  summarise(lvTot=sum(CLtotalOfficialLandingsValue)) %>%
+  arrange(desc(lvTot)) %>%
+  top_n(20)
+top20_CLSpecies$Top20CLSpecies <- "X"
+CL1 <- left_join(CL,top20_CLSpecies,by="CLspeciesCode")
+CL1$topCLSpecies <- ifelse(is.na(CL1$Top20CLSpecies),"OTH",CL1$CLspeciesCode)
+
+#Find top 20 metiers
+top20_metiers <- CL1 %>%
+  group_by(CLmetier6) %>%
+  summarise(lvTot=sum(CLtotalOfficialLandingsValue)) %>%
+  arrange(desc(lvTot)) %>%
+  top_n(20)
+top20_metiers$Top20metiers <- "X"
+CL1 <- left_join(CL1,top20_metiers,by="CLmetier6")
+CL1$topMetiers <- ifelse(is.na(CL1$Top20metiers),"OTH",CL1$CLmetier6)
+
+```
+
+Data source: RDBES CL data
+
+##	Overviews number of records by flag countries {.tabset}
+
+### by year
+
+```{r echo=FALSE, message=FALSE, warning = FALSE, fig.height=2}
+country_years <- CL_DF %>%
+  group_by(CLyear, CLvesselFlagCountry) %>%
+  summarise(n_records=sum(n_records)) 
+
+g <- ggplot(country_years, aes(x= CLvesselFlagCountry, n_records))+
+  geom_col(aes(fill=CLyear))
+g + theme(axis.text.x = element_text(angle=90, hjust=1, size=5))
+
+```
+
+### by CLdataTypeOfScientificWeight
+
+```{r echo=FALSE, message=FALSE, warning = FALSE, fig.height=2}
+country_CLdTypSciWeig <- CL_DF %>%
+  group_by(CLvesselFlagCountry, CLdataTypeOfScientificWeight) %>%
+  summarise(n_records=sum(n_records)) 
+
+g <- ggplot(country_CLdTypSciWeig, aes(x= CLvesselFlagCountry, n_records))+
+  geom_col(aes(fill=CLdataTypeOfScientificWeight))
+g + theme(axis.text.x = element_text(angle=90, hjust=1, size=5))
+
+```
+
+### by CLdataSourceOfScientificWeight
+
+```{r echo=FALSE, message=FALSE, warning = FALSE, fig.height=2}
+country_CLdSouSciWeig <- CL_DF %>%
+  group_by(CLvesselFlagCountry, CLdataSourceOfScientificWeight) %>%
+  summarise(n_records=sum(n_records)) 
+
+g <- ggplot(country_CLdSouSciWeig, aes(x= CLvesselFlagCountry, n_records))+
+  geom_col(aes(fill=CLdataSourceOfScientificWeight))
+g + theme(axis.text.x = element_text(angle=90, hjust=1, size=5))
+
+```
+
+### by CLsamplingScheme
+
+```{r echo=FALSE, message=FALSE, warning = FALSE, fig.height=2}
+country_CLsampScheme <- CL_DF %>%
+  group_by(CLvesselFlagCountry, CLsamplingScheme) %>%
+  summarise(n_records=sum(n_records)) 
+
+g <- ggplot(country_CLsampScheme, aes(x= CLvesselFlagCountry, n_records))+
+  geom_col(aes(fill=CLsamplingScheme))
+g + theme(axis.text.x = element_text(angle=90, hjust=1, size=5))
+
+```
+
+### by CLdataSourceLandingsValue
+
+```{r echo=FALSE, message=FALSE, warning = FALSE, fig.height=2}
+country_CLdSouLanVal <- CL_DF %>%
+  group_by(CLvesselFlagCountry, CLdataSourceLandingsValue) %>%
+  summarise(n_records=sum(n_records)) 
+
+g <- ggplot(country_CLdSouLanVal, aes(x= CLvesselFlagCountry, n_records))+
+  geom_col(aes(fill=CLdataSourceLandingsValue))
+g + theme(axis.text.x = element_text(angle=90, hjust=1, size=5))
+
+```
+
+### by CLlandingCategory
+
+```{r echo=FALSE, message=FALSE, warning = FALSE, fig.height=2}
+country_CLlandCat <- CL_DF %>%
+  group_by(CLvesselFlagCountry, CLlandingCategory) %>%
+  summarise(n_records=sum(n_records)) 
+
+g <- ggplot(country_CLlandCat, aes(x= CLvesselFlagCountry, n_records))+
+  geom_col(aes(fill=CLlandingCategory))
+g + theme(axis.text.x = element_text(angle=90, hjust=1, size=5))
+
+```
+
+### by CLcatchCategory
+
+```{r echo=FALSE, message=FALSE, warning = FALSE, fig.height=2}
+country_CLcatchCat <- CL_DF %>%
+  group_by(CLvesselFlagCountry, CLcatchCategory) %>%
+  summarise(n_records=sum(n_records)) 
+
+g <- ggplot(country_CLcatchCat, aes(x= CLvesselFlagCountry, n_records))+
+  geom_col(aes(fill=CLcatchCategory))
+g + theme(axis.text.x = element_text(angle=90, hjust=1, size=5))
+
+```
+
+### by difference official and scientific weight 
+
+```{r echo=FALSE, message=FALSE, warning = FALSE, fig.height=2}
+country_weightdifference <- CL_DF %>%
+  group_by(CLvesselFlagCountry, CLexplainDifference) %>%
+  summarise(OfficialScientificWeightDiff=sum(OfficialScientificWeightDiff)) 
+
+g <- ggplot(country_weightdifference, aes(x= CLvesselFlagCountry, OfficialScientificWeightDiff))+
+  geom_col(aes(fill=CLexplainDifference))
+g + theme(axis.text.x = element_text(angle=90, hjust=1, size=5))
+
+```
+
+
+CL_DF$OfficialScientificWeightDiff
+
+
+### by CLexplainDifference
+
+```{r echo=FALSE, message=FALSE, warning = FALSE, fig.height=2}
+country_CLexplainDifference <- CL_DF %>%
+  group_by(CLvesselFlagCountry, CLexplainDifference) %>%
+  summarise(n_records=sum(n_records)) 
+
+g <- ggplot(country_CLexplainDifference, aes(x= CLvesselFlagCountry, n_records))+
+  geom_col(aes(fill=CLexplainDifference))
+g + theme(axis.text.x = element_text(angle=90, hjust=1, size=5))
+
+```
+
+### by number of vessels < 3
+
+```{r echo=FALSE, message=FALSE, warning = FALSE, fig.height=2}
+country_CLnVessels3 <- CL_DF %>%
+  group_by(CLvesselFlagCountry, n_vessels_3) %>%
+  summarise(n_records=sum(n_records)) 
+
+g <- ggplot(country_CLnVessels3, aes(x= CLvesselFlagCountry, n_records))+
+  geom_col(aes(fill=n_vessels_3))
+g + theme(axis.text.x = element_text(angle=90, hjust=1, size=5))
+
+```
+
+## CL Maps by country{.tabset}
+ICES rectangle centroids in CL data submitted to the RDBES
+
+
+```{r include=FALSE}
+
+world <- ne_countries(scale = "medium", returnclass = "sf")
+st_crs(world)
+world <- st_set_crs(world, 4326)
+
+```
+
+
+```{r echo=FALSE, message=FALSE, warning = FALSE}
+
+  min.lon<-min(CLmap$lon, na.rm = T)
+  max.lon<-max(CLmap$lon, na.rm = T)
+  min.lat<-min(CLmap$lat, na.rm = T)
+  max.lat<-max(CLmap$lat, na.rm = T)
+
+countries = sort(unique(CLmap$CLvesselFlagCountry))
+
+countries[1:floor(length(countries)/2)] -> set1
+
+countries[ceiling(length(countries)/2):length(countries)] -> set2
+
+
+    ggplot() +
+    theme_bw() +
+    geom_sf(data=world)+
+    geom_point(data = CLmap %>% filter(CLvesselFlagCountry %in% set1), aes(lon, lat), size=2, colour="red") +
+    facet_wrap(facets = ~CLvesselFlagCountry)+
+    coord_sf(xlim = c(min.lon, max.lon), ylim = c(min.lat, max.lat))
+    
+    
+    ggplot() +
+    theme_bw() +
+    geom_sf(data=world)+
+    geom_point(data = CLmap %>% filter(CLvesselFlagCountry %in% set2), aes(lon, lat), size=2, colour="red") +
+    facet_wrap(facets = ~CLvesselFlagCountry)+
+    coord_sf(xlim = c(min.lon, max.lon), ylim = c(min.lat, max.lat))
+```
+
+
+## CL table (top 20 species (rest grouped in OTH group)) {.tabset}
+
+### CL weight by year and month
+
+```{r CLweightYear, fig.dim= c(12, 8)}
+CLweightYear <- CL1 %>%
+  group_by(CLyear, CLmonth) %>%
+  summarise(CLscientificWeight = sum(CLscientificWeight)) 
+
+ggplot(CLweightYear, aes(CLmonth, CLscientificWeight, fill=CLyear)) +
+  geom_bar(position="dodge", stat="identity") +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1), legend.key.size = unit(2, 'cm'))  +
+  xlab("CLMonth") +
+  labs(fill = "CLyear")
+
+```
+
+
+### CL official weight vs scientific weight 
+
+```{r CLoffweightSciweightSP, fig.dim= c(12, 8)}
+CLweightS <- CL1 %>%
+  group_by(topCLSpecies) %>%
+  summarise(CLoffWeight = sum(CLofficialWeight),
+            CLsciWeight = sum(CLscientificWeight)) %>%
+  gather(CLweightSource, CLweight, -c(topCLSpecies))
+
+
+ggplot(CLweightS, aes(reorder(topCLSpecies, -CLweight), CLweight, fill = CLweightSource)) +
+  geom_bar(position="dodge", stat="identity") +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1), legend.key.size = unit(2, 'cm'))+
+  xlab("topCLSpecies")
+
+```
+
+
+### CL scientific weight source
+
+```{r CLoffweightSciweightSourceSP, fig.dim= c(12, 8)}
+CLweightSource <- CL1 %>%
+  group_by(topCLSpecies, CLdataSourceOfScientificWeight) %>%
+  summarise(CLsciWeight = sum(CLscientificWeight)) 
+
+ggplot(CLweightSource, aes(reorder(topCLSpecies, -CLsciWeight), CLsciWeight, fill = CLdataSourceOfScientificWeight)) +
+  geom_bar(position="stack", stat="identity") +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1), legend.key.size = unit(2, 'cm')) +
+  xlab("topCLSpecies")
+
+```
+
+### CL Landings by area (stacked)
+
+```{r CLLanSArea, , fig.dim= c(12, 8)}
+CLLanSArea <- CL1 %>%
+  group_by(topCLSpecies, CLarea) %>%
+  summarise(CLoffWeight = sum(CLofficialWeight))
+
+CLLanSArea <- CLLanSArea %>%
+  group_by(topCLSpecies) %>%
+  mutate(TotW = sum(CLoffWeight))
+
+ggplot(CLLanSArea, aes(reorder(topCLSpecies, -TotW), CLoffWeight, fill = CLarea)) +
+  geom_bar(position="stack", stat="identity") +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) +
+  xlab("topCLSpecies")
+```
+
+
+### CL Landings value source 
+
+```{r CLValSSP, fig.dim= c(12, 8)}
+CLValS <- CL1 %>%
+  group_by(topCLSpecies, CLdataSourceLandingsValue) %>%
+  summarise(CLtotalOfficialLandingsValue = sum(CLtotalOfficialLandingsValue)) 
+
+ggplot(CLValS, aes(reorder(topCLSpecies, -CLtotalOfficialLandingsValue), CLtotalOfficialLandingsValue, fill = CLdataSourceLandingsValue)) +
+  geom_bar(position="stack", stat="identity") +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1), legend.key.size = unit(2, 'cm')) +
+  xlab("topCLSpecies")
+```
+
+### CL Landing category 
+
+```{r CLlandCatSP, fig.dim= c(12, 8)}
+CLValS2 <- CL1 %>%
+  group_by(topCLSpecies, CLlandingCategory) %>%
+  summarise(CLofficialWeight = sum(CLofficialWeight))
+
+ggplot(CLValS2, aes(reorder(topCLSpecies, -CLofficialWeight), CLofficialWeight, fill = CLlandingCategory)) +
+  geom_bar(position="stack", stat="identity") +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1), legend.key.size = unit(2, 'cm')) +
+  xlab("topCLSpecies")
+```
+
+### CL Catch category 
+
+```{r CLcatchCatSP, fig.dim= c(12, 8)}
+
+CLValS3 <- CL1 %>%
+  group_by(topCLSpecies,CLcatchCategory) %>%
+  summarise(CLoffWeight = sum(CLofficialWeight))
+
+ggplot(CLValS3, aes(reorder(topCLSpecies, -CLoffWeight), CLoffWeight, fill = CLcatchCategory)) +
+  geom_bar(position="stack", stat="identity") +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1), legend.key.size = unit(2, 'cm')) +
+  xlab("topCLSpecies")
+```
+
+## CL official weight vs total official landings value {.tabset}
+
+```{r  CLoffWeightValSP}
+
+myplotsVal <- list()
+for(i in sort(unique(CL1$topCLSpecies))){
+  myplotsVal[[i]] <- 
+    ggplot(subset(CL1, topCLSpecies == i), aes(x= CLofficialWeight, y=CLtotalOfficialLandingsValue)) + geom_point()
+}
+```
+
+```{r CLoffWeightValplotSP, results = "asis"}
+
+for(i in unique(names(myplotsVal))){
+    catHeader(names(myplotsVal[i]), 3)
+    lapply(myplotsVal[i], print)
+}
+```
+
+
+
+## CL top 20 species maps {.tabset}
+
+```{r  CLMapSP, include=FALSE}
+
+world <- ne_countries(scale = "medium", returnclass = "sf")
+world <- st_set_crs(world, 4326)
+
+CLMap <- CL1 %>%
+  filter(CLstatisticalRectangle != '-9') %>%
+  distinct(CLstatisticalRectangle, topCLSpecies) %>%
+  mutate(lon = ices.rect(CLstatisticalRectangle)$lon,
+         lat = ices.rect(CLstatisticalRectangle)$lat)
+ 
+
+myplotsMap <- list()
+for(i in sort(unique(CLMap$topCLSpecies))){
+  min.lon<-min(CLMap$lon, na.rm = T)
+  max.lon<-max(CLMap$lon, na.rm = T)
+  min.lat<-min(CLMap$lat, na.rm = T)
+  max.lat<-max(CLMap$lat, na.rm = T)
+  myplotsMap[[i]] <- 
+    ggplot() +
+    theme_bw() +
+    geom_sf(data=world)+
+    geom_point(data = subset(CLMap, topCLSpecies == i), aes(lon, lat), size=2, colour="red") +
+    coord_sf(xlim = c(min.lon, max.lon), ylim = c(min.lat, max.lat)) +
+    xlab("Longitude") +
+    ylab("Latitude")
+}
+```
+
+```{r CLMapplot, results = "asis", fig.dim = c(12, 12)}
+
+for(i in unique(names(myplotsMap))){
+    catHeader(names(myplotsMap[i]), 3)
+    lapply(myplotsMap[i], print)
+}
+```
+
+## CL top 20 metiers (rest grouped in OTH group)) {.tabset}
+
+### CL official weight vs scientific weight 
+
+```{r CLoffweightSciweightME, fig.dim= c(12, 8)}
+CLweightS <- CL1 %>%
+  group_by(topMetiers) %>%
+  summarise(CLoffWeight = sum(CLofficialWeight),
+            CLsciWeight = sum(CLscientificWeight)) %>%
+  gather(CLweightSource, CLweight, -c(topMetiers))
+
+
+ggplot(CLweightS, aes(reorder(topMetiers, -CLweight), CLweight, fill = CLweightSource)) +
+  geom_bar(position="dodge", stat="identity") +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1), legend.key.size = unit(2, 'cm')) +
+  xlab("topMetiers")
+
+```
+
+
+### CL scientific weight source
+
+```{r CLoffweightSciweightSourceME, fig.dim= c(12, 8)}
+CLweightSource <- CL1 %>%
+  group_by(topMetiers, CLdataSourceOfScientificWeight) %>%
+  summarise(CLsciWeight = sum(CLofficialWeight)) 
+
+ggplot(CLweightSource, aes(reorder(topMetiers, -CLsciWeight), CLsciWeight, fill = CLdataSourceOfScientificWeight)) +
+  geom_bar(position="stack", stat="identity") +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1), legend.key.size = unit(2, 'cm')) +
+  xlab("topMetiers")
+
+```
+
+### CL Landings value source 
+
+```{r CLValSME, fig.dim= c(12, 8)}
+
+CLValS <- CL1 %>%
+  group_by(topMetiers, CLarea,CLdataSourceLandingsValue) %>%
+  summarise(CLoffValue = sum(CLtotalOfficialLandingsValue))
+
+ggplot(subset(CLValS), aes(reorder(topMetiers, -CLoffValue), CLoffValue, fill = CLdataSourceLandingsValue)) +
+  geom_bar(position="stack", stat="identity") +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1), legend.key.size = unit(2, 'cm')) +
+  xlab("topMetiers")
+
+```
+
+
+## CL top 20 metiers maps {.tabset}
+
+```{r  CLMapME}
+
+world <- ne_countries(scale = "medium", returnclass = "sf")
+world <- st_set_crs(world, 4326)
+
+CLMap <- CL1 %>%
+  filter(CLstatisticalRectangle != '-9') %>%
+  distinct(CLstatisticalRectangle, topMetiers) %>%
+  mutate(lon = ices.rect(CLstatisticalRectangle)$lon,
+         lat = ices.rect(CLstatisticalRectangle)$lat)
+ 
+
+myplotsMap <- list()
+for(i in sort(unique(CLMap$topMetiers))){
+  min.lon<-min(CLMap$lon, na.rm = T)
+  max.lon<-max(CLMap$lon, na.rm = T)
+  min.lat<-min(CLMap$lat, na.rm = T)
+  max.lat<-max(CLMap$lat, na.rm = T)
+  myplotsMap[[i]] <- 
+    ggplot() +
+    theme_bw() +
+    geom_sf(data=world)+
+    geom_point(data = subset(CLMap, topMetiers == i), aes(lon, lat), size=2, colour="red") +
+    coord_sf(xlim = c(min.lon, max.lon), ylim = c(min.lat, max.lat)) +
+    xlab("Longitude") +
+    ylab("Latitude")
+}
+```
+
+```{r CLMapplotME, results = "asis", fig.dim = c(12, 12)}
+
+for(i in unique(names(myplotsMap))){
+    catHeader(names(myplotsMap[i]), 3)
+    lapply(myplotsMap[i], print)
+}
+```
+
+
+
+## Potential Errors {.tabset}
+
+### ICES rectangles and FAO Areas
+
+```{r echo=FALSE, message=FALSE, warning = FALSE}
+
+CLRect <- left_join(CL, ICESrect, by = c("CLstatisticalRectangle" = "ICESNAME"))%>%
+  select(CLvesselFlagCountry, CLarea, CLstatisticalRectangle, Area) %>%
+  distinct()
+
+CLRectErr <- CLRect %>%
+  group_by(CLstatisticalRectangle, CLvesselFlagCountry) %>%
+  summarise(CLarea = unique(CLarea),
+            Area = paste0(unique(Area), collapse = ", ")) %>%
+  rowwise() %>%
+  mutate(NoMatch = grepl(CLarea, Area)) %>%
+  filter(NoMatch %in% FALSE & CLstatisticalRectangle !='-9') %>%
+  rename(ICESArea = Area) %>%
+  ungroup() %>%
+  select(CLvesselFlagCountry, CLstatisticalRectangle, CLarea, ICESArea) %>%
+  rename(RectangleCLtable = CLstatisticalRectangle,
+         AreaCLtable = CLarea,
+         ICESAreaWithRectangle = ICESArea)
+
+DT::datatable(CLRectErr, filter = 'top')
+
+```
