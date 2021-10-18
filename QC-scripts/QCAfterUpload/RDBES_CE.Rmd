@@ -1,0 +1,460 @@
+```{r title, include = F}
+
+front_title <- "RDBES CE Multinational overviews"
+
+```
+
+
+---
+title: `r front_title`
+author: "ICES RDBES Core group (MS)"
+date: "`r format(Sys.time(), '%d %B, %Y')`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+options(scipen=999)
+```
+
+```{r ReadData, echo=FALSE, message=FALSE, warning = FALSE}
+library(dplyr)
+library(knitr)
+library(tidyr)
+library(ggplot2)
+library(data.table)
+library(mapplots)
+library(rnaturalearth)
+library(rnaturalearthdata)
+library(sf)
+library(stringr)
+
+setwd("D:/Projekty/RDBES/CoreGroup CQ subgroup")
+
+CE <- read.csv("RDBES CE all data from year 2019\\RDBES CE all data from year 2019.csv",header=F,sep = ",",stringsAsFactors = FALSE)
+colnames(CE) <- c("CErecType","CEdTypSciEff","CEdSouSciEff","CEnatProgSciEff","CEvesFlagCou","CEyear","CEquar",
+                  "CEMonth","CEArea","CEstatRect","CEgsaSubarea","CEjurisdArea","CEeconZoneIndi","CEnatFishAct",
+                  "CEmetier6","CEIBmitiDev","CEloc","CEvesLenCat","CEfishTech","CEdeepSeaReg","CEnumFracTrips",
+                  "CEnumDomTrip","CEoffDaySea","CESciDaySea","CEoffFishDay","CEsciFishDay","CEoffNumHaulSet",
+                  "CEsciNumHaulSet","CEoffVesFishHour","CEsciVesFishHour","CEoffSoakMeterHour","CEsciSoakMeterHour",
+                  "CEoffkWDaySea","CEscikWDaySea","CEoffkWFishDay","CEscikWFishDay","CEoffkWFishHour","CEscikWFishHour",
+                  "CEgTDaySea","CEgTFishDay","CEgTFishHour","CEnumUniqVes","CEsciFishDayRSE","CEscientificFishingDaysQualBias")
+
+CE <- CE[CE$CEvesFlagCou !='AD' & CE$CEvesFlagCou !='',]
+
+CE_DF <- as.data.frame(CE)
+
+
+CE_DF$n_records <- 1
+
+CE_DF$n_vessels_3[CE_DF$CEnumUniqVes<3] <- '<3 vessels'
+CE_DF$n_vessels_3[CE_DF$CEnumUniqVes>=3] <- '>=3 vessels'
+#CL_DF$OfficialScientificWeightDiff <- CL_DF$CLofficialWeight - CL_DF$CLscientificWeight
+CE_DF$CEyear <- as.character(CE$CEyear)
+
+# Get gear for passive/active
+CE_DF <- mutate(CE_DF, CEGear = str_extract(CEmetier6, "[^_]+"))
+CE_DF <- mutate(CE_DF, CEGearActivity = ifelse(CEGear %in% c("FIX", "FAR", "FPN", "FPO", "FWR", "FYK", "GEN", "GNF", "GN", "GNC", "GND", "GNS", "GTN", "GTR", "GES", "LH", "LHM", "LHP", "LL", "LLD", "LLF", "LLS", "LTL", "LVD", "LVS", "LX", "LN", "LNB", "LNP", "LNS","MIS"), "Passive", ifelse(CEGear %in% "NK", "NK", "Active")))
+
+
+#Read the rectangle list from the repository 
+url <- "https://github.com/ices-tools-dev/RDBES/raw/master/QC-scripts/RectangleList/ICESRectAreas.csv"
+ICESrect <- read.csv(url, header = TRUE)
+
+```
+
+```{r functions, include = FALSE}
+catHeader <- function(text = "", level = 3) {
+    cat(paste0("\n\n", 
+               paste(rep("#", level), collapse = ""), 
+               " ", text, "\n"))
+}
+```
+
+
+```{r, include = FALSE}
+# Find top 10 metiers accoding to the fishing days
+top20_metiers <- CE_DF %>%
+  group_by(CEmetier6) %>%
+  summarise(ofdTot=sum(CEoffFishDay)) %>%
+  arrange(desc(ofdTot)) %>%
+  top_n(20)
+top20_metiers$Top20metiers <- "X"
+CE_DF <- left_join(CE_DF,top20_metiers,by="CEmetier6")
+CE_DF$topMetiers <- ifelse(is.na(CE_DF$Top20metiers),"OTH",CE_DF$CEmetier6)
+
+```
+
+
+
+Data source: RDBES CE data
+
+## Overviews number of records by flag countries {.tabset}
+
+### by year
+
+
+```{r echo=FALSE, message=FALSE, warning = FALSE, fig.height=2}
+country_years <- CE_DF %>%
+  group_by(CEyear, CEvesFlagCou) %>%
+  summarise(n_records=sum(n_records)) 
+
+g <- ggplot(country_years, aes(x= CEvesFlagCou, n_records))+
+  geom_col(aes(fill=CEyear))
+g + theme(axis.text.x = element_text(angle=90, hjust=1, size=5))
+
+```
+
+### by CEdTypSciEff
+
+
+```{r echo=FALSE, message=FALSE, warning = FALSE, fig.height=2}
+country_CEdTypSciEff <- CE_DF %>%
+  group_by(CEvesFlagCou, CEdTypSciEff) %>%
+  summarise(n_records=sum(n_records)) 
+
+g <- ggplot(country_CEdTypSciEff, aes(x= CEvesFlagCou, n_records))+
+  geom_col(aes(fill=CEdTypSciEff))
+g + theme(axis.text.x = element_text(angle=90, hjust=1, size=5))
+
+
+```
+
+### by CEdSouSciEff
+
+
+```{r echo=FALSE, message=FALSE, warning = FALSE, fig.height=2}
+country_CEdSouSciEff <- CE_DF %>%
+  group_by(CEvesFlagCou, CEdSouSciEff) %>%
+  summarise(n_records=sum(n_records)) 
+
+g <- ggplot(country_CEdSouSciEff, aes(x= CEvesFlagCou, n_records))+
+  geom_col(aes(fill=CEdSouSciEff))
+g + theme(axis.text.x = element_text(angle=90, hjust=1, size=5))
+
+
+```
+
+### by CEvesLenCat
+
+
+```{r echo=FALSE, message=FALSE, warning = FALSE, fig.height=2}
+country_CEvesLenCat <- CE_DF %>%
+  group_by(CEvesFlagCou, CEvesLenCat) %>%
+  summarise(n_records=sum(n_records)) 
+
+g <- ggplot(country_CEvesLenCat, aes(x= CEvesFlagCou, n_records))+
+  geom_col(aes(fill=CEvesLenCat))
+g + theme(axis.text.x = element_text(angle=90, hjust=1, size=5))
+
+
+```
+
+### by number of vessels < 3
+
+
+```{r echo=FALSE, message=FALSE, warning = FALSE, fig.height=2}
+country_n_vessels_3 <- CE_DF %>%
+  group_by(CEvesFlagCou, n_vessels_3) %>%
+  summarise(n_records=sum(n_records)) 
+
+g <- ggplot(country_n_vessels_3, aes(x= CEvesFlagCou, n_records))+
+  geom_col(aes(fill=n_vessels_3))
+g + theme(axis.text.x = element_text(angle=90, hjust=1, size=5))
+
+
+```
+
+## Fishing days vs days at sea {.tabset}
+
+### Official fishing days by year and country
+
+```{r echo=FALSE, message=FALSE, warning = FALSE}
+
+CEDASYear <- CE_DF %>%
+  group_by(CEyear, CEvesFlagCou) %>%
+  summarise(CEoffFishDay = sum(CEoffFishDay)) 
+
+ggplot(CEDASYear, aes(CEvesFlagCou, CEoffFishDay, fill = CEyear)) +
+  geom_bar(position="dodge2", stat="identity") +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1), legend.key.size = unit(2, 'cm'))
+```
+
+### Official days at sea by year and country
+
+```{r echo=FALSE, message=FALSE, warning = FALSE}
+
+CEDASYear <- CE_DF %>%
+  group_by(CEyear, CEvesFlagCou) %>%
+  summarise(CEoffDaySea = sum(CEoffDaySea)) 
+
+ggplot(CEDASYear, aes(CEvesFlagCou, CEoffDaySea, fill = CEyear)) +
+  geom_bar(position="dodge2", stat="identity") +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1), legend.key.size = unit(2, 'cm'))
+```
+
+### Official days at sea vs scientific days at sea
+
+```{r CLeffortDATS, fig.dim= c(12, 8), echo = FALSE,  message=FALSE, warning = FALSE}
+CEeffortDATS <- CE_DF %>%
+  group_by(CEArea) %>%
+  summarise(CEoffDaySea = sum(CEoffDaySea),
+            CESciDaySea = sum(CESciDaySea))  %>%
+  gather(CEDaySeaSource, CEDaySea, -c(CEArea))
+
+ggplot(CEeffortDATS, aes(reorder(CEArea, -CEDaySea), CEDaySea, fill = CEDaySeaSource)) +
+  geom_bar(position="dodge", stat="identity") +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1), legend.key.size = unit(2, 'cm')) +
+  xlab("CEDaySea")
+
+```
+
+### Official days at sea and scientific days at sea (passive/active gears) 
+
+```{r CLeffortDATSpa, fig.dim= c(12, 8), echo = FALSE,  message=FALSE, warning = FALSE}
+CEeffortDATSpa <- CE_DF %>%
+  group_by(CEArea, CEGearActivity) %>%
+  summarise(CEoffDaySea = sum(CEoffDaySea),
+            CESciDaySea = sum(CESciDaySea))  %>%
+  gather(CEDaySeaSource, CEDaySea, -c(CEArea, CEGearActivity))
+
+CEeffortDATSpa <- CEeffortDATSpa %>%
+  group_by(CEArea) %>%
+  mutate(TotE = sum(CEDaySea))
+
+ggplot(CEeffortDATSpa, aes(reorder(CEArea, -TotE), CEDaySea, fill = CEGearActivity)) +
+  geom_bar(position="stack", stat="identity") +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1), legend.key.size = unit(2, 'cm')) +
+  facet_grid(CEDaySeaSource~., scales = "free") +
+  xlab("CEFishDay")
+```
+
+### Official fishing days vs scientific fishing days 
+
+```{r CLeffortFDS, fig.dim= c(12, 8), echo = FALSE,  message=FALSE, warning = FALSE}
+CEeffortFDS <- CE_DF %>%
+  group_by(CEArea) %>%
+  summarise(CEoffFishDay = sum(CEoffFishDay),
+            CEsciFishDay = sum(CEsciFishDay))  %>%
+  gather(CEFishDaySource, CEFishDay, -c(CEArea))
+
+ggplot(CEeffortFDS, aes(reorder(CEArea, -CEFishDay), CEFishDay, fill = CEFishDaySource)) +
+  geom_bar(position="dodge", stat="identity") +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1), legend.key.size = unit(2, 'cm')) +
+  xlab("CEFishDay")
+
+```
+
+
+### Official fishing days and scientific fishing days (passive/active gears) 
+
+```{r CLeffortFDSpa, fig.dim= c(12, 8), echo = FALSE,  message=FALSE, warning = FALSE}
+CEeffortFDSpa <- CE_DF %>%
+  group_by(CEArea, CEGearActivity) %>%
+  summarise(CEoffFishDay = sum(CEoffFishDay),
+            CEsciFishDay = sum(CEsciFishDay))  %>%
+  gather(CEFishDaySource, CEFishDay, -c(CEArea, CEGearActivity))
+
+CEeffortFDSpa <- CEeffortFDSpa %>%
+  group_by(CEArea) %>%
+  mutate(TotE = sum(CEFishDay))
+
+ggplot(CEeffortFDSpa, aes(reorder(CEArea, -TotE), CEFishDay, fill = CEGearActivity)) +
+  geom_bar(position="stack", stat="identity") +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1), legend.key.size = unit(2, 'cm')) +
+  facet_grid(CEFishDaySource~., scales = "free") +
+  xlab("CEFishDay")
+```
+
+### CE scientific effort source 
+
+```{r CESciEffortSource, fig.dim= c(12, 8), echo = FALSE,  message=FALSE, warning = FALSE}
+CESciEffortSource <- CE_DF %>%
+  group_by(CEArea, CEdSouSciEff) %>%
+  summarise(CESciDaySea = sum(CESciDaySea),
+            CEsciFishDay = sum(CEsciFishDay)) %>%
+  gather(CEEffSource, CEEffort, -c(CEArea, CEdSouSciEff)) 
+
+ggplot(CESciEffortSource, aes(reorder(CEArea, -CEEffort), CEEffort, fill = CEdSouSciEff)) +
+  geom_bar(position="stack", stat="identity") +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1), legend.key.size = unit(2, 'cm')) +
+  facet_grid(CEEffSource~., scales = "free") +
+  xlab("CEEffort")
+```
+
+## CE official days at sea vs official fishing days {.tabset}
+
+
+```{r  CEoffEff, echo = FALSE,  message=FALSE, warning = FALSE}
+
+myplotsEff <- list()
+for(i in unique(CE_DF$CEArea)){
+  myplotsEff[[i]] <- 
+    ggplot(subset(CE_DF, CEArea == i), aes(x= CEoffDaySea, y= CEoffFishDay, colour=CEGearActivity)) + geom_point()
+}
+```
+
+
+```{r CEoffEffplot, results = "asis", echo = FALSE,  message=FALSE, warning = FALSE}
+for(i in unique(names(myplotsEff))){
+    catHeader(names(myplotsEff[i]), 3)
+    lapply(myplotsEff[i], print)
+}
+```
+
+## Days at sea vs fishing days by country {.tabset}
+
+### CEoffDaySea vs CEoffFishDay by country
+
+```{r echo=FALSE, message=FALSE, warning = FALSE}
+
+ggplot(CE_DF , aes(x=CEoffDaySea, y=CEoffFishDay)) + 
+  geom_point()+
+  facet_wrap(~CEvesFlagCou)+
+  theme_bw() +
+  theme(axis.text.x = element_text(angle = 90, hjust=1))
+
+```
+
+### CEosciDaySea vs CEsciFishDay by country
+
+```{r echo=FALSE, message=FALSE, warning = FALSE}
+
+ggplot(CE_DF , aes(x=CESciDaySea, y=CEsciFishDay)) + 
+  geom_point()+
+  facet_wrap(~CEvesFlagCou)+
+  theme_bw() +
+  theme(axis.text.x = element_text(angle = 90, hjust=1))
+
+```
+
+
+
+## CE Maps by country {.tabset}
+ICES rectangle centroids in CE data submitted to the RDBES
+
+```{r  mapCE, include = FALSE,  echo=FALSE, message=FALSE, warning = FALSE}
+world <- ne_countries(scale = "medium", returnclass = "sf")
+world <- st_set_crs(world, 4326)
+
+CE %>% 
+distinct(CEstatRect, CEvesFlagCou) %>% 
+mutate(lon = ices.rect(CEstatRect)$lon,
+       lat = ices.rect(CEstatRect)$lat)-> CEmap
+
+mapCE <- list()
+for(i in sort(unique(CEmap$CEvesFlagCou))){
+  min.lon<-min(CEmap$lon, na.rm = T)
+  max.lon<-max(CEmap$lon, na.rm = T)
+  min.lat<-min(CEmap$lat, na.rm = T)
+  max.lat<-max(CEmap$lat, na.rm = T)
+  mapCE[[i]] <- 
+    ggplot() +
+    theme_bw() +
+    geom_sf(data=world)+
+    geom_point(data = subset(CEmap, CEvesFlagCou == i), aes(lon, lat), size=2, colour="red") +
+    coord_sf(xlim = c(min.lon, max.lon), ylim = c(min.lat, max.lat)) +
+    xlab("Longitude") +
+    ylab("Latitude")
+}
+```
+
+```{r, results = "asis", echo = FALSE, warning = FALSE}
+
+for(i in sort(unique(CEmap$CEvesFlagCou))){
+    catHeader(i, 3)
+    lapply(mapCE[i], print)
+}
+```
+
+
+
+## Potential Errors {.tabset}
+
+
+### CE ICES rectangles and FAO Areas
+
+Area and ICES rectangle in the CE data (AreaCEtable, RectangleCEtable) set is compared with area/rectangle relationship ICES reference list. 
+The expected area related to the ICES rectangle is found in the column ICESAreaWithRectangle.
+Note that -9 is allowed as unknown ICES rectangle.
+
+```{r echo=FALSE, message=FALSE, warning = FALSE}
+
+ICESrect$sq_check <- "correct"
+
+CE_sq <- CE_DF
+CE_sq <- CE_sq[CE_sq$CEstatRect != "-9",]
+CE_sq$t <- 1
+
+CE_sq1 <- CE_sq %>%
+  group_by(CEvesFlagCou, CEstatRect, CEArea) %>%
+  summarise(t=sum(t))
+
+
+CE_sq2 <- CE_sq1 %>% 
+  left_join(ICESrect, by= c("CEArea" = "Area", "CEstatRect"="ICESNAME"))
+
+CE_sq3 <- CE_sq2[is.na(CE_sq2$sq_check),]
+
+CE_sq4 <- subset(CE_sq3, select=c(CEvesFlagCou,CEstatRect,CEArea))
+DT::datatable(CE_sq4, filter = 'top')
+
+```
+
+
+### Mandatory fields missing
+
+```{r echo=FALSE, message=FALSE, warning = FALSE}
+
+CE_DF %>% 
+  filter(is.na(CEdTypSciEff) | 
+           is.na(CEdSouSciEff) | 
+           is.na(CEvesFlagCou) |
+           is.na(CEyear) |
+           is.na(CEquar) |
+           is.na(CEArea) |
+           is.na(CEstatRect) |
+           is.na(CEgsaSubarea) |
+           is.na(CEmetier6) |
+           is.na(CEIBmitiDev) |
+           is.na(CEloc) |
+           is.na(CEvesLenCat) |
+           is.na(CEnumDomTrip) |
+           is.na(CEoffDaySea) |
+           is.na(CESciDaySea) |
+           is.na(CEoffFishDay) |
+           is.na(CEsciFishDay)|
+           is.na(CEoffkWDaySea) |
+           is.na(CEscikWDaySea) |
+           is.na(CEoffkWFishDay) |
+           is.na(CEscikWFishDay) |
+           is.na(CEgTDaySea) |
+           is.na(CEgTFishDay) |
+           is.na(CEnumUniqVes)
+  ) ->mandatoryMissing
+
+DT::datatable(mandatoryMissing)
+
+
+```
+
+### GSA subarea missing for area 37
+
+
+```{r echo=FALSE, message=FALSE, warning = FALSE}
+
+CE_DF %>% 
+  filter(grepl('37', CEArea)) %>% 
+  filter(is.na(CEgsaSubarea)) -> GSAmissing
+
+DT::datatable(GSAmissing)
+
+```
+
+
+
+
+
+
+
+
