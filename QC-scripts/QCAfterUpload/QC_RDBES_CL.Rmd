@@ -44,7 +44,16 @@ library(kableExtra)
 
 setwd("H:/RDBES/QC_CE_CL")
 
-CL <- read.csv("H:\\RDBES\\RDBES CL all data from year 2019\\RDBES CL all data from year 2019.csv",header=T,sep = ",",stringsAsFactors = FALSE)
+CL <- read.csv("H:\\RDBES\\RDBES CL all data from year 2019\\RDBES CL all data from year 2019_2021_format.csv",header=T,sep = ",",stringsAsFactors = FALSE)
+
+colnames(CL) <- c("CLrecordType","CLdataTypeOfScientificWeight","CLdataSourceOfScientificWeight",
+  "CLsamplingScheme",  "CLdataSourceLandingsValue","CLlandingCountry","CLvesselFlagCountry","CLyear",
+  "CLquarter","CLmonth",   "CLarea","CLstatisticalRectangle","CLgsaSubarea","CLjurisdictionArea",
+  "CLexclusiveEconomicZoneIndicator","CLspeciesCode","CLspeciesFaoCode","CLlandingCategory",
+  "CLcatchCategory","CLregDisCategory", "CLcommercialSizeCategoryScale","CLcommercialSizeCategory",
+  "CLnationalFishingActivity","CLmetier6","CLincidentialByCatchMitigationDevice","CLlandingLocation",
+  "CLvesselLengthCategory","CLfishingTechnique","CLdeepSeaRegulation","CLofficialWeight",
+  "CLscientificWeight","CLexplainDifference","CLtotalOfficialLandingsValue","CLnumberOfUniqueVessels",   "CLscientificWeightRSE","CLvalueRSE","CLscientificWeightQualitativeBias")   
 
 CL <- CL[CL$CLvesselFlagCountry !='AD' & CL$CLvesselFlagCountry !='',]
 
