@@ -1,0 +1,1 @@
+ICES Secretariat have developed the RDBES information system in C# code. It is possible to download relevant parts and modules. Since the source code is written in C#, it is important that the user is an experienced C# developer to be able to understand and use parts of the code.
