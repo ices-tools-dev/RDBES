@@ -597,7 +597,11 @@ for(i in unique(names(myplotsMap))){
 
 ```{r echo=FALSE, message=FALSE, warning = FALSE}
 
-CLRect <- left_join(CL, ICESrect, by = c("CLstatisticalRectangle" = "ICESNAME"))%>%
+# Filter out Med & LDF 
+
+CLrect <- filter(CL, str_detect(CLarea, "27."))
+
+CLRect <- left_join(CLrect, ICESrect, by = c("CLstatisticalRectangle" = "ICESNAME"))%>%
   select(CLvesselFlagCountry, CLarea, CLstatisticalRectangle, Area) %>%
   distinct()
 
