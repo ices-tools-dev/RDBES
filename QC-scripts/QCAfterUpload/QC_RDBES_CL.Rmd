@@ -14,6 +14,7 @@ output: html_document
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = FALSE, message = FALSE, warning = FALSE)
+##knitr::opts_chunk$set(echo = FALSE, message = FALSE, warning = FALSE, cache=TRUE) ##,cache will take previous made files/graphs and use them, this will save time but will not update the files/graphs
 options(scipen=999)
 ```
 
@@ -41,10 +42,17 @@ library(stringr)
 library(DT)
 library(tidyverse)
 library(kableExtra)
+library(rgeos)
 
-setwd("H:/RDBES/QC_CE_CL")
+#setwd("H:/RDBES/QC_CE_CL")
+setwd("D:/DB backups and EXPORTS/Data exports/2022/2022 02 01 QC CL CE Core Group/R working dir")
 
-CL <- read.csv("H:\\RDBES\\RDBES CL all data from year 2019\\RDBES CL all data from year 2019_2021_format.csv",header=T,sep = ",",stringsAsFactors = FALSE)
+#D:\DB backups and EXPORTS\Data exports\2022\2022 02 01 QC CL CE Core Group
+#CL <- read.csv("H:\\RDBES\\RDBES CL all data from year 2019\\RDBES CL all data from year 2019_2021_format.csv",header=T,sep = ",",stringsAsFactors = FALSE)
+#CL <- read.csv("H:\\RDBES\\RDBES CL all data from year 2019\\RDBES CL all data from year 2019_2021_format.csv",header=T,sep = ",",stringsAsFactors = FALSE)
+
+
+CL <- read.csv("D:\\DB backups and EXPORTS\\Data exports\\2022\\2022 02 01 QC CL CE Core Group\\RDBES CL 2019 2020.csv",header=T,sep = ",",stringsAsFactors = FALSE)
 
 colnames(CL) <- c("CLrecordType","CLdataTypeOfScientificWeight","CLdataSourceOfScientificWeight",
   "CLsamplingScheme",  "CLdataSourceLandingsValue","CLlandingCountry","CLvesselFlagCountry","CLyear",
@@ -102,7 +110,7 @@ for(c in CLcountries){
     coord_sf(xlim = c(min.lon, max.lon), ylim = c(min.lat, max.lat))+
     labs(title = paste0("ICES rectangle centroids in CL data submitted to the RDBES by ",c))
   #assign(d, c)
-  ggsave(filename=paste0("H:\\RDBES\\QC_CE_CL\\CL_maps\\CL_",c,"_coords.jpg"), plot=d, height = 12, width = 12)
+#  ggsave(filename=paste0("H:\\RDBES\\QC_CE_CL\\CL_maps\\CL_",c,"_coords.jpg"), plot=d, height = 12, width = 12)
 }
 
 
@@ -597,28 +605,50 @@ for(i in unique(names(myplotsMap))){
 
 ```{r echo=FALSE, message=FALSE, warning = FALSE}
 
-# Filter out Med & LDF 
-
-CLrect <- filter(CL, str_detect(CLarea, "27."))
-
-CLRect <- left_join(CLrect, ICESrect, by = c("CLstatisticalRectangle" = "ICESNAME"))%>%
-  select(CLvesselFlagCountry, CLarea, CLstatisticalRectangle, Area) %>%
-  distinct()
-
-CLRectErr <- CLRect %>%
-  group_by(CLstatisticalRectangle, CLvesselFlagCountry) %>%
-  summarise(CLarea = unique(CLarea),
-            Area = paste0(unique(Area), collapse = ", ")) %>%
-  rowwise() %>%
-  mutate(NoMatch = grepl(CLarea, Area)) %>%
-  filter(NoMatch %in% FALSE & CLstatisticalRectangle !='-9') %>%
-  rename(ICESArea = Area) %>%
-  ungroup() %>%
-  select(CLvesselFlagCountry, CLstatisticalRectangle, CLarea, ICESArea) %>%
-  rename(RectangleCLtable = CLstatisticalRectangle,
-         AreaCLtable = CLarea,
-         ICESAreaWithRectangle = ICESArea)
-
-DT::datatable(CLRectErr, filter = 'top')
+CL <- filter(CL, str_detect(CLarea, "27."))
+	
+ICESrect$sq_check <- "correct"
+	
+	CL_sq <- CL
+	CL_sq <- CL_sq[CL_sq$CLstatisticalRectangle != "-9",]
+	CL_sq$t <- 1
+	
+	CL_sq1 <- CL_sq %>%
+	  group_by(CLvesselFlagCountry, CLstatisticalRectangle, CLarea) %>%
+	  summarise(t=sum(t))
+	
+	
+	CL_sq2 <- CL_sq1 %>% 
+	  left_join(ICESrect, by= c("CLarea" = "Area", "CLstatisticalRectangle"="ICESNAME"))
+	
+	CL_sq3 <- CL_sq2[is.na(CL_sq2$sq_check),]
+	
+	CL_sq4 <- subset(CL_sq3, select=c(CLvesselFlagCountry,CLstatisticalRectangle,CLarea))
+	DT::datatable(CL_sq4, filter = 'top')
+# # Filter out Med & LDF 
+# 
+# CLrect <- filter(CL, str_detect(CLarea, "27."))
+# 
+# CLRect <- left_join(CL, ICESrect, by = c("CLstatisticalRectangle" = "ICESNAME"))%>%
+#   select(CLvesselFlagCountry, CLarea, CLstatisticalRectangle, Area) %>%
+#   distinct()
+# 
+# CLRectErr <- CLRect %>%
+#   group_by(CLstatisticalRectangle, CLvesselFlagCountry) %>%
+#   ##summarise(CLarea = unique(CLarea),
+#   summarise(CLarea = CLarea,
+#             ##Area = paste0(unique(Area), collapse = ", ")) %>%
+#             Area = paste0(unique(Area), collapse = ", "))
+#   rowwise() %>%
+#   mutate(NoMatch = grepl(CLarea, Area)) %>%
+#   filter(NoMatch %in% FALSE & CLstatisticalRectangle !='-9') %>%
+#   rename(ICESArea = Area) %>%
+#   ungroup() %>%
+#   select(CLvesselFlagCountry, CLstatisticalRectangle, CLarea, ICESArea) %>%
+#   rename(RectangleCLtable = CLstatisticalRectangle,
+#          AreaCLtable = CLarea,
+#          ICESAreaWithRectangle = ICESArea)
+# 
+# DT::datatable(CLRectErr, filter = 'top')
 
 ```
