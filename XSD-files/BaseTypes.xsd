@@ -68,17 +68,19 @@
 	<xs:include schemaLocation="Enumerators/Year.xsd" />
 	<xs:include schemaLocation="Enumerators/YesNoExtensions.xsd" />
 	<xs:include schemaLocation="Enumerators/YesNoFields.xsd" />
-	
-
-
-
-    <xs:include schemaLocation="Enumerators/WLTYP.xsd"   />
+	<xs:include schemaLocation="Enumerators/WLTYP.xsd"   />
     <xs:include schemaLocation="Enumerators/StatRecSource.xsd" />
 	<xs:include schemaLocation="Enumerators/RiversAndCatchments.xsd" />
 	<xs:include schemaLocation="Enumerators/METCU.xsd" />
 
-	
-
+	<xs:include schemaLocation="Enumerators/FDI_MESH_SIZE_RANGE.xsd" />
+	<xs:include schemaLocation="Enumerators/AreaNonFAO.xsd" />
+	<xs:include schemaLocation="Enumerators/FDI_SUPRA_REGION.xsd" />
+	<xs:include schemaLocation="Enumerators/FDI_GEO_INDICATOR.xsd" />
+	<xs:include schemaLocation="Enumerators/FDI_SPECON_TECH.xsd" />
+	<xs:include schemaLocation="Enumerators/FDI_CONFIDENTIALITY.xsd" />
+	<xs:include schemaLocation="Enumerators/AuxiliaryVariableName.xsd" />
+	<xs:include schemaLocation="Enumerators/MUNIT.xsd" />
 
 	<xs:complexType name="BaseSL">
     <xs:sequence>
@@ -106,12 +108,14 @@
       <xs:element minOccurs="1" maxOccurs="1" name="CLarea" type="tICES_Area" />
       <xs:element minOccurs="1" maxOccurs="1" name="CLstatisticalRectangle" type="tStatRec" />
 	  <xs:element minOccurs="1"	maxOccurs="1" name="CLdataSourceOfStatisticalRectangle" type="tStatRecSource" />
-      <xs:element minOccurs="1" maxOccurs="1" name="CLgsaSubarea" type="tAreas_GFCM_GSA" />
+	  <xs:element minOccurs="0" maxOccurs="1" name="CLfisheriesManagementUnit" type="tAreaNonFAO" />
+	  <xs:element minOccurs="1" maxOccurs="1" name="CLgsaSubarea" type="tAreas_GFCM_GSA" />
       <xs:element minOccurs="0" maxOccurs="1" name="CLjurisdictionArea" type="tJurisdictionArea" />
 	  <xs:element minOccurs="1" maxOccurs="1" name="CLfishingAreaCategory" type="tWLTYP" />
 	  <xs:element minOccurs="1" maxOccurs="1" name="CLfreshWaterName"	type="tRiversAndCatchments" />
-	  <xs:element minOccurs="0" maxOccurs="1" name="CLexclusiveEconomicZone"	type="tISO_3166" />			    
-      <xs:element minOccurs="1" maxOccurs="1" name="CLspeciesCode" type="tSpecWoRMS" />
+	  <xs:element minOccurs="0" maxOccurs="1" name="CLexclusiveEconomicZone"	type="tISO_3166" />
+	  <xs:element minOccurs="0" maxOccurs="1" name="CLexclusiveEconomicZoneIndicator"	type="tEEZI" />
+	  <xs:element minOccurs="1" maxOccurs="1" name="CLspeciesCode" type="tSpecWoRMS" />
       <xs:element minOccurs="0" maxOccurs="1" name="CLspeciesFaoCode" type="tSpecASFIS" />
       <xs:element minOccurs="1" maxOccurs="1" name="CLlandingCategory" type="tLandingCategory" />
       <xs:element minOccurs="1" maxOccurs="1" name="CLcatchCategory" type="tCatchCategory" />
@@ -124,7 +128,12 @@
       <xs:element minOccurs="1" maxOccurs="1" name="CLlandingLocation" type="tHarbour_LOCODE" />
       <xs:element minOccurs="1" maxOccurs="1" name="CLvesselLengthCategory" type="tVesselLengthClass" />
       <xs:element minOccurs="0" maxOccurs="1" name="CLfishingTechnique" type="tFishingTechnique" />
-      <xs:element minOccurs="0" maxOccurs="1" name="CLdeepSeaRegulation" type="tYesNoFields" />
+      <xs:element minOccurs="0" maxOccurs="1" name="CLmeshSizeRange" type="tFDI_MESH_SIZE_RANGE" />
+	  <xs:element minOccurs="0" maxOccurs="1" name="CLsupraRegion" type="tFDI_SUPRA_REGION" />
+	  <xs:element minOccurs="0" maxOccurs="1" name="CLgeoIndicator" type="tFDI_GEO_INDICATOR" />
+	  <xs:element minOccurs="0" maxOccurs="1" name="CLspecificConditionsTechnical" type="tFDI_SPECON_TECH" />
+	  <xs:element minOccurs="0" maxOccurs="1" name="CLdeepSeaRegulation" type="tYesNoFields" />
+	  <xs:element minOccurs="0" maxOccurs="1" name="CLFDIconfidentialityCode" type="tFDI_CONFIDENTIALITY" />
       <xs:element minOccurs="1" maxOccurs="1" name="CLofficialWeight" type="tInt2Billion" />
       <xs:element minOccurs="1" maxOccurs="1" name="CLscientificWeight" type="tInt2Billion" />
       <xs:element minOccurs="1" maxOccurs="1" name="CLexplainDifference" type="tDifferenceReason" />
@@ -142,10 +151,9 @@
 	  <xs:element minOccurs="0" maxOccurs="1" name="CLnumberFishInCatchErrorMeasureValueSecond"	type="tDecimal0.000001-999" 	/>		
 	  <xs:element minOccurs="0" maxOccurs="1" name="CLcomment" type="xs:string" />
 	  <xs:element minOccurs="0" maxOccurs="1" name="CLscientificWeightQualitativeBias" type="tQualitativeBias" />
-	  
-		
-		
-    </xs:sequence>
+      <xs:element minOccurs="1" maxOccurs="1" name="CLconfidentialityFlag"	type="tYesNoFields" 	/>
+	  <xs:element minOccurs="1" maxOccurs="1" name="CLencryptedVesselIds"     type="xs:string" />
+	</xs:sequence>
     <xs:attribute name="ln" type="xs:int" />
   </xs:complexType>
   <xs:complexType name="BaseCE">
@@ -159,19 +167,26 @@
       <xs:element minOccurs="0" maxOccurs="1" name="CEmonth" type="tMonth" />
       <xs:element minOccurs="1" maxOccurs="1" name="CEarea" type="tICES_Area" />
       <xs:element minOccurs="1" maxOccurs="1" name="CEstatisticalRectangle" type="tStatRec" />
-	  <xs:element minOccurs="1" maxOccurs="1" name="CEdataSourceOfStatisticalRectangle" type="tStatRecSource" />		
+	  <xs:element minOccurs="1" maxOccurs="1" name="CEdataSourceOfStatisticalRectangle" type="tStatRecSource" />
+	  <xs:element minOccurs="0" maxOccurs="1" name="CEfisheriesManagementUnit" type="tAreaNonFAO" />
 	  <xs:element minOccurs="1" maxOccurs="1" name="CEgsaSubarea" type="tAreas_GFCM_GSA" />
       <xs:element minOccurs="0" maxOccurs="1" name="CEjurisdictionArea" type="tJurisdictionArea" />
 	  <xs:element minOccurs="1" maxOccurs="1" name="CEfishingAreaCategory" type="tWLTYP" />		
 	  <xs:element minOccurs="1" maxOccurs="1" name="CEfreshWaterName" type="tRiversAndCatchments" />
 	  <xs:element minOccurs="0" maxOccurs="1" name="CEexclusiveEconomicZone" type="tISO_3166" />
-	  <xs:element minOccurs="0" maxOccurs="1" name="CEnationalFishingActivity" type="tNationalFishingActivity" />
+      <xs:element minOccurs="0" maxOccurs="1" name="CEexclusiveEconomicZoneIndicator" type="tEEZI" />
+      <xs:element minOccurs="0" maxOccurs="1" name="CEnationalFishingActivity" type="tNationalFishingActivity" />
       <xs:element minOccurs="1" maxOccurs="1" name="CEmetier6" type="tMetier6_FishingActivity" />
       <xs:element minOccurs="1" maxOccurs="1" name="CEincidentalByCatchMitigationDevice" type="tBycatchMitigationDevice" />
       <xs:element minOccurs="1" maxOccurs="1" name="CElandingLocation" type="tHarbour_LOCODE" />
       <xs:element minOccurs="1" maxOccurs="1" name="CEvesselLengthCategory" type="tVesselLengthClass" />
       <xs:element minOccurs="0" maxOccurs="1" name="CEfishingTechnique" type="tFishingTechnique" />
-      <xs:element minOccurs="0" maxOccurs="1" name="CEdeepSeaRegulation" type="tYesNoFields" />
+      <xs:element minOccurs="0" maxOccurs="1" name="CEmeshSizeRange" type="tFDI_MESH_SIZE_RANGE" />
+	  <xs:element minOccurs="0" maxOccurs="1" name="CEsupraRegion" type="tFDI_SUPRA_REGION" />
+	  <xs:element minOccurs="0" maxOccurs="1" name="CEgeoIndicator" type="tFDI_GEO_INDICATOR" />
+	  <xs:element minOccurs="0" maxOccurs="1" name="CEspecificConditionsTechnical" type="tFDI_SPECON_TECH" />
+	  <xs:element minOccurs="0" maxOccurs="1" name="CEdeepSeaRegulation" type="tYesNoFields" />
+	  <xs:element minOccurs="0" maxOccurs="1" name="CEofficialVesselHoursAtSea" type="tDecimalPointZeroOneTo50000" />
       <xs:element minOccurs="1" maxOccurs="1" name="CEnumberOfFractionTrips" type="tDecimalPointZeroOneTo50000" />
       <xs:element minOccurs="1" maxOccurs="1" name="CEnumberOfDominantTrips" type="tIntZeroTo50000" />
       <xs:element minOccurs="1" maxOccurs="1" name="CEofficialDaysAtSea" type="tDecimalPointZeroOneTo25000" />
@@ -201,8 +216,8 @@
       <xs:element minOccurs="0" maxOccurs="1" name="CEfishingDaystErrorMeasureValueFirst" type="tDecimal0.000001-999" />
 	  <xs:element minOccurs="0" maxOccurs="1" name="CEfishingDaysErrorMeasureValueSecond" type="tDecimal0.000001-999" />
 	  <xs:element minOccurs="0" maxOccurs="1" name="CEscientificFishingDaysQualitativeBias" type="tQualitativeBias" />
-      <xs:element minOccurs="0" maxOccurs="1" name="CEconfidentialityFlag" type="tYesNoFields" />
-      <xs:element minOccurs="0" maxOccurs="1" name="CEencryptedVesselIds" type="xs:string" />
+      <xs:element minOccurs="1" maxOccurs="1" name="CEconfidentialityFlag" type="tYesNoFields" />
+      <xs:element minOccurs="1" maxOccurs="1" name="CEencryptedVesselIds" type="xs:string" />
 	</xs:sequence>
     <xs:attribute name="ln" type="xs:int" />
   </xs:complexType>
@@ -225,8 +240,8 @@
       <xs:element minOccurs="1" maxOccurs="1" name="BVtypeAssessment" type="tBiologicalMeasurementType" />
       <xs:element minOccurs="0" maxOccurs="1" name="BVnumberTotal" type="xs:int" />
       <xs:element minOccurs="0" maxOccurs="1" name="BVnumberSampled" type="xs:int" />
-      <xs:element minOccurs="0" maxOccurs="1" name="BVselectionProb" type="tDecimal0.0000000000000001-1" />
-      <xs:element minOccurs="0" maxOccurs="1" name="BVinclusionProb" type="tDecimal0.0000000000000001-1" />
+      <xs:element minOccurs="0" maxOccurs="1" name="BVselectionProb" type="tDecimal0-1" />
+      <xs:element minOccurs="0" maxOccurs="1" name="BVinclusionProb" type="tDecimal0-1" />
       <xs:element minOccurs="1" maxOccurs="1" name="BVselectionMethod" type="tSelectionMethod" />
       <xs:element minOccurs="1" maxOccurs="1" name="BVunitName" type="tStringLength100" />
       <xs:element minOccurs="0" maxOccurs="1" name="BVsampler" type="tSampler" />
@@ -243,7 +258,15 @@
       <xs:element minOccurs="1" maxOccurs="1" name="DEhierarchy" type="tRDBESUpperHierarchy" />
       <xs:element minOccurs="1" maxOccurs="1" name="DEsampled" type="tYesNoFields" />
       <xs:element minOccurs="0" maxOccurs="1" name="DEreasonNotSampled" type="tReasonForNotSampling" />
-    </xs:sequence>
+
+		<xs:element minOccurs="0" maxOccurs="1" name="DEnonResponseCollected" type="tYesNoFields" />
+		<xs:element minOccurs="0" maxOccurs="1" name="DEauxiliaryVariableTotal" type="tDecimalPrec3" />
+		<xs:element minOccurs="0" maxOccurs="1" name="DEauxiliaryVariableValue" type="tDecimalPrec3" />
+		<xs:element minOccurs="0" maxOccurs="1" name="DEauxiliaryVariableName" type="tAuxiliaryVariableName" />
+		<xs:element minOccurs="0" maxOccurs="1" name="DEauxiliaryVariableUnit" type="tMUNIT" />
+
+
+	</xs:sequence>
     <xs:attribute name="ln" type="xs:int" use="required" />
   </xs:complexType>
   <xs:complexType name="BaseSD">
@@ -283,9 +306,9 @@
       <xs:element minOccurs="1" maxOccurs="1" name="FOvalidity" type="tValidityFlag" />
       <xs:element minOccurs="1" maxOccurs="1" name="FOcatchReg" type="tCatchRegistration" />
       <xs:element minOccurs="0" maxOccurs="1" name="FOstartDate" type="tDate" />
-      <xs:element minOccurs="0" maxOccurs="1" name="FOstartTime" type="tTime" />
+      <xs:element minOccurs="0" maxOccurs="1" name="FOstartTime" type="tStringLength60" />
       <xs:element minOccurs="1" maxOccurs="1" name="FOendDate" type="tDate" />
-      <xs:element minOccurs="0" maxOccurs="1" name="FOendTime" type="tTime" />
+      <xs:element minOccurs="0" maxOccurs="1" name="FOendTime" type="tStringLength60" />
       <xs:element minOccurs="0" maxOccurs="1" name="FOduration" type="xs:int" />
       <xs:element minOccurs="1" maxOccurs="1" name="FOdurationSource" type="tDurationSource" />
       <xs:element minOccurs="0" maxOccurs="1" name="FOhandlingTime" type="xs:int" />
@@ -295,8 +318,9 @@
       <xs:element minOccurs="0" maxOccurs="1" name="FOstopLon" type="tDecimal-180.000000-180.000000" />
       <xs:element minOccurs="0" maxOccurs="1" name="FOexclusiveEconomicZoneIndicator" type="tISO_3166" />
       <xs:element minOccurs="1" maxOccurs="1" name="FOarea" type="tICES_Area" />
-      <xs:element minOccurs="0" maxOccurs="1" name="FOrectangle" type="tStatRec" />
-      <xs:element minOccurs="1" maxOccurs="1" name="FOgsaSubarea" type="tAreas_GFCM_GSA" />
+	  <xs:element minOccurs="0" maxOccurs="1" name="FOrectangle" type="tStatRec" />
+      <xs:element minOccurs="0" maxOccurs="1" name="FOfisheriesManagementUnit" type="tAreaNonFAO" />
+	  <xs:element minOccurs="1" maxOccurs="1" name="FOgsaSubarea" type="tAreas_GFCM_GSA" />
       <xs:element minOccurs="0" maxOccurs="1" name="FOjurisdictionArea" type="tJurisdictionArea" />
       <xs:element minOccurs="0" maxOccurs="1" name="FOfishingDepth" type="xs:int" />
       <xs:element minOccurs="0" maxOccurs="1" name="FOwaterDepth" type="xs:int" />
@@ -316,24 +340,30 @@
       <xs:element minOccurs="1" maxOccurs="1" name="FOobservationCode" type="tObservationCode" />
       <xs:element minOccurs="0" maxOccurs="1" name="FOnumberTotal" type="xs:int" />
       <xs:element minOccurs="0" maxOccurs="1" name="FOnumberSampled" type="xs:int" />
-      <xs:element minOccurs="0" maxOccurs="1" name="FOselectionProb" type="tDecimal0.0000000000000001-1" />
-      <xs:element minOccurs="0" maxOccurs="1" name="FOinclusionProb" type="tDecimal0.0000000000000001-1" />
+      <xs:element minOccurs="0" maxOccurs="1" name="FOselectionProb" type="tDecimal0-1" />
+      <xs:element minOccurs="0" maxOccurs="1" name="FOinclusionProb" type="tDecimal0-1" />
       <xs:element minOccurs="1" maxOccurs="1" name="FOselectionMethod" type="tSelectionMethod" />
       <xs:element minOccurs="1" maxOccurs="1" name="FOunitName" type="tStringLength100" />
       <xs:element minOccurs="0" maxOccurs="1" name="FOselectionMethodCluster" type="tSelectionMethod" />
       <xs:element minOccurs="0" maxOccurs="1" name="FOnumberTotalClusters" type="xs:int" />
       <xs:element minOccurs="0" maxOccurs="1" name="FOnumberSampledClusters" type="xs:int" />
-      <xs:element minOccurs="0" maxOccurs="1" name="FOselectionProbCluster" type="tDecimal0.0000000000000001-1" />
-      <xs:element minOccurs="0" maxOccurs="1" name="FOinclusionProbCluster" type="tDecimal0.0000000000000001-1" />
+      <xs:element minOccurs="0" maxOccurs="1" name="FOselectionProbCluster" type="tDecimal0-1" />
+      <xs:element minOccurs="0" maxOccurs="1" name="FOinclusionProbCluster" type="tDecimal0-1" />
       <xs:element minOccurs="1" maxOccurs="1" name="FOsampled" type="tYesNoFields" />
       <xs:element minOccurs="0" maxOccurs="1" name="FOreasonNotSampled" type="tReasonForNotSampling" />
+	  <xs:element minOccurs="0" maxOccurs="1" name="FOnonResponseCollected" type="tYesNoFields" />
+	<xs:element minOccurs="0" maxOccurs="1" name="FOauxiliaryVariableTotal" type="tDecimalPrec3" />
+	<xs:element minOccurs="0" maxOccurs="1" name="FOauxiliaryVariableValue" type="tDecimalPrec3" />
+	<xs:element minOccurs="0" maxOccurs="1" name="FOauxiliaryVariableName" type="tAuxiliaryVariableName" />
+	<xs:element minOccurs="0" maxOccurs="1" name="FOauxiliaryVariableUnit" type="tMUNIT" />
+
     </xs:sequence>
     <xs:attribute name="ln" type="xs:int" use="required" />
   </xs:complexType>
   <xs:complexType name="BaseFT">
     <xs:sequence>
       <xs:element minOccurs="1" maxOccurs="1" name="FTencryptedVesselCode" type="tStringLength100" />
-      <xs:element minOccurs="1" maxOccurs="1" name="FTsequenceNumber" type="tStringLength100" />
+      <xs:element minOccurs="1" maxOccurs="1" name="FTsequenceNumber" type="xs:int" />
       <xs:element minOccurs="1" maxOccurs="1" name="FTstratification" type="tYesNoFields" />
       <xs:element minOccurs="1" maxOccurs="1" name="FTstratumName" type="tStringLength100" />
       <xs:element minOccurs="1" maxOccurs="1" name="FTclustering" type="tClustering" />
@@ -343,23 +373,29 @@
       <xs:element minOccurs="0" maxOccurs="1" name="FTnumberOfHaulsOrSets" type="tIntZeroToMax" />
       <xs:element minOccurs="0" maxOccurs="1" name="FTdepartureLocation" type="tHarbour_LOCODE" />
       <xs:element minOccurs="0" maxOccurs="1" name="FTdepartureDate" type="tDate" />
-      <xs:element minOccurs="0" maxOccurs="1" name="FTdepartureTime" type="tTime" />
+      <xs:element minOccurs="0" maxOccurs="1" name="FTdepartureTime" type="tStringLength60" />
       <xs:element minOccurs="1" maxOccurs="1" name="FTarrivalLocation" type="tHarbour_LOCODE" />
       <xs:element minOccurs="1" maxOccurs="1" name="FTarrivalDate" type="tDate" />
-      <xs:element minOccurs="0" maxOccurs="1" name="FTarrivalTime" type="tTime" />
+      <xs:element minOccurs="0" maxOccurs="1" name="FTarrivalTime" type="tStringLength60" />
       <xs:element minOccurs="0" maxOccurs="1" name="FTnumberTotal" type="xs:int" />
       <xs:element minOccurs="0" maxOccurs="1" name="FTnumberSampled" type="xs:int" />
-      <xs:element minOccurs="0" maxOccurs="1" name="FTselectionProb" type="tDecimal0.0000000000000001-1" />
-      <xs:element minOccurs="0" maxOccurs="1" name="FTinclusionProb" type="tDecimal0.0000000000000001-1" />
+      <xs:element minOccurs="0" maxOccurs="1" name="FTselectionProb" type="tDecimal0-1" />
+      <xs:element minOccurs="0" maxOccurs="1" name="FTinclusionProb" type="tDecimal0-1" />
       <xs:element minOccurs="1" maxOccurs="1" name="FTselectionMethod" type="tSelectionMethod" />
       <xs:element minOccurs="1" maxOccurs="1" name="FTunitName" type="tStringLength100" />
       <xs:element minOccurs="0" maxOccurs="1" name="FTselectionMethodCluster" type="tSelectionMethod" />
       <xs:element minOccurs="0" maxOccurs="1" name="FTnumberTotalClusters" type="xs:int" />
       <xs:element minOccurs="0" maxOccurs="1" name="FTnumberSampledClusters" type="xs:int" />
-      <xs:element minOccurs="0" maxOccurs="1" name="FTselectionProbCluster" type="tDecimal0.0000000000000001-1" />
-      <xs:element minOccurs="0" maxOccurs="1" name="FTinclusionProbCluster" type="tDecimal0.0000000000000001-1" />
+      <xs:element minOccurs="0" maxOccurs="1" name="FTselectionProbCluster" type="tDecimal0-1" />
+      <xs:element minOccurs="0" maxOccurs="1" name="FTinclusionProbCluster" type="tDecimal0-1" />
       <xs:element minOccurs="1" maxOccurs="1" name="FTsampled" type="tYesNoFields" />
       <xs:element minOccurs="0" maxOccurs="1" name="FTreasonNotSampled" type="tReasonForNotSampling" />
+	<xs:element minOccurs="0" maxOccurs="1" name="FTnonResponseCollected" type="tYesNoFields" />
+		<xs:element minOccurs="0" maxOccurs="1" name="FTauxiliaryVariableTotal" type="tDecimalPrec3" />
+		<xs:element minOccurs="0" maxOccurs="1" name="FTauxiliaryVariableValue" type="tDecimalPrec3" />
+		<xs:element minOccurs="0" maxOccurs="1" name="FTauxiliaryVariableName" type="tAuxiliaryVariableName" />
+		<xs:element minOccurs="0" maxOccurs="1" name="FTauxiliaryVariableUnit" type="tMUNIT" />
+
     </xs:sequence>
     <xs:attribute name="ln" type="xs:int" use="required" />
   </xs:complexType>
@@ -380,10 +416,11 @@
       <xs:element minOccurs="0" maxOccurs="1" name="LElocationType" type="tLocationType" />
       <xs:element minOccurs="1" maxOccurs="1" name="LEcountry" type="tISO_3166" />
       <xs:element minOccurs="0" maxOccurs="1" name="LEdate" type="tDate" />
-      <xs:element minOccurs="0" maxOccurs="1" name="LEtime" type="tTime" />
+      <xs:element minOccurs="0" maxOccurs="1" name="LEtime" type="tStringLength60" />
       <xs:element minOccurs="0" maxOccurs="1" name="LEexclusiveEconomicZoneIndicator" type="tISO_3166" />
       <xs:element minOccurs="1" maxOccurs="1" name="LEarea" type="tICES_Area" />
       <xs:element minOccurs="0" maxOccurs="1" name="LErectangle" type="tStatRec" />
+	  <xs:element minOccurs="0" maxOccurs="1" name="LEfisheriesManagementUnit" type="tAreaNonFAO" />
       <xs:element minOccurs="1" maxOccurs="1" name="LEgsaSubarea" type="tAreas_GFCM_GSA" />
       <xs:element minOccurs="0" maxOccurs="1" name="LEjurisdictionArea" type="tJurisdictionArea" />
       <xs:element minOccurs="0" maxOccurs="1" name="LEnationalFishingActivity" type="tNationalFishingActivity" />
@@ -398,18 +435,25 @@
       <xs:element minOccurs="0" maxOccurs="1" name="LEgearDimensions" type="xs:int" />
       <xs:element minOccurs="0" maxOccurs="1" name="LEnumberTotal" type="xs:int" />
       <xs:element minOccurs="0" maxOccurs="1" name="LEnumberSampled" type="xs:int" />
-      <xs:element minOccurs="0" maxOccurs="1" name="LEselectionProb" type="tDecimal0.0000000000000001-1" />
-      <xs:element minOccurs="0" maxOccurs="1" name="LEinclusionProb" type="tDecimal0.0000000000000001-1" />
+      <xs:element minOccurs="0" maxOccurs="1" name="LEselectionProb" type="tDecimal0-1" />
+      <xs:element minOccurs="0" maxOccurs="1" name="LEinclusionProb" type="tDecimal0-1" />
       <xs:element minOccurs="1" maxOccurs="1" name="LEselectionMethod" type="tSelectionMethod" />
       <xs:element minOccurs="1" maxOccurs="1" name="LEunitName" type="tStringLength100" />
       <xs:element minOccurs="0" maxOccurs="1" name="LEselectionMethodCluster" type="tSelectionMethod" />
       <xs:element minOccurs="0" maxOccurs="1" name="LEnumberTotalClusters" type="xs:int" />
       <xs:element minOccurs="0" maxOccurs="1" name="LEnumberSampledClusters" type="xs:int" />
-      <xs:element minOccurs="0" maxOccurs="1" name="LEselectionProbCluster" type="tDecimal0.0000000000000001-1" />
-      <xs:element minOccurs="0" maxOccurs="1" name="LEinclusionProbCluster" type="tDecimal0.0000000000000001-1" />
+      <xs:element minOccurs="0" maxOccurs="1" name="LEselectionProbCluster" type="tDecimal0-1" />
+      <xs:element minOccurs="0" maxOccurs="1" name="LEinclusionProbCluster" type="tDecimal0-1" />
       <xs:element minOccurs="1" maxOccurs="1" name="LEsampled" type="tYesNoFields" />
       <xs:element minOccurs="0" maxOccurs="1" name="LEreasonNotSampled" type="tReasonForNotSampling" />
-      <xs:element minOccurs="0" maxOccurs="1" name="LEfullTripAvailable" type="tYesNoExtensions" />
+      
+	   <xs:element minOccurs="0" maxOccurs="1" name="LEnonResponseCollected" type="tYesNoFields" />
+		<xs:element minOccurs="0" maxOccurs="1" name="LEfullTripAvailable" type="tYesNoExtensions" />
+		<xs:element minOccurs="0" maxOccurs="1" name="LEauxiliaryVariableTotal" type="tDecimalPrec3" />
+		<xs:element minOccurs="0" maxOccurs="1" name="LEauxiliaryVariableValue" type="tDecimalPrec3" />
+		<xs:element minOccurs="0" maxOccurs="1" name="LEauxiliaryVariableName" type="tAuxiliaryVariableName" />
+		<xs:element minOccurs="0" maxOccurs="1" name="LEauxiliaryVariableUnit" type="tMUNIT" />
+
     </xs:sequence>
     <xs:attribute name="ln" type="xs:int" use="required" />
   </xs:complexType>
@@ -426,17 +470,23 @@
       <xs:element minOccurs="0" maxOccurs="1" name="LOsampler" type="tSampler" />
       <xs:element minOccurs="0" maxOccurs="1" name="LOnumberTotal" type="xs:int" />
       <xs:element minOccurs="0" maxOccurs="1" name="LOnumberSampled" type="xs:int" />
-      <xs:element minOccurs="0" maxOccurs="1" name="LOselectionProb" type="tDecimal0.0000000000000001-1" />
-      <xs:element minOccurs="0" maxOccurs="1" name="LOinclusionProb" type="tDecimal0.0000000000000001-1" />
+      <xs:element minOccurs="0" maxOccurs="1" name="LOselectionProb" type="tDecimal0-1" />
+      <xs:element minOccurs="0" maxOccurs="1" name="LOinclusionProb" type="tDecimal0-1" />
       <xs:element minOccurs="1" maxOccurs="1" name="LOselectionMethod" type="tSelectionMethod" />
       <xs:element minOccurs="1" maxOccurs="1" name="LOunitName" type="tStringLength100" />
       <xs:element minOccurs="0" maxOccurs="1" name="LOselectionMethodCluster" type="tSelectionMethod" />
       <xs:element minOccurs="0" maxOccurs="1" name="LOnumberTotalClusters" type="xs:int" />
       <xs:element minOccurs="0" maxOccurs="1" name="LOnumberSampledClusters" type="xs:int" />
-      <xs:element minOccurs="0" maxOccurs="1" name="LOselectionProbCluster" type="tDecimal0.0000000000000001-1" />
-      <xs:element minOccurs="0" maxOccurs="1" name="LOinclusionProbCluster" type="tDecimal0.0000000000000001-1" />
+      <xs:element minOccurs="0" maxOccurs="1" name="LOselectionProbCluster" type="tDecimal0-1" />
+      <xs:element minOccurs="0" maxOccurs="1" name="LOinclusionProbCluster" type="tDecimal0-1" />
       <xs:element minOccurs="1" maxOccurs="1" name="LOsampled" type="tYesNoFields" />
       <xs:element minOccurs="0" maxOccurs="1" name="LOreasonNotSampled" type="tReasonForNotSampling" />
+	<xs:element minOccurs="0" maxOccurs="1" name="LOnonResponseCollected" type="tYesNoFields" />
+		<xs:element minOccurs="0" maxOccurs="1" name="LOauxiliaryVariableTotal" type="tDecimalPrec3" />
+		<xs:element minOccurs="0" maxOccurs="1" name="LOauxiliaryVariableValue" type="tDecimalPrec3" />
+		<xs:element minOccurs="0" maxOccurs="1" name="LOauxiliaryVariableName" type="tAuxiliaryVariableName" />
+		<xs:element minOccurs="0" maxOccurs="1" name="LOauxiliaryVariableUnit" type="tMUNIT" />
+
     </xs:sequence>
     <xs:attribute name="ln" type="xs:int" use="required" />
   </xs:complexType>
@@ -448,7 +498,7 @@
       <xs:element minOccurs="1" maxOccurs="1" name="OSlocationName" type="tStringLength100" />
       <xs:element minOccurs="0" maxOccurs="1" name="OSlocationType" type="tLocationType" />
       <xs:element minOccurs="1" maxOccurs="1" name="OSsamplingDate" type="tDate" />
-      <xs:element minOccurs="0" maxOccurs="1" name="OSsamplingTime" type="tTime" />
+      <xs:element minOccurs="0" maxOccurs="1" name="OSsamplingTime" type="tStringLength60" />
       <xs:element minOccurs="1" maxOccurs="1" name="OSstratumName" type="tStringLength100" />
       <xs:element minOccurs="1" maxOccurs="1" name="OSclustering" type="tClustering" />
       <xs:element minOccurs="1" maxOccurs="1" name="OSclusterName" type="tStringLength100" />
@@ -457,17 +507,23 @@
       <xs:element minOccurs="0" maxOccurs="1" name="OStimeValue" type="tDecimal0.01-99999" />
       <xs:element minOccurs="0" maxOccurs="1" name="OSnumberTotal" type="xs:int" />
       <xs:element minOccurs="0" maxOccurs="1" name="OSnumberSampled" type="xs:int" />
-      <xs:element minOccurs="0" maxOccurs="1" name="OSselectionProb" type="tDecimal0.0000000000000001-1" />
-      <xs:element minOccurs="0" maxOccurs="1" name="OSinclusionProb" type="tDecimal0.0000000000000001-1" />
+      <xs:element minOccurs="0" maxOccurs="1" name="OSselectionProb" type="tDecimal0-1" />
+      <xs:element minOccurs="0" maxOccurs="1" name="OSinclusionProb" type="tDecimal0-1" />
       <xs:element minOccurs="1" maxOccurs="1" name="OSselectionMethod" type="tSelectionMethod" />
       <xs:element minOccurs="1" maxOccurs="1" name="OSunitName" type="tStringLength100" />
       <xs:element minOccurs="0" maxOccurs="1" name="OSselectionMethodCluster" type="tSelectionMethod" />
       <xs:element minOccurs="0" maxOccurs="1" name="OSnumberTotalClusters" type="xs:int" />
       <xs:element minOccurs="0" maxOccurs="1" name="OSnumberSampledClusters" type="xs:int" />
-      <xs:element minOccurs="0" maxOccurs="1" name="OSselectionProbCluster" type="tDecimal0.0000000000000001-1" />
-      <xs:element minOccurs="0" maxOccurs="1" name="OSinclusionProbCluster" type="tDecimal0.0000000000000001-1" />
+      <xs:element minOccurs="0" maxOccurs="1" name="OSselectionProbCluster" type="tDecimal0-1" />
+      <xs:element minOccurs="0" maxOccurs="1" name="OSinclusionProbCluster" type="tDecimal0-1" />
       <xs:element minOccurs="1" maxOccurs="1" name="OSsampled" type="tYesNoFields" />
       <xs:element minOccurs="0" maxOccurs="1" name="OSreasonNotSampled" type="tReasonForNotSampling" />
+		<xs:element minOccurs="0" maxOccurs="1" name="OSnonResponseCollected" type="tYesNoFields" />
+		<xs:element minOccurs="0" maxOccurs="1" name="OSauxiliaryVariableTotal" type="tDecimalPrec3" />
+		<xs:element minOccurs="0" maxOccurs="1" name="OSauxiliaryVariableValue" type="tDecimalPrec3" />
+		<xs:element minOccurs="0" maxOccurs="1" name="OSauxiliaryVariableName" type="tAuxiliaryVariableName" />
+		<xs:element minOccurs="0" maxOccurs="1" name="OSauxiliaryVariableUnit" type="tMUNIT" />
+
     </xs:sequence>
     <xs:attribute name="ln" type="xs:int" use="required" />
   </xs:complexType>
@@ -490,6 +546,7 @@
       <xs:element minOccurs="0" maxOccurs="1" name="SAexclusiveEconomicZoneIndicator" type="tISO_3166" />
       <xs:element minOccurs="0" maxOccurs="1" name="SAarea" type="tICES_Area" />
       <xs:element minOccurs="0" maxOccurs="1" name="SArectangle" type="tStatRec" />
+	  <xs:element minOccurs="0" maxOccurs="1" name="SAfisheriesManagementUnit" type="tAreaNonFAO" />
       <xs:element minOccurs="1" maxOccurs="1" name="SAgsaSubarea" type="tAreas_GFCM_GSA" />
       <xs:element minOccurs="0" maxOccurs="1" name="SAjurisdictionArea" type="tJurisdictionArea" />
       <xs:element minOccurs="0" maxOccurs="1" name="SAnationalFishingActivity" type="tNationalFishingActivity" />
@@ -504,18 +561,25 @@
       <xs:element minOccurs="0" maxOccurs="1" name="SAsampleWeightLive" type="xs:int" />
       <xs:element minOccurs="0" maxOccurs="1" name="SAnumberTotal" type="tDecimal0.1-999999999" />
       <xs:element minOccurs="0" maxOccurs="1" name="SAnumberSampled" type="tDecimal0.1-999999999" />
-      <xs:element minOccurs="0" maxOccurs="1" name="SAselectionProb" type="tDecimal0.0000000000000001-1" />
-      <xs:element minOccurs="0" maxOccurs="1" name="SAinclusionProb" type="tDecimal0.0000000000000001-1" />
+      <xs:element minOccurs="0" maxOccurs="1" name="SAselectionProb" type="tDecimal0-1" />
+      <xs:element minOccurs="0" maxOccurs="1" name="SAinclusionProb" type="tDecimal0-1" />
       <xs:element minOccurs="1" maxOccurs="1" name="SAselectionMethod" type="tSelectionMethod" />
       <xs:element minOccurs="1" maxOccurs="1" name="SAunitName" type="tStringLength100" />
       <xs:element minOccurs="1" maxOccurs="1" name="SAlowerHierarchy" type="tLowerHierarchy" />
       <xs:element minOccurs="0" maxOccurs="1" name="SAsampler" type="tSampler" />
       <xs:element minOccurs="1" maxOccurs="1" name="SAsampled" type="tYesNoFields" />
+				<xs:element minOccurs="0" maxOccurs="1" name="SAreasonNotSampled" type="tReasonForNotSampling" />
+	<xs:element minOccurs="0" maxOccurs="1" name="SAnonResponseCollected" type="tYesNoFields" />
       <xs:element minOccurs="0" maxOccurs="1" name="SAreasonNotSampledFM" type="tReasonForNotSampling" />
       <xs:element minOccurs="0" maxOccurs="1" name="SAreasonNotSampledBV" type="tReasonForNotSampling" />
-      <xs:element minOccurs="0" maxOccurs="1" name="SAtotalWeightMeasured" type="xs:int" />
+	  <xs:element minOccurs="0" maxOccurs="1" name="SAtotalWeightMeasured" type="xs:int" />
       <xs:element minOccurs="0" maxOccurs="1" name="SAsampleWeightMeasured" type="xs:int" />
       <xs:element minOccurs="0" maxOccurs="1" name="SAconversionFactorMeasLive" type="tDecimal0.900-10" />
+      <xs:element minOccurs="0" maxOccurs="1" name="SAauxiliaryVariableTotal" type="tDecimalPrec3" />
+	  <xs:element minOccurs="0" maxOccurs="1" name="SAauxiliaryVariableValue" type="tDecimalPrec3" />
+	  <xs:element minOccurs="0" maxOccurs="1" name="SAauxiliaryVariableName" type="tAuxiliaryVariableName" />
+	  <xs:element minOccurs="0" maxOccurs="1" name="SAauxiliaryVariableUnit" type="tMUNIT" />
+
     </xs:sequence>
     <xs:attribute name="ln" type="xs:int" use="required" />
   </xs:complexType>
@@ -536,17 +600,24 @@
 	  <xs:element minOccurs="0" maxOccurs="1" name="SStimeSampled" type="xs:int" />		
       <xs:element minOccurs="0" maxOccurs="1" name="SSnumberTotal" type="xs:int" />
       <xs:element minOccurs="0" maxOccurs="1" name="SSnumberSampled" type="xs:int" />
-      <xs:element minOccurs="0" maxOccurs="1" name="SSselectionProb" type="tDecimal0.0000000000000001-1" />
-      <xs:element minOccurs="0" maxOccurs="1" name="SSinclusionProb" type="tDecimal0.0000000000000001-1" />
+      <xs:element minOccurs="0" maxOccurs="1" name="SSselectionProb" type="tDecimal0-1" />
+      <xs:element minOccurs="0" maxOccurs="1" name="SSinclusionProb" type="tDecimal0-1" />
       <xs:element minOccurs="1" maxOccurs="1" name="SSselectionMethod" type="tSelectionMethod" />
       <xs:element minOccurs="1" maxOccurs="1" name="SSunitName" type="tStringLength100" />
       <xs:element minOccurs="0" maxOccurs="1" name="SSselectionMethodCluster" type="tSelectionMethod" />
       <xs:element minOccurs="0" maxOccurs="1" name="SSnumberTotalClusters" type="xs:int" />
       <xs:element minOccurs="0" maxOccurs="1" name="SSnumberSampledClusters" type="xs:int" />
-      <xs:element minOccurs="0" maxOccurs="1" name="SSselectionProbCluster" type="tDecimal0.0000000000000001-1" />
-      <xs:element minOccurs="0" maxOccurs="1" name="SSinclusionProbCluster" type="tDecimal0.0000000000000001-1" />
+      <xs:element minOccurs="0" maxOccurs="1" name="SSselectionProbCluster" type="tDecimal0-1" />
+      <xs:element minOccurs="0" maxOccurs="1" name="SSinclusionProbCluster" type="tDecimal0-1" />
       <xs:element minOccurs="1" maxOccurs="1" name="SSsampled" type="tYesNoFields" />
       <xs:element minOccurs="0" maxOccurs="1" name="SSreasonNotSampled" type="tReasonForNotSampling" />
+	  <xs:element minOccurs="0" maxOccurs="1" name="SSnonResponseCollected" type="tYesNoFields" />
+	  <xs:element minOccurs="0" maxOccurs="1" name="SSauxiliaryVariableTotal" type="tDecimalPrec3" />
+	  <xs:element minOccurs="0" maxOccurs="1" name="SSauxiliaryVariableValue" type="tDecimalPrec3" />
+	  <xs:element minOccurs="0" maxOccurs="1" name="SSauxiliaryVariableName" type="tAuxiliaryVariableName" />
+	  <xs:element minOccurs="0" maxOccurs="1" name="SSauxiliaryVariableUnit" type="tMUNIT" />
+
+	
     </xs:sequence>
     <xs:attribute name="ln" type="xs:int" use="required" />
   </xs:complexType>
@@ -561,18 +632,25 @@
       <xs:element minOccurs="0" maxOccurs="1" name="TEsampler" type="tSampler" />
       <xs:element minOccurs="0" maxOccurs="1" name="TEnumberTotal" type="xs:int" />
       <xs:element minOccurs="0" maxOccurs="1" name="TEnumberSampled" type="xs:int" />
-      <xs:element minOccurs="0" maxOccurs="1" name="TEselectionProb" type="tDecimal0.0000000000000001-1" />
-      <xs:element minOccurs="0" maxOccurs="1" name="TEinclusionProb" type="tDecimal0.0000000000000001-1" />
+      <xs:element minOccurs="0" maxOccurs="1" name="TEselectionProb" type="tDecimal0-1" />
+      <xs:element minOccurs="0" maxOccurs="1" name="TEinclusionProb" type="tDecimal0-1" />
       <xs:element minOccurs="1" maxOccurs="1" name="TEselectionMethod" type="tSelectionMethod" />
       <xs:element minOccurs="1" maxOccurs="1" name="TEunitName" type="tStringLength100" />
       <xs:element minOccurs="0" maxOccurs="1" name="TEselectionMethodCluster" type="tSelectionMethod" />
       <xs:element minOccurs="0" maxOccurs="1" name="TEnumberTotalClusters" type="xs:int" />
       <xs:element minOccurs="0" maxOccurs="1" name="TEnumberSampledClusters" type="xs:int" />
-      <xs:element minOccurs="0" maxOccurs="1" name="TEselectionProbCluster" type="tDecimal0.0000000000000001-1" />
-      <xs:element minOccurs="0" maxOccurs="1" name="TEinclusionProbCluster" type="tDecimal0.0000000000000001-1" />
+      <xs:element minOccurs="0" maxOccurs="1" name="TEselectionProbCluster" type="tDecimal0-1" />
+      <xs:element minOccurs="0" maxOccurs="1" name="TEinclusionProbCluster" type="tDecimal0-1" />
       <xs:element minOccurs="1" maxOccurs="1" name="TEsampled" type="tYesNoFields" />
       <xs:element minOccurs="0" maxOccurs="1" name="TEreasonNotSampled" type="tReasonForNotSampling" />
-    </xs:sequence>
+
+		<xs:element minOccurs="0" maxOccurs="1" name="TEnonResponseCollected" type="tYesNoFields" />
+		<xs:element minOccurs="0" maxOccurs="1" name="TEauxiliaryVariableTotal" type="tDecimalPrec3" />
+		<xs:element minOccurs="0" maxOccurs="1" name="TEauxiliaryVariableValue" type="tDecimalPrec3" />
+		<xs:element minOccurs="0" maxOccurs="1" name="TEauxiliaryVariableName" type="tAuxiliaryVariableName" />
+		<xs:element minOccurs="0" maxOccurs="1" name="TEauxiliaryVariableUnit" type="tMUNIT" />
+
+	</xs:sequence>
     <xs:attribute name="ln" type="xs:int" use="required" />
   </xs:complexType>
   <xs:complexType name="BaseVD">
@@ -601,17 +679,23 @@
       <xs:element minOccurs="0" maxOccurs="1" name="VSsampler" type="tSampler" />
       <xs:element minOccurs="0" maxOccurs="1" name="VSnumberTotal" type="xs:int" />
       <xs:element minOccurs="0" maxOccurs="1" name="VSnumberSampled" type="xs:int" />
-      <xs:element minOccurs="0" maxOccurs="1" name="VSselectionProb" type="tDecimal0.0000000000000001-1" />
-      <xs:element minOccurs="0" maxOccurs="1" name="VSinclusionProb" type="tDecimal0.0000000000000001-1" />
+      <xs:element minOccurs="0" maxOccurs="1" name="VSselectionProb" type="tDecimal0-1" />
+      <xs:element minOccurs="0" maxOccurs="1" name="VSinclusionProb" type="tDecimal0-1" />
       <xs:element minOccurs="1" maxOccurs="1" name="VSselectionMethod" type="tSelectionMethod" />
       <xs:element minOccurs="1" maxOccurs="1" name="VSunitName" type="tStringLength100" />
       <xs:element minOccurs="0" maxOccurs="1" name="VSselectionMethodCluster" type="tSelectionMethod" />
       <xs:element minOccurs="0" maxOccurs="1" name="VSnumberTotalClusters" type="xs:int" />
       <xs:element minOccurs="0" maxOccurs="1" name="VSnumberSampledClusters" type="xs:int" />
-      <xs:element minOccurs="0" maxOccurs="1" name="VSselectionProbCluster" type="tDecimal0.0000000000000001-1" />
-      <xs:element minOccurs="0" maxOccurs="1" name="VSinclusionProbCluster" type="tDecimal0.0000000000000001-1" />
+      <xs:element minOccurs="0" maxOccurs="1" name="VSselectionProbCluster" type="tDecimal0-1" />
+      <xs:element minOccurs="0" maxOccurs="1" name="VSinclusionProbCluster" type="tDecimal0-1" />
       <xs:element minOccurs="1" maxOccurs="1" name="VSsampled" type="tYesNoFields" />
       <xs:element minOccurs="0" maxOccurs="1" name="VSreasonNotSampled" type="tReasonForNotSampling" />
+	<xs:element minOccurs="0" maxOccurs="1" name="VSnonResponseCollected" type="tYesNoFields" />
+		<xs:element minOccurs="0" maxOccurs="1" name="VSauxiliaryVariableTotal" type="tDecimalPrec3" />
+		<xs:element minOccurs="0" maxOccurs="1" name="VSauxiliaryVariableValue" type="tDecimalPrec3" />
+		<xs:element minOccurs="0" maxOccurs="1" name="VSauxiliaryVariableName" type="tAuxiliaryVariableName" />
+		<xs:element minOccurs="0" maxOccurs="1" name="VSauxiliaryVariableUnit" type="tMUNIT" />
+
     </xs:sequence>
     <xs:attribute name="ln" type="xs:int" use="required" />
   </xs:complexType>
@@ -620,6 +704,11 @@
         <xs:maxLength value="100" />
     </xs:restriction>
   </xs:simpleType>
+	<xs:simpleType name="tStringLength60">
+		<xs:restriction base="xs:string">
+			<xs:maxLength value="60" />
+		</xs:restriction>
+	</xs:simpleType>
   <xs:simpleType name="tDate">
     <xs:restriction base="xs:string">
       <xs:length value="10" />
@@ -645,7 +734,8 @@
     </xs:restriction>
   </xs:simpleType>
   <xs:simpleType name="tVesselLengthDecimal">
-    <xs:restriction base="xs:int">
+    <xs:restriction base="xs:decimal">
+		<xs:fractionDigits value="2" />
       <xs:minInclusive value="3" />
       <xs:maxInclusive value="160" />
     </xs:restriction>
@@ -854,11 +944,11 @@
 			<xs:minInclusive value="-180.000000" />
 		</xs:restriction>
 	</xs:simpleType>
-	<xs:simpleType name="tDecimal0.0000000000000001-1">
+	<xs:simpleType name="tDecimal0-1">
 		<xs:restriction base="xs:decimal">
 			<xs:fractionDigits value="16" />
 			<xs:maxInclusive value="1" />
-			<xs:minInclusive value="0.0000000000000001" />
+			<xs:minInclusive value="0" />
 		</xs:restriction>
 	</xs:simpleType>
 	<xs:simpleType name="tDecimal0.01-99999">

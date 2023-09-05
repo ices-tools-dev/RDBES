@@ -42,8 +42,7 @@
   <xs:complexType name="TE">
     <xs:complexContent mixed="false">
       <xs:extension base="BaseTE">
-        <xs:sequence>
-          <xs:element minOccurs="0"  name="FT" type="FT" />
+        <xs:sequence>         
           <xs:element   minOccurs="0" maxOccurs="unbounded" name="LE" type="LE" />
         </xs:sequence>
       </xs:extension>
@@ -57,8 +56,9 @@
   <xs:complexType name="LE">
     <xs:complexContent mixed="false">
       <xs:extension base="BaseLE">
-        <xs:sequence>                
-          <xs:element  minOccurs="0" maxOccurs="unbounded"  name="SS" type="SS" />
+        <xs:sequence>
+			<xs:element minOccurs="0"  maxOccurs="1"  name="FT" type="FT" />
+          <xs:element   minOccurs="0"  maxOccurs="unbounded"  name="SS" type="SS" />
         </xs:sequence>
       </xs:extension>
     </xs:complexContent>

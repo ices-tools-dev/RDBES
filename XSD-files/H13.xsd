@@ -25,7 +25,7 @@
     <xs:complexContent mixed="false">
       <xs:extension base="BaseSD">
         <xs:sequence>
-          <xs:element minOccurs="0" name="FT" type="FT" />
+         
           <xs:element minOccurs="0" maxOccurs="unbounded"  name="FO" type="FO" />
         </xs:sequence>
       </xs:extension>
@@ -41,6 +41,7 @@
     <xs:complexContent mixed="false">
       <xs:extension base="BaseFO">
         <xs:sequence>
+		  <xs:element  minOccurs="0"   maxOccurs="unbounded"  name="FT" type="FT" />
           <xs:element  minOccurs="0"   maxOccurs="unbounded"  name="SS" type="SS" />
         </xs:sequence>
       </xs:extension>
