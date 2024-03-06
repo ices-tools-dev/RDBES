@@ -137,7 +137,7 @@
 			<xs:element minOccurs="1" maxOccurs="1" name="CLofficialWeight" type="tDecimal2Billion" />
 			<xs:element minOccurs="1" maxOccurs="1" name="CLscientificWeight" type="tDecimal2Billion" />
 			<xs:element minOccurs="1" maxOccurs="1" name="CLexplainDifference" type="tDifferenceReason" />
-			<xs:element minOccurs="1" maxOccurs="1" name="CLtotalOfficialLandingsValue" type="xs:string" />
+			<xs:element minOccurs="1" maxOccurs="1" name="CLlandingsValue" type="xs:string" />
 			<xs:element minOccurs="0" maxOccurs="1" name="CLtotalNumberFish"	type ="tInt1-100000" />
 			<xs:element minOccurs="1" maxOccurs="1" name="CLnumberOfUniqueVessels" type="tInt100Thousands0Inclusive" />
 			<xs:element minOccurs="0" maxOccurs="1" name="CLscientificWeightErrorMeasureValueType" type="tMETCU" />
@@ -158,8 +158,8 @@
 	</xs:complexType>
 	<xs:complexType name="BaseCE">
 		<xs:sequence>
-			<xs:element minOccurs="1" maxOccurs="1" name="CEdataTypeForScientificEffort" type="tDataTypeOfScientificWeight" />
-			<xs:element minOccurs="1" maxOccurs="1" name="CEdataSourceForScientificEffort" type="tDataSourceOfScientificWeight" />
+			<xs:element minOccurs="1" maxOccurs="1" name="CEdataTypeOfScientificEffort" type="tDataTypeOfScientificWeight" />
+			<xs:element minOccurs="1" maxOccurs="1" name="CEdataSourceOfScientificEffort" type="tDataSourceOfScientificWeight" />
 			<xs:element minOccurs="0" maxOccurs="1" name="CEsamplingScheme" type="tSamplingScheme" />
 			<xs:element minOccurs="1" maxOccurs="1" name="CEvesselFlagCountry" type="tISO_3166" />
 			<xs:element minOccurs="1" maxOccurs="1" name="CEyear" type="tYear" />
@@ -187,7 +187,7 @@
 			<xs:element minOccurs="0" maxOccurs="1" name="CEspecificConditionsTechnical" type="tFDI_SPECON_TECH" />
 			<xs:element minOccurs="0" maxOccurs="1" name="CEdeepSeaRegulation" type="tYesNoFields" />
 			<xs:element minOccurs="0" maxOccurs="1" name="CEofficialVesselHoursAtSea" type="tDecimalPointZeroOneTo50000" />
-			<xs:element minOccurs="1" maxOccurs="1" name="CEnumberOfFractionTrips" type="tDecimalPointZeroOneTo50000" />
+			<xs:element minOccurs="1" maxOccurs="1" name="CEnumberOfFractionalTrips" type="tDecimalPointZeroOneTo50000" />
 			<xs:element minOccurs="1" maxOccurs="1" name="CEnumberOfDominantTrips" type="tIntZeroTo50000" />
 			<xs:element minOccurs="1" maxOccurs="1" name="CEofficialDaysAtSea" type="tDecimalPointZeroOneTo25000" />
 			<xs:element minOccurs="1" maxOccurs="1" name="CEscientificDaysAtSea" type="tDecimalPointZeroOneTo25000" />
