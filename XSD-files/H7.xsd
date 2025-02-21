@@ -50,7 +50,7 @@
     <xs:complexContent mixed="false">
       <xs:extension base="BaseSS">
         <xs:sequence>
-		  <xs:element minOccurs="0" maxOccurs="1"  name="LE" type="LE"  />
+		  <xs:element minOccurs="1" maxOccurs="1"  name="LE" type="LE"  />
           <xs:element  minOccurs="0"  maxOccurs="unbounded"    name="SA" type="SA" />
         </xs:sequence>
       </xs:extension>

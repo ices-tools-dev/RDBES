@@ -9,8 +9,22 @@
   </xs:complexType>
   <xs:complexType name="HSL">
     <xs:sequence>
-      <xs:element  maxOccurs="unbounded" name="SL" type="BaseSL" />
+      <xs:element  maxOccurs="unbounded" name="SL" type="SL" />
     </xs:sequence>
-  </xs:complexType>  
+  </xs:complexType>
+	<xs:complexType name="SL">
+		<xs:complexContent mixed="false">
+			<xs:extension base="BaseSL">
+				<xs:sequence>
+					<xs:element minOccurs="1"  maxOccurs="unbounded" name="IS" type="IS" />
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="IS">
+		<xs:complexContent mixed="false">
+			<xs:extension base="BaseIS" />
+		</xs:complexContent>
+	</xs:complexType>
   
 </xs:schema>

@@ -13,11 +13,8 @@
 	<xs:include schemaLocation="Enumerators/Clustering.xsd" />
 	<xs:include schemaLocation="Enumerators/CommercialSizeCategory.xsd" />
 	<xs:include schemaLocation="Enumerators/CommercialSizeCategoryScale.xsd" />
-	<xs:include schemaLocation="Enumerators/DataSourceLandingsValue.xsd" />
-	<xs:include schemaLocation="Enumerators/DataSourceOfScientificWeight.xsd" />
-	<xs:include schemaLocation="Enumerators/DataTypeOfScientificWeight.xsd" />
-	<xs:include schemaLocation="Enumerators/DifferenceReason.xsd" />
-	<xs:include schemaLocation="Enumerators/DurationSource.xsd" />
+	<xs:include schemaLocation="Enumerators/DataSourceLandingsValue.xsd" />	
+	<xs:include schemaLocation="Enumerators/DifferenceReason.xsd" />	
 	<xs:include schemaLocation="Enumerators/EDMO.xsd" />
 	<xs:include schemaLocation="Enumerators/EEZI.xsd" />
 	<xs:include schemaLocation="Enumerators/FishingTechnique.xsd" />
@@ -69,7 +66,7 @@
 	<xs:include schemaLocation="Enumerators/YesNoExtensions.xsd" />
 	<xs:include schemaLocation="Enumerators/YesNoFields.xsd" />
 	<xs:include schemaLocation="Enumerators/WLTYP.xsd"   />
-	<xs:include schemaLocation="Enumerators/StatRecSource.xsd" />
+	
 	<xs:include schemaLocation="Enumerators/RiversAndCatchments.xsd" />
 	<xs:include schemaLocation="Enumerators/METCU.xsd" />
 
@@ -81,6 +78,9 @@
 	<xs:include schemaLocation="Enumerators/FDI_CONFIDENTIALITY.xsd" />
 	<xs:include schemaLocation="Enumerators/AuxiliaryVariableName.xsd" />
 	<xs:include schemaLocation="Enumerators/MUNIT.xsd" />
+	<xs:include schemaLocation="Enumerators/DataTypeOfScientificWeight.xsd" />
+	<xs:include schemaLocation="Enumerators/DataBasis.xsd" />
+	<xs:include schemaLocation="Enumerators/DataSource.xsd" />
 
 	<xs:complexType name="BaseSL">
 		<xs:sequence>
@@ -88,16 +88,21 @@
 			<xs:element minOccurs="1" maxOccurs="1" name="SLinstitute" type="tEDMO" />
 			<xs:element minOccurs="1" maxOccurs="1" name="SLspeciesListName" type="tStringLength100" />
 			<xs:element minOccurs="1" maxOccurs="1" name="SLyear" type="tYear" />
-			<xs:element minOccurs="1" maxOccurs="1" name="SLcatchFraction" type="tCatchFraction" />
-			<xs:element minOccurs="1" maxOccurs="1" name="SLcommercialTaxon" type="tSpecWoRMS" />
-			<xs:element minOccurs="1" maxOccurs="1" name="SLspeciesCode" type="tSpecWoRMS" />
+			<xs:element minOccurs="1" maxOccurs="1" name="SLcatchFraction" type="tCatchFraction" />			
+		</xs:sequence>
+		<xs:attribute name="ln" type="xs:int" use="required" />
+	</xs:complexType>
+	<xs:complexType name="BaseIS">
+		<xs:sequence>			
+			<xs:element minOccurs="1" maxOccurs="1" name="IScommercialTaxon" type="tSpecWoRMS" />
+			<xs:element minOccurs="1" maxOccurs="1" name="ISspeciesCode" type="tSpecWoRMS" />
 		</xs:sequence>
 		<xs:attribute name="ln" type="xs:int" use="required" />
 	</xs:complexType>
 	<xs:complexType name="BaseCL">
 		<xs:sequence>
-			<xs:element minOccurs="1" maxOccurs="1" name="CLdataTypeOfScientificWeight" type="tDataTypeOfScientificWeight" />
-			<xs:element minOccurs="1" maxOccurs="1" name="CLdataSourceOfScientificWeight" type="tDataSourceOfScientificWeight" />
+			<xs:element minOccurs="1" maxOccurs="1" name="CLdataBasisOfScientificWeight" type="tDataBasis" />
+			<xs:element minOccurs="1" maxOccurs="1" name="CLdataSourceOfScientificWeight" type="tDataSource" />
 			<xs:element minOccurs="0" maxOccurs="1" name="CLsamplingScheme" type="tSamplingScheme" />
 			<xs:element minOccurs="1" maxOccurs="1" name="CLdataSourceLandingsValue" type="tDataSourceLandingsValue" />
 			<xs:element minOccurs="1" maxOccurs="1" name="CLlandingCountry" type="tISO_3166" />
@@ -107,7 +112,8 @@
 			<xs:element minOccurs="0" maxOccurs="1" name="CLmonth" type="tMonth" />
 			<xs:element minOccurs="1" maxOccurs="1" name="CLarea" type="tICES_Area" />
 			<xs:element minOccurs="1" maxOccurs="1" name="CLstatisticalRectangle" type="tStatRec" />
-			<xs:element minOccurs="1"	maxOccurs="1" name="CLdataSourceOfStatisticalRectangle" type="tStatRecSource" />
+			<xs:element minOccurs="1" maxOccurs="1" name="CLdataBasisOfStatisticalRectangle" type="tDataBasis" />
+			<xs:element minOccurs="1" maxOccurs="1" name="CLdataSourceOfStatisticalRectangle" type="tDataSource" />
 			<xs:element minOccurs="0" maxOccurs="1" name="CLfisheriesManagementUnit" type="tAreaNonFAO" />
 			<xs:element minOccurs="1" maxOccurs="1" name="CLgsaSubarea" type="tAreas_GFCM_GSA" />
 			<xs:element minOccurs="0" maxOccurs="1" name="CLjurisdictionArea" type="tJurisdictionArea" />
@@ -152,14 +158,14 @@
 			<xs:element minOccurs="0" maxOccurs="1" name="CLcomment" type="xs:string" />
 			<xs:element minOccurs="0" maxOccurs="1" name="CLscientificWeightQualitativeBias" type="tQualitativeBias" />
 			<xs:element minOccurs="1" maxOccurs="1" name="CLconfidentialityFlag"	type="tYesNoFields" 	/>
-			<xs:element minOccurs="1" maxOccurs="1" name="CLencryptedVesselIds"     type="xs:string" />
+			<xs:element minOccurs="1" maxOccurs="1" name="CLencryptedVesselIds"     type="tStringLength3000" />
 		</xs:sequence>
 		<xs:attribute name="ln" type="xs:int" />
 	</xs:complexType>
 	<xs:complexType name="BaseCE">
 		<xs:sequence>
-			<xs:element minOccurs="1" maxOccurs="1" name="CEdataTypeOfScientificEffort" type="tDataTypeOfScientificWeight" />
-			<xs:element minOccurs="1" maxOccurs="1" name="CEdataSourceOfScientificEffort" type="tDataSourceOfScientificWeight" />
+			<xs:element minOccurs="1" maxOccurs="1" name="CEdataBasisOfScientificEffort" type="tDataBasis" />
+			<xs:element minOccurs="1" maxOccurs="1" name="CEdataSourceOfScientificEffort" type="tDataSource" />
 			<xs:element minOccurs="0" maxOccurs="1" name="CEsamplingScheme" type="tSamplingScheme" />
 			<xs:element minOccurs="1" maxOccurs="1" name="CEvesselFlagCountry" type="tISO_3166" />
 			<xs:element minOccurs="1" maxOccurs="1" name="CEyear" type="tYear" />
@@ -167,7 +173,8 @@
 			<xs:element minOccurs="0" maxOccurs="1" name="CEmonth" type="tMonth" />
 			<xs:element minOccurs="1" maxOccurs="1" name="CEarea" type="tICES_Area" />
 			<xs:element minOccurs="1" maxOccurs="1" name="CEstatisticalRectangle" type="tStatRec" />
-			<xs:element minOccurs="1" maxOccurs="1" name="CEdataSourceOfStatisticalRectangle" type="tStatRecSource" />
+			<xs:element minOccurs="1" maxOccurs="1" name="CEdataBasisOfStatisticalRectangle" type="tDataBasis" />
+			<xs:element minOccurs="1" maxOccurs="1" name="CEdataSourceOfStatisticalRectangle" type="tDataSource" />
 			<xs:element minOccurs="0" maxOccurs="1" name="CEfisheriesManagementUnit" type="tAreaNonFAO" />
 			<xs:element minOccurs="1" maxOccurs="1" name="CEgsaSubarea" type="tAreas_GFCM_GSA" />
 			<xs:element minOccurs="0" maxOccurs="1" name="CEjurisdictionArea" type="tJurisdictionArea" />
@@ -189,9 +196,9 @@
 			<xs:element minOccurs="0" maxOccurs="1" name="CEofficialVesselHoursAtSea" type="tDecimalPointZeroOneTo50000" />
 			<xs:element minOccurs="1" maxOccurs="1" name="CEnumberOfFractionalTrips" type="tDecimalPointZeroOneTo50000" />
 			<xs:element minOccurs="1" maxOccurs="1" name="CEnumberOfDominantTrips" type="tIntZeroTo50000" />
-			<xs:element minOccurs="1" maxOccurs="1" name="CEofficialDaysAtSea" type="tDecimalPointZeroOneTo25000" />
+			<xs:element minOccurs="0" maxOccurs="1" name="CEofficialDaysAtSea" type="tDecimalPointZeroOneTo25000" />
 			<xs:element minOccurs="1" maxOccurs="1" name="CEscientificDaysAtSea" type="tDecimalPointZeroOneTo25000" />
-			<xs:element minOccurs="1" maxOccurs="1" name="CEofficialFishingDays" type="tDecimalPointZeroOneTo25000" />
+			<xs:element minOccurs="0" maxOccurs="1" name="CEofficialFishingDays" type="tDecimalPointZeroOneTo25000" />
 			<xs:element minOccurs="1" maxOccurs="1" name="CEscientificFishingDays" type="tDecimalPointZeroOneTo25000" />
 			<xs:element minOccurs="0" maxOccurs="1" name="CEofficialNumberOfHaulsOrSets" type="tInt2Hundrend50Thousand" />
 			<xs:element minOccurs="0" maxOccurs="1" name="CEscientificNumberOfHaulsOrSets" type="tInt2Hundrend50Thousand" />
@@ -199,9 +206,9 @@
 			<xs:element minOccurs="0" maxOccurs="1" name="CEscientificVesselFishingHour" type="tDecimal0.01-1200000" />
 			<xs:element minOccurs="0" maxOccurs="1" name="CEofficialSoakingMeterHour" type="tDecimal0.01-10000000" />
 			<xs:element minOccurs="0" maxOccurs="1" name="CEscientificSoakingMeterHour" type="tDecimal0.01-10000000" />
-			<xs:element minOccurs="1" maxOccurs="1" name="CEofficialkWDaysAtSea" type="tInt2Million500Thousand" />
-			<xs:element minOccurs="1" maxOccurs="1" name="CEscientifickWDaysAtSea" type="tInt2Million500Thousand" />
-			<xs:element minOccurs="1" maxOccurs="1" name="CEofficialkWFishingDays" type="tInt2Million500Thousand" />
+			<xs:element minOccurs="0" maxOccurs="1" name="CEofficialkWDaysAtSea" type="tInt3Million" />
+			<xs:element minOccurs="1" maxOccurs="1" name="CEscientifickWDaysAtSea" type="tInt3Million" />
+			<xs:element minOccurs="0" maxOccurs="1" name="CEofficialkWFishingDays" type="tInt2Million500Thousand" />
 			<xs:element minOccurs="1" maxOccurs="1" name="CEscientifickWFishingDays" type="tInt2Million500Thousand" />
 			<xs:element minOccurs="0" maxOccurs="1" name="CEofficialkWFishingHours" type="tInt25Million" />
 			<xs:element minOccurs="0" maxOccurs="1" name="CEscientifickWFishingHours" type="tInt2Million5000Thousand" />
@@ -217,7 +224,7 @@
 			<xs:element minOccurs="0" maxOccurs="1" name="CEfishingDaysErrorMeasureValueSecond" type="tDecimal0.000001-999" />
 			<xs:element minOccurs="0" maxOccurs="1" name="CEscientificFishingDaysQualitativeBias" type="tQualitativeBias" />
 			<xs:element minOccurs="1" maxOccurs="1" name="CEconfidentialityFlag" type="tYesNoFields" />
-			<xs:element minOccurs="1" maxOccurs="1" name="CEencryptedVesselIds" type="xs:string" />
+			<xs:element minOccurs="1" maxOccurs="1" name="CEencryptedVesselIds" type="tStringLength4000" />
 		</xs:sequence>
 		<xs:attribute name="ln" type="xs:int" />
 	</xs:complexType>
@@ -231,8 +238,8 @@
 			<xs:element minOccurs="1" maxOccurs="1" name="BVtypeMeasured" type="tBiologicalMeasurementType" />
 			<xs:element minOccurs="1" maxOccurs="1" name="BVvalueMeasured" type="tStringLength100" />
 			<xs:element minOccurs="1" maxOccurs="1" name="BVvalueUnitOrScale" type="tValueUnitOrScale" />
-			<xs:element minOccurs="0" maxOccurs="1" name="BVmethod" type="tSampleType" />
-			<xs:element minOccurs="0" maxOccurs="1" name="BVmeasurementEquipment" type="tMETOA" />
+			<xs:element minOccurs="0" maxOccurs="1" name="BVspecimenType" type="tSampleType" />
+			<xs:element minOccurs="0" maxOccurs="1" name="BVanalysisType" type="tMETOA" />
 			<xs:element minOccurs="0" maxOccurs="1" name="BVaccuracy" type="tAccuracyCode" />
 			<xs:element minOccurs="1" maxOccurs="1" name="BVcertaintyQualitative" type="tMeasurementCertainty" />
 			<xs:element minOccurs="0" maxOccurs="1" name="BVcertaintyQuantitative" type="tDecimal0.001-1" />
@@ -258,7 +265,6 @@
 			<xs:element minOccurs="1" maxOccurs="1" name="DEhierarchy" type="tRDBESUpperHierarchy" />
 			<xs:element minOccurs="1" maxOccurs="1" name="DEsampled" type="tYesNoFields" />
 			<xs:element minOccurs="0" maxOccurs="1" name="DEreasonNotSampled" type="tReasonForNotSampling" />
-
 			<xs:element minOccurs="0" maxOccurs="1" name="DEnonResponseCollected" type="tYesNoFields" />
 			<xs:element minOccurs="0" maxOccurs="1" name="DEauxiliaryVariableTotal" type="tDecimalPrec3" />
 			<xs:element minOccurs="0" maxOccurs="1" name="DEauxiliaryVariableValue" type="tDecimalPrec3" />
@@ -306,11 +312,12 @@
 			<xs:element minOccurs="1" maxOccurs="1" name="FOvalidity" type="tValidityFlag" />
 			<xs:element minOccurs="1" maxOccurs="1" name="FOcatchReg" type="tCatchRegistration" />
 			<xs:element minOccurs="0" maxOccurs="1" name="FOstartDate" type="tDate" />
-			<xs:element minOccurs="0" maxOccurs="1" name="FOstartTime" type="tStringLength60" />
+			<xs:element minOccurs="0" maxOccurs="1" name="FOstartTime" type="tTimeWithoutZone" />
 			<xs:element minOccurs="1" maxOccurs="1" name="FOendDate" type="tDate" />
-			<xs:element minOccurs="0" maxOccurs="1" name="FOendTime" type="tStringLength60" />
+			<xs:element minOccurs="0" maxOccurs="1" name="FOendTime" type="tTimeWithoutZone" />
 			<xs:element minOccurs="0" maxOccurs="1" name="FOduration" type="xs:int" />
-			<xs:element minOccurs="1" maxOccurs="1" name="FOdurationSource" type="tDurationSource" />
+				<xs:element minOccurs="0" maxOccurs="1" name="FOfishingDurationDataBasis" type="tDataBasis" />
+			<xs:element minOccurs="1" maxOccurs="1" name="FOdurationSource" type="tDataSource" />
 			<xs:element minOccurs="0" maxOccurs="1" name="FOhandlingTime" type="xs:int" />
 			<xs:element minOccurs="0" maxOccurs="1" name="FOstartLat" type="tDecimal-90.000000-90.000000" />
 			<xs:element minOccurs="0" maxOccurs="1" name="FOstartLon" type="tDecimal-180.000000-180.000000" />
@@ -322,12 +329,17 @@
 			<xs:element minOccurs="0" maxOccurs="1" name="FOfisheriesManagementUnit" type="tAreaNonFAO" />
 			<xs:element minOccurs="1" maxOccurs="1" name="FOgsaSubarea" type="tAreas_GFCM_GSA" />
 			<xs:element minOccurs="0" maxOccurs="1" name="FOjurisdictionArea" type="tJurisdictionArea" />
+				<xs:element minOccurs="0" maxOccurs="1" name="FOgeographicalDataBasis" type="tDataBasis" />
+				<xs:element minOccurs="0" maxOccurs="1" name="FOgeographicalSource" type="tDataSource" />
 			<xs:element minOccurs="0" maxOccurs="1" name="FOfishingDepth" type="xs:int" />
 			<xs:element minOccurs="0" maxOccurs="1" name="FOwaterDepth" type="xs:int" />
 			<xs:element minOccurs="0" maxOccurs="1" name="FOnationalFishingActivity" type="tNationalFishingActivity" />
 			<xs:element minOccurs="0" maxOccurs="1" name="FOmetier5" type="tMetier5_FishingActivity" />
 			<xs:element minOccurs="1" maxOccurs="1" name="FOmetier6" type="tMetier6_FishingActivity" />
+			
 			<xs:element minOccurs="1" maxOccurs="1" name="FOgear" type="tGearType" />
+				<xs:element minOccurs="0" maxOccurs="1" name="FOgearDataBasis" type="tDataBasis" />
+				<xs:element minOccurs="0" maxOccurs="1" name="FOgearSource" type="tDataSource" />
 			<xs:element minOccurs="0" maxOccurs="1" name="FOmeshSize" type="xs:int" />
 			<xs:element minOccurs="0" maxOccurs="1" name="FOselectionDevice" type="tSelectionDevice" />
 			<xs:element minOccurs="0" maxOccurs="1" name="FOselectionDeviceMeshSize" type="xs:int" />
@@ -373,10 +385,11 @@
 			<xs:element minOccurs="0" maxOccurs="1" name="FTnumberOfHaulsOrSets" type="tIntZeroToMax" />
 			<xs:element minOccurs="0" maxOccurs="1" name="FTdepartureLocation" type="tHarbour_LOCODE" />
 			<xs:element minOccurs="0" maxOccurs="1" name="FTdepartureDate" type="tDate" />
-			<xs:element minOccurs="0" maxOccurs="1" name="FTdepartureTime" type="tStringLength60" />
+			<xs:element minOccurs="0" maxOccurs="1" name="FTdepartureTime" type="tTimeWithoutZone" />
 			<xs:element minOccurs="1" maxOccurs="1" name="FTarrivalLocation" type="tHarbour_LOCODE" />
 			<xs:element minOccurs="1" maxOccurs="1" name="FTarrivalDate" type="tDate" />
-			<xs:element minOccurs="0" maxOccurs="1" name="FTarrivalTime" type="tStringLength60" />
+			<xs:element minOccurs="0" maxOccurs="1" name="FTarrivalTime" type="tTimeWithoutZone" />
+			<xs:element minOccurs="0" maxOccurs="1" name="FTdominantLandingDate" type="tDate" />			
 			<xs:element minOccurs="0" maxOccurs="1" name="FTnumberTotal" type="xs:int" />
 			<xs:element minOccurs="0" maxOccurs="1" name="FTnumberSampled" type="xs:int" />
 			<xs:element minOccurs="0" maxOccurs="1" name="FTselectionProb" type="tDecimal0-1" />
@@ -416,17 +429,22 @@
 			<xs:element minOccurs="0" maxOccurs="1" name="LElocationType" type="tLocationType" />
 			<xs:element minOccurs="1" maxOccurs="1" name="LEcountry" type="tISO_3166" />
 			<xs:element minOccurs="0" maxOccurs="1" name="LEdate" type="tDate" />
-			<xs:element minOccurs="0" maxOccurs="1" name="LEtime" type="tStringLength60" />
+			<xs:element minOccurs="0" maxOccurs="1" name="LEtime" type="tTimeWithoutZone" />
 			<xs:element minOccurs="0" maxOccurs="1" name="LEexclusiveEconomicZoneIndicator" type="tISO_3166" />
 			<xs:element minOccurs="1" maxOccurs="1" name="LEarea" type="tICES_Area" />
 			<xs:element minOccurs="0" maxOccurs="1" name="LErectangle" type="tStatRec" />
 			<xs:element minOccurs="0" maxOccurs="1" name="LEfisheriesManagementUnit" type="tAreaNonFAO" />
 			<xs:element minOccurs="1" maxOccurs="1" name="LEgsaSubarea" type="tAreas_GFCM_GSA" />
 			<xs:element minOccurs="0" maxOccurs="1" name="LEjurisdictionArea" type="tJurisdictionArea" />
+				<xs:element minOccurs="0" maxOccurs="1" name="LEgeographicalDataBasis" type="tDataBasis" />
+				<xs:element minOccurs="0" maxOccurs="1" name="LEgeographicalSource" type="tDataSource" />
 			<xs:element minOccurs="0" maxOccurs="1" name="LEnationalFishingActivity" type="tNationalFishingActivity" />
 			<xs:element minOccurs="0" maxOccurs="1" name="LEmetier5" type="tMetier5_FishingActivity" />
 			<xs:element minOccurs="1" maxOccurs="1" name="LEmetier6" type="tMetier6_FishingActivity" />
+			
 			<xs:element minOccurs="1" maxOccurs="1" name="LEgear" type="tGearType" />
+				<xs:element minOccurs="0" maxOccurs="1" name="LEgearDataBasis" type="tDataBasis" />
+				<xs:element minOccurs="0" maxOccurs="1" name="LEgearSource" type="tDataSource" />
 			<xs:element minOccurs="0" maxOccurs="1" name="LEmeshSize" type="xs:int" />
 			<xs:element minOccurs="0" maxOccurs="1" name="LEselectionDevice" type="tSelectionDevice" />
 			<xs:element minOccurs="0" maxOccurs="1" name="LEselectionDeviceMeshSize" type="xs:int" />
@@ -446,7 +464,6 @@
 			<xs:element minOccurs="0" maxOccurs="1" name="LEinclusionProbCluster" type="tDecimal0-1" />
 			<xs:element minOccurs="1" maxOccurs="1" name="LEsampled" type="tYesNoFields" />
 			<xs:element minOccurs="0" maxOccurs="1" name="LEreasonNotSampled" type="tReasonForNotSampling" />
-
 			<xs:element minOccurs="0" maxOccurs="1" name="LEnonResponseCollected" type="tYesNoFields" />
 			<xs:element minOccurs="0" maxOccurs="1" name="LEfullTripAvailable" type="tYesNoExtensions" />
 			<xs:element minOccurs="0" maxOccurs="1" name="LEauxiliaryVariableTotal" type="tDecimalPrec3" />
@@ -498,7 +515,7 @@
 			<xs:element minOccurs="1" maxOccurs="1" name="OSlocationName" type="tStringLength100" />
 			<xs:element minOccurs="0" maxOccurs="1" name="OSlocationType" type="tLocationType" />
 			<xs:element minOccurs="1" maxOccurs="1" name="OSsamplingDate" type="tDate" />
-			<xs:element minOccurs="0" maxOccurs="1" name="OSsamplingTime" type="tStringLength60" />
+			<xs:element minOccurs="0" maxOccurs="1" name="OSsamplingTime" type="tTimeWithoutZone" />
 			<xs:element minOccurs="1" maxOccurs="1" name="OSstratumName" type="tStringLength100" />
 			<xs:element minOccurs="1" maxOccurs="1" name="OSclustering" type="tClustering" />
 			<xs:element minOccurs="1" maxOccurs="1" name="OSclusterName" type="tStringLength100" />
@@ -549,10 +566,15 @@
 			<xs:element minOccurs="0" maxOccurs="1" name="SAfisheriesManagementUnit" type="tAreaNonFAO" />
 			<xs:element minOccurs="1" maxOccurs="1" name="SAgsaSubarea" type="tAreas_GFCM_GSA" />
 			<xs:element minOccurs="0" maxOccurs="1" name="SAjurisdictionArea" type="tJurisdictionArea" />
+			<xs:element minOccurs="0" maxOccurs="1" name="SAgeographicalDataBasis" type="tDataBasis" />
+			<xs:element minOccurs="0" maxOccurs="1" name="SAgeographicalSource" type="tDataSource" />
 			<xs:element minOccurs="0" maxOccurs="1" name="SAnationalFishingActivity" type="tNationalFishingActivity" />
 			<xs:element minOccurs="0" maxOccurs="1" name="SAmetier5" type="tMetier5_FishingActivity" />
 			<xs:element minOccurs="0" maxOccurs="1" name="SAmetier6" type="tMetier6_FishingActivity" />
+			
 			<xs:element minOccurs="0" maxOccurs="1" name="SAgear" type="tGearType" />
+			<xs:element minOccurs="0" maxOccurs="1" name="SAgearDataBasis" type="tDataBasis" />
+			<xs:element minOccurs="0" maxOccurs="1" name="SAgearSource" type="tDataSource" />
 			<xs:element minOccurs="0" maxOccurs="1" name="SAmeshSize" type="xs:int" />
 			<xs:element minOccurs="0" maxOccurs="1" name="SAselectionDevice" type="tSelectionDevice" />
 			<xs:element minOccurs="0" maxOccurs="1" name="SAselectionDeviceMeshSize" type="xs:int" />
@@ -573,6 +595,7 @@
 			<xs:element minOccurs="0" maxOccurs="1" name="SAreasonNotSampledFM" type="tReasonForNotSampling" />
 			<xs:element minOccurs="0" maxOccurs="1" name="SAreasonNotSampledBV" type="tReasonForNotSampling" />
 			<xs:element minOccurs="0" maxOccurs="1" name="SAtotalWeightMeasured" type="xs:int" />
+			<xs:element minOccurs="0" maxOccurs="1" name="SAtotalWeightMeasuredDataBasis" type="tDataBasis" />
 			<xs:element minOccurs="0" maxOccurs="1" name="SAsampleWeightMeasured" type="xs:int" />
 			<xs:element minOccurs="0" maxOccurs="1" name="SAconversionFactorMeasLive" type="tDecimal0.900-10" />
 			<xs:element minOccurs="0" maxOccurs="1" name="SAauxiliaryVariableTotal" type="tDecimalPrec3" />
@@ -597,8 +620,10 @@
 			<xs:element minOccurs="1" maxOccurs="1" name="SSspeciesListName" type="tStringLength100" />
 			<xs:element minOccurs="1" maxOccurs="1" name="SSuseForCalculateZero" type="tYesNoFields" />
 			<xs:element minOccurs="0" maxOccurs="1" name="SStimeTotal" type="xs:int" />
+			<xs:element minOccurs="0" maxOccurs="1" name="SStimeTotalDataBasis" type="tDataBasis" />
 			<xs:element minOccurs="0" maxOccurs="1" name="SStimeSampled" type="xs:int" />
 			<xs:element minOccurs="0" maxOccurs="1" name="SSnumberTotal" type="xs:int" />
+			<xs:element minOccurs="0" maxOccurs="1" name="SSnumberTotalDataBasis" type="tDataBasis" />
 			<xs:element minOccurs="0" maxOccurs="1" name="SSnumberSampled" type="xs:int" />
 			<xs:element minOccurs="0" maxOccurs="1" name="SSselectionProb" type="tDecimal0-1" />
 			<xs:element minOccurs="0" maxOccurs="1" name="SSinclusionProb" type="tDecimal0-1" />
@@ -643,7 +668,6 @@
 			<xs:element minOccurs="0" maxOccurs="1" name="TEinclusionProbCluster" type="tDecimal0-1" />
 			<xs:element minOccurs="1" maxOccurs="1" name="TEsampled" type="tYesNoFields" />
 			<xs:element minOccurs="0" maxOccurs="1" name="TEreasonNotSampled" type="tReasonForNotSampling" />
-
 			<xs:element minOccurs="0" maxOccurs="1" name="TEnonResponseCollected" type="tYesNoFields" />
 			<xs:element minOccurs="0" maxOccurs="1" name="TEauxiliaryVariableTotal" type="tDecimalPrec3" />
 			<xs:element minOccurs="0" maxOccurs="1" name="TEauxiliaryVariableValue" type="tDecimalPrec3" />
@@ -704,21 +728,38 @@
 			<xs:maxLength value="100" />
 		</xs:restriction>
 	</xs:simpleType>
+	<xs:simpleType name="tStringLength4000">
+		<xs:restriction base="xs:string">
+			<xs:minLength value="1" />
+			<xs:maxLength value="4000" />
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="tStringLength3000">
+		<xs:restriction base="xs:string">
+			<xs:minLength value="1" />
+			<xs:maxLength value="3000" />
+		</xs:restriction>
+	</xs:simpleType>
 	<xs:simpleType name="tStringLength60">
 		<xs:restriction base="xs:string">
 			<xs:maxLength value="60" />
 		</xs:restriction>
 	</xs:simpleType>
 	<xs:simpleType name="tDate">
-		<xs:restriction base="xs:string">
-			<xs:length value="10" />
-			<xs:pattern value="\d{4}\-\d{2}\-\d{2}" />
+		<xs:restriction base="xs:date">
+			<xs:minInclusive value="1753-01-01" />
+			<xs:maxInclusive value="9999-12-31" />
 		</xs:restriction>
 	</xs:simpleType>
 	<xs:simpleType name="tTime">
 		<xs:restriction base="xs:string">
 			<xs:length value="5" />
 			<xs:pattern value="\d{2}\:\d{2}" />
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="tTimeWithoutZone">
+		<xs:restriction base="xs:string">
+			<xs:pattern value="([0-1][0-9]|2[0-3]):[0-5][0-9]"/>
 		</xs:restriction>
 	</xs:simpleType>
 	<xs:simpleType name="tNumberOfHauls">
@@ -831,6 +872,12 @@
 		<xs:restriction base="xs:int">
 			<xs:minInclusive value="0" />
 			<xs:maxInclusive value="2500000" />
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="tInt3Million">
+		<xs:restriction base="xs:int">
+			<xs:minInclusive value="0" />
+			<xs:maxInclusive value="3000000" />
 		</xs:restriction>
 	</xs:simpleType>
 	<xs:simpleType name="tInt2Million5000Thousand">
