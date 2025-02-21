@@ -1,4 +1,4 @@
-This folder contain a XSD files for each hierarchy, it can be used for the CSV format. The RDBES data exchange format is comma separated values CSV files (NOT XML files). But until we have a document describing the format it is suggested to use the XSD files.
+This folder contain a XSD files for each hierarchy, it can be used for the CSV format. The RDBES data exchange format is comma separated values CSV files (NOT XML files).
 
 The following describe how to use the XSD files.
 
